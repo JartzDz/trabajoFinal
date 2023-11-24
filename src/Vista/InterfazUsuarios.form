@@ -116,7 +116,7 @@
                             <properties>
                               <font size="18"/>
                               <foreground color="-6117446"/>
-                              <text value="Ingrese la CEDULA del propietario"/>
+                              <text value="Ingrese la CEDULA"/>
                             </properties>
                           </component>
                         </children>
