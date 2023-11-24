@@ -1,6 +1,7 @@
 package Controlador;
 
 import Modelo.Administrador;
+import Modelo.DuenioMascota;
 import Modelo.GestorUsuario;
 import Vista.InterfazLogin;
 
@@ -48,6 +49,9 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             if(modelo.getUsuarios().get(indice).getContrasenia().equals(new String(passwordChars))){
                 if(modelo.getUsuarios().get(indice) instanceof Administrador){
                     controladorUsuarios.mostrarInterfazUsuarios();
+                }
+                if(modelo.getUsuarios().get(indice) instanceof DuenioMascota){
+                    controladorMascotas.mostrarInterfazMascotas();
                 }
             }else{
                 JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES INCORRECTAS");

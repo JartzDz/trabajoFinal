@@ -15,8 +15,6 @@ public class Main {
         ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
 
         GestorUsuario gestorLogin = new GestorUsuario();
-        gestorLogin.agregarUsuario("1", "dsd", "das", "fsdf", "ADMINISTRADOR", "1", "ADMINISTRADOR");
-        gestorLogin.guardarUsuarios();
         InterfazUsuarios interfazUsuarios = new InterfazUsuarios();
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorLogin, interfazUsuarios);
 

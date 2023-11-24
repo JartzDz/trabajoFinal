@@ -5,11 +5,11 @@ import javax.swing.*;
 public class InterfazEstablecimientos extends JFrame{
     public JTable tablaEstablecimientos;
     public JTextField txtBuscar;
+    public JTextField txtDireccion;
+    public JTextField txtTelefono;
+    public JTextField txtRUC;
     public JButton btnBuscar;
-    public JTextField txtID;
     public JTextField txtNombre;
-    public JTextField txtRaza;
-    public JTextField txtDuenio;
     public JTextField txtCorreo;
     public JComboBox cboTipoEst;
     public JTextField txtCIProp;

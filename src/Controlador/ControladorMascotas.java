@@ -55,7 +55,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.txtRaza.setText("");
         vista.txtDuenio.setText("");
     }
-    /*public void agregar(){
+
+    public void agregar(){
 
         try {
             int ID = Integer.parseInt(vista.txtID.getText());
@@ -85,9 +86,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "El ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-
-    }*/
     public void eliminarTabla(){
         int fila=vista.tablaMascotas.getSelectedRow();
         //String valor= (String) vista.tablaPersonas.getValueAt(fila,0);
@@ -227,11 +227,9 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vista.btnAgregar) {
-            //agregar();
-        }
-        if (e.getSource() == vista.btnMostrarMascotas) mostrarMascotas();
-        if (e.getSource()==vista.btnEliminar)eliminarTabla();
+        if(e.getSource()==vista.btnAgregar) agregar();
+        if(e.getSource() == vista.btnMostrarMascotas) mostrarMascotas();
+        if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
         if(e.getSource()==vista.btnSubirFotoMascota)cargarFoto();
     }

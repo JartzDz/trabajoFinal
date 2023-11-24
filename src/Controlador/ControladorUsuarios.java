@@ -3,6 +3,8 @@ package Controlador;
 import Modelo.GestorUsuario;
 import Vista.InterfazUsuarios;
 
+import javax.swing.*;
+
 public class ControladorUsuarios {
     private GestorUsuario modeloUsuario;
     private InterfazUsuarios vistaUsuario;
@@ -13,7 +15,7 @@ public class ControladorUsuarios {
     }
 
     public void mostrarInterfazUsuarios() {
-        vistaUsuario.setSize(980, 700);
+        vistaUsuario.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vistaUsuario.setLocationRelativeTo(null);
         vistaUsuario.setResizable(true);
         vistaUsuario.setVisible(true);
