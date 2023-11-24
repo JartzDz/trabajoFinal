@@ -3,8 +3,6 @@ package Controlador;
 import Modelo.GestorUsuario;
 import Vista.InterfazUsuarios;
 
-import javax.swing.*;
-
 public class ControladorUsuarios {
     private GestorUsuario modeloUsuario;
     private InterfazUsuarios vistaUsuario;

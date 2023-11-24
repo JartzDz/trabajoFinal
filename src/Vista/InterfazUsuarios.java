@@ -1,26 +1,24 @@
 package Vista;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class InterfazUsuarios extends JFrame{
-    private JPanel panel1;
-    private JPanel JPanelFondo;
-    private JTable tablaMascotas;
-    private JTextField txtBuscar;
-    private JButton btnBuscar;
-    private JTextField txtID;
-    private JTextField txtNombre;
-    private JTextField txtRaza;
-    private JTextField txtDuenio;
-    private JButton btnAgregar;
-    private JButton btnMostrarMascotas;
-    private JButton btnEliminar;
-    private JButton btnModificar;
-    private JTextField textField1;
-    private JComboBox comboBox1;
+    public JPanel contenedor;
+    public JTable tablaMascotas;
+    public JTextField txtBuscar;
+    public JButton btnBuscar;
+    public JTextField txtID;
+    public JTextField txtNombre;
+    public JTextField txtRaza;
+    public JTextField txtDuenio;
+    public JTextField textField1;
+    public JComboBox comboBox1;
+    public JButton btnAgregar;
+    public JButton btnMostrarMascotas;
+    public JButton btnEliminar;
+    public JButton btnModificar;
 
     public InterfazUsuarios(){
-        setContentPane(panel1);
+        setContentPane(contenedor);
     }
 }
