@@ -1,9 +1,10 @@
 package Modelo;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DuenioMascota extends Persona {
+public class DuenioMascota extends Persona implements Serializable {
     private ArrayList<Mascota> listaMascotas = new ArrayList<>();
     public DuenioMascota(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, ArrayList<Mascota> listaMascotas) {
         super(cedula, nombre, direccion, telefono, correo, contrasenia);

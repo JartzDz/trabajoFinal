@@ -1,6 +1,8 @@
 package Modelo;
 
-public class Persona {
+import java.io.Serializable;
+
+public class Persona implements Serializable {
     private String cedula, nombre, direccion, telefono, correo, contrasenia;
 
     public Persona(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia) {

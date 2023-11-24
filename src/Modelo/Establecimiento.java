@@ -1,8 +1,9 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Establecimiento {
+public class Establecimiento implements Serializable {
     private ArrayList<String> telefono = new ArrayList<>();
     private String ruc, nombreRepresentante, tipoEstablecimiento;
     private int coordenadas;
