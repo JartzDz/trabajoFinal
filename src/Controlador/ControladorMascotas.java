@@ -234,7 +234,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         if (e.getSource() == vista.btnMostrarMascotas) mostrarMascotas();
         if (e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
-        if(e.getSource()==vista.btnCargarFoto)cargarFoto();
+        if(e.getSource()==vista.btnSubirFotoMascota)cargarFoto();
     }
 
     @Override
