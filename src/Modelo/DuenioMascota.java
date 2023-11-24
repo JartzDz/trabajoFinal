@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DuenioMascota extends Persona implements Serializable {
-    private ArrayList<Mascota> listaMascotas = new ArrayList<>();
-    public DuenioMascota(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, ArrayList<Mascota> listaMascotas) {
+    private ArrayList<Mascota> listaMascotas ;
+    public DuenioMascota(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia) {
         super(cedula, nombre, direccion, telefono, correo, contrasenia);
-        this.listaMascotas = listaMascotas;
+        this.listaMascotas = new ArrayList<>();
     }
 
     public ArrayList<Mascota> getListaMascotas() {
