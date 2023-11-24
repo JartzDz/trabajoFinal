@@ -40,6 +40,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.btnBuscar.setEnabled(false);
         vista.btnSubirFotoCarnet.addActionListener(this);
         vista.btnSubirFotoMascota.addActionListener(this);
+
     }
 
     public void mostrarInterfazMascotas() {

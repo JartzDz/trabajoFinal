@@ -17,7 +17,6 @@ public class InterfazMascotas extends JFrame {
     public JTable tablaMascotas;
 
     public JPanel panelImagen;
-    public JButton btnCargarFoto;
     public JComboBox cboSexo;
     public JCheckBox chkVacunas;
     public JButton btnSubirFotoCarnet;
