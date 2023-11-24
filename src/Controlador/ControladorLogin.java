@@ -37,7 +37,6 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
     public void limpiar(){
         vista.txtUsuario.setText("");
         vista.txtContra.setText("");
-        vista.cboTipoUsuario.setSelectedIndex(0);
     }
 
     public void validarIngreso() {
@@ -46,7 +45,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         String contra = new String(passwordChars);
         int indice = modelo.buscarUsuario(usuario);
         if (indice!=-1) {
-            if(modelo.getUsuarios().get(indice).getContrasenia().equals(passwordChars.toString())){
+            if(modelo.getUsuarios().get(indice).getContrasenia().equals(new String(passwordChars))){
                 if(modelo.getUsuarios().get(indice) instanceof Administrador){
                     controladorUsuarios.mostrarInterfazUsuarios();
                 }

@@ -1,5 +1,6 @@
 package Modelo;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class GestorUsuario {
@@ -7,10 +8,6 @@ public class GestorUsuario {
     public GestorUsuario() {
         usuarios = new ArrayList<>();
     }
-
-<<<<<<< Updated upstream
-    public void agregarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia){
-=======
     public ArrayList<Persona> getUsuarios() {
         return usuarios;
     }
@@ -33,7 +30,50 @@ public class GestorUsuario {
             usuarios.add(new PersonalCGA(cedula, nombre, direccion, telefono, correo, contrasenia));
         }
     }
->>>>>>> Stashed changes
 
+    public int buscarUsuario(String cedula){
+        int contador=0;
+        for (Persona persona : usuarios) {
+            if (persona.getCedula().equals(cedula)) {
+                return contador;
+            }
+            contador++;
+        }
+        return -1;
     }
+
+    public void modificarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, int indice){
+        usuarios.get(indice).setCedula(cedula);
+        usuarios.get(indice).setNombre(nombre);
+        usuarios.get(indice).setDireccion(direccion);
+        usuarios.get(indice).setTelefono(telefono);
+        usuarios.get(indice).setCorreo(correo);
+        usuarios.get(indice).setContrasenia(contrasenia);
+    }
+
+    public void eliminarUsuario(int indice){
+        usuarios.remove(indice);
+    }
+
+    // Método para serializar la lista de usuarios
+    public void guardarUsuarios() {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("Usuarios.bin"))) {
+            salida.writeObject(usuarios);
+            System.out.println("La lista de usuarios se ha serializado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al serializar la lista de usuarios: " + e.getMessage());
+        }
+    }
+
+    // Método para deserializar la lista de usuarios
+    @SuppressWarnings("unchecked")
+    public void recuperarUsuarios() {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Usuarios.bin"))) {
+            usuarios = (ArrayList<Persona>) entrada.readObject();
+            System.out.println("La lista de usuarios se ha deserializado correctamente.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al deserializar la lista de usuarios: " + e.getMessage());
+        }
+    }
+
 }

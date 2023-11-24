@@ -15,9 +15,9 @@ public class ControladorUsuarios {
     }
 
     public void mostrarInterfazUsuarios() {
+        vistaUsuario.setSize(980, 700);
         vistaUsuario.setLocationRelativeTo(null);
-        vistaUsuario.setResizable(false);
+        vistaUsuario.setResizable(true);
         vistaUsuario.setVisible(true);
-        vistaUsuario.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }
