@@ -9,6 +9,6 @@ public class GestorUsuario {
     }
 
     public void agregarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia){
-        usuarios.add()
+
     }
 }

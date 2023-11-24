@@ -18,10 +18,15 @@ public class InterfazMascotas extends JFrame {
 
     public JPanel panelImagen;
     public JButton btnCargarFoto;
-    public JComboBox comboBox1;
-    private JCheckBox SICheckBox;
-    private JButton btnSubirFotoCarnet;
-    private JButton btnSubirFotoMascota;
+    public JComboBox cboSexo;
+    public JCheckBox chkVacunas;
+    public JButton btnSubirFotoCarnet;
+    public JButton btnSubirFotoMascota;
+    public JTextField txtColor;
+    public JCheckBox chkDesparacitaciones;
+    public JCheckBox chkEsterilizacion;
+    public JCheckBox chkCirugias;
+    public JSpinner spnEdad;
 
 
     public InterfazMascotas() {

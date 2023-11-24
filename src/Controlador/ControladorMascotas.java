@@ -38,7 +38,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         modeloTabla = new DefaultTableModel(null, columnas);
         vista.btnMostrarMascotas.setEnabled(false);
         vista.btnBuscar.setEnabled(false);
-        vista.btnCargarFoto.addActionListener(this);
+        vista.btnSubirFotoCarnet.addActionListener(this);
+        vista.btnSubirFotoMascota.addActionListener(this);
     }
 
     public void mostrarInterfazMascotas() {
@@ -58,12 +59,21 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
         try {
             int ID = Integer.parseInt(vista.txtID.getText());
-            String nombre = vista.txtNombre.getText();
+            String nombreMascota= vista.txtNombre.getText();
             String raza = vista.txtRaza.getText();
             String duenio = vista.txtDuenio.getText();
+            int edad= (int) vista.spnEdad.getValue();
+            String sexo= String.valueOf(vista.cboSexo.getSelectedIndex());
+            String color=vista.txtColor.getText();
+            Image foto = null;
+            Image fotoCarnet = null;
+            boolean vacunas= Boolean.parseBoolean(vista.chkVacunas.getText());
+            boolean esterilizacion= Boolean.parseBoolean(vista.chkEsterilizacion.getText());
+            boolean desparacitaciones= Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
+            boolean otrasCirugias= Boolean.parseBoolean(vista.chkCirugias.getText());
 
-            if (!nombre.isEmpty() && !raza.isEmpty() && !duenio.isEmpty()) {
-                modelo.agregarMascota(ID, nombre, raza, duenio);
+            if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty()) {
+                modelo.agregarMascota(ID,edad, nombreMascota, sexo,raza,color, duenio, foto, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                 vista.btnMostrarMascotas.setEnabled(true);
                 vista.btnBuscar.setEnabled(true);
                 vista.txtBuscar.setEnabled(true);
