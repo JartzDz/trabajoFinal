@@ -511,7 +511,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="d1e0f" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="d1e0f" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -522,10 +522,10 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="3e15" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="3e15" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="3" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-35"/>
@@ -543,11 +543,22 @@
                       <text value="FOTO"/>
                     </properties>
                   </component>
+                  <component id="b89b6" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font size="18"/>
+                      <foreground color="-16777216"/>
+                      <icon value="Vista/imagenes/adjuntar.png"/>
+                      <text value="FOTO"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
               <grid id="bd59f" binding="panelImagen" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false">
                     <minimum-size width="600" height="120"/>
                     <preferred-size width="600" height="120"/>
                     <maximum-size width="600" height="120"/>
@@ -576,24 +587,24 @@
                   </scrollpane>
                 </children>
               </grid>
-              <grid id="53e69" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+              <component id="9ce8" class="javax.swing.JButton">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <background color="-35"/>
+                  <preferredSize width="265" height="35"/>
+                  <text value="SUBIR FOTO CARNET"/>
                 </properties>
-                <border type="none"/>
-                <children>
-                  <component id="a5095" class="javax.swing.JButton" binding="btnCargarFoto">
-                    <constraints/>
-                    <properties>
-                      <preferredSize width="265" height="35"/>
-                      <text value="SUBIR IMAGEN"/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
+              </component>
+              <component id="efac1" class="javax.swing.JButton">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <preferredSize width="265" height="35"/>
+                  <text value="SUBIR FOTO MASCOTA"/>
+                </properties>
+              </component>
             </children>
           </grid>
         </children>

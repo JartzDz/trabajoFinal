@@ -3,12 +3,19 @@ package Modelo;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GestorMascotas {
+public class DuenioMascota extends Persona {
+    private ArrayList<Mascota> listaMascotas = new ArrayList<>();
+    public DuenioMascota(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, ArrayList<Mascota> listaMascotas) {
+        super(cedula, nombre, direccion, telefono, correo, contrasenia);
+        this.listaMascotas = listaMascotas;
+    }
 
-    ArrayList<Mascota> listaMascotas;
+    public ArrayList<Mascota> getListaMascotas() {
+        return listaMascotas;
+    }
 
-    public GestorMascotas() {
-        this.listaMascotas = new ArrayList<Mascota>();
+    public void setListaMascotas(ArrayList<Mascota> listaMascotas) {
+        this.listaMascotas = listaMascotas;
     }
 
     public void agregarMascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
@@ -34,9 +41,12 @@ public class GestorMascotas {
         }
         return resultados;
     }
+
     public void eliminarMascota(int indice){
+
         listaMascotas.remove(indice);
     }
+
     public void modificarMascota(int indice,String nombre,String raza, String duenio){
         Mascota nuevaMascota=listaMascotas.get(indice);
         nuevaMascota.setNombreMascota(nombre);
