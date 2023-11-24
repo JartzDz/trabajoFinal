@@ -48,7 +48,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.setResizable(false);
         vista.setVisible(true);
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
     }
     public void limpiar(){
         vista.txtID.setText("");

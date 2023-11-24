@@ -1,5 +1,6 @@
 package Controlador;
 
+import Modelo.Administrador;
 import Modelo.GestorUsuario;
 import Vista.InterfazLogin;
 
@@ -14,9 +15,13 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
     GestorUsuario modelo;
     ControladorMascotas controladorMascotas;
 
-    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo) {
+    ControladorUsuarios controladorUsuarios;
+
+    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios) {
         this.vista = vista;
         this.modelo = modelo;
+        this.controladorMascotas = controladorMascotas;
+        this.controladorUsuarios = controladorUsuarios;
         vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vista.setResizable(false);
         vista.setSize(700,535);
@@ -27,27 +32,30 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         vista.btnIngresar.addActionListener(this);
         vista.btnIngresar.addMouseListener(this);
         vista.chkMostrarContra.addActionListener(this);
-
+        modelo.recuperarUsuarios();
     }
     public void limpiar(){
         vista.txtUsuario.setText("");
         vista.txtContra.setText("");
         vista.cboTipoUsuario.setSelectedIndex(0);
     }
-    public void setControladorMascotas(ControladorMascotas controladorMascotas) {
-        this.controladorMascotas = controladorMascotas;
-    }
+
     public void validarIngreso() {
         String usuario = vista.txtUsuario.getText();
         char[] passwordChars = vista.txtContra.getPassword();
         String contra = new String(passwordChars);
-        String tipoUsuario = (String) vista.cboTipoUsuario.getSelectedItem();
-
-        if (usuario.equals("JulianLojano") && contra.equals("123") && Objects.equals(tipoUsuario, "PROPIETARIO DE MASCOTA")) {
-            controladorMascotas.mostrarInterfazMascotas();
-
+        int indice = modelo.buscarUsuario(usuario);
+        if (indice!=-1) {
+            if(modelo.getUsuarios().get(indice).getContrasenia().equals(passwordChars.toString())){
+                if(modelo.getUsuarios().get(indice) instanceof Administrador){
+                    controladorUsuarios.mostrarInterfazUsuarios();
+                }
+            }else{
+                JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES INCORRECTAS");
+                limpiar();
+            }
         } else {
-            JOptionPane.showMessageDialog(vista.contenedor, "Credenciales incorrectas");
+            JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES NO EXISTENTES");
             limpiar();
         }
     }

@@ -1,8 +1,9 @@
 package Vista;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class InterfazUsuarios {
+public class InterfazUsuarios extends JFrame{
     private JPanel panel1;
     private JPanel JPanelFondo;
     private JTable tablaMascotas;
@@ -18,4 +19,8 @@ public class InterfazUsuarios {
     private JButton btnModificar;
     private JTextField textField1;
     private JComboBox comboBox1;
+
+    public InterfazUsuarios(){
+        setContentPane(panel1);
+    }
 }
