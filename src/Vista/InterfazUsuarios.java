@@ -18,4 +18,5 @@ public class InterfazUsuarios {
     private JButton btnModificar;
     private JTextField textField1;
     private JComboBox comboBox1;
+    private JPasswordField passwordField1;
 }
