@@ -1,9 +1,10 @@
 package Modelo;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Mascota {
+public class Mascota implements Serializable {
     private int ID,edad;
     private String nombreMascota, sexo, raza, color, duenio;
     private Image foto, fotoCarnet;

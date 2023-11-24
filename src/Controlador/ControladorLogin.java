@@ -1,8 +1,7 @@
 package Controlador;
 
-import Modelo.GestorLogin;
+import Modelo.GestorUsuario;
 import Vista.InterfazLogin;
-import Vista.InterfazMascotas;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,10 +11,10 @@ import java.util.Objects;
 
 public class ControladorLogin extends MouseAdapter implements ActionListener, KeyListener {
     InterfazLogin vista;
-    GestorLogin modelo;
+    GestorUsuario modelo;
     ControladorMascotas controladorMascotas;
 
-    public ControladorLogin(InterfazLogin vista, GestorLogin modelo) {
+    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo) {
         this.vista = vista;
         this.modelo = modelo;
         vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
