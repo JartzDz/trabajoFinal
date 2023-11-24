@@ -20,6 +20,8 @@ public class InterfazMascotas extends JFrame {
     public JButton btnCargarFoto;
     public JComboBox comboBox1;
     private JCheckBox SICheckBox;
+    private JButton btnSubirFotoCarnet;
+    private JButton btnSubirFotoMascota;
 
 
     public InterfazMascotas() {
