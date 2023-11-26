@@ -95,7 +95,12 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
     public void buscarMascota(){
         String valor = vista.txtBuscar.getText();
-
+        int indice= modelo.buscarMascota(Integer.parseInt(valor));
+        if(indice!=-1){
+            JOptionPane.showMessageDialog(null, "Mascota Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Mascota No Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     public void cargarFoto(){
         JFileChooser jf = new JFileChooser();
@@ -170,9 +175,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "No se han ingresado mascotas", "Error", JOptionPane.ERROR_MESSAGE);
             vista.btnMostrarMascotas.setEnabled(false);
         }
-
-
-}
+    }
     public void mostrarMascotas() {
         if (!modelo.mostrarMascotas().isEmpty()) {
             if (modeloTabla.getColumnCount() == 0) {
