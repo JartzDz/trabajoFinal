@@ -60,7 +60,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="cb339" class="javax.swing.JTable" binding="tablaMascotas">
+                  <component id="cb339" class="javax.swing.JTable" binding="tablaUsuarios">
                     <constraints/>
                     <properties/>
                   </component>
@@ -201,7 +201,7 @@
                           <font size="18"/>
                         </properties>
                       </component>
-                      <component id="6d5e6" class="javax.swing.JTextField" binding="txtRaza">
+                      <component id="6d5e6" class="javax.swing.JTextField" binding="txtDireccion">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -211,7 +211,7 @@
                           <font size="18"/>
                         </properties>
                       </component>
-                      <component id="a6ded" class="javax.swing.JTextField" binding="txtDuenio">
+                      <component id="a6ded" class="javax.swing.JTextField" binding="txtTelefono">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -221,7 +221,7 @@
                           <font size="18"/>
                         </properties>
                       </component>
-                      <component id="aea7f" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+                      <component id="aea7f" class="javax.swing.JTextField" binding="txtCorreo">
                         <constraints>
                           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -231,7 +231,7 @@
                           <font size="18"/>
                         </properties>
                       </component>
-                      <component id="e44a6" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+                      <component id="e44a6" class="javax.swing.JComboBox" binding="cbTipoUsuario">
                         <constraints>
                           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -244,7 +244,7 @@
                           </model>
                         </properties>
                       </component>
-                      <component id="f5f11" class="javax.swing.JTextField">
+                      <component id="f5f11" class="javax.swing.JTextField" binding="txtClave">
                         <constraints>
                           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -378,7 +378,7 @@
                           <text value="AGREGAR"/>
                         </properties>
                       </component>
-                      <component id="c376e" class="javax.swing.JButton" binding="btnMostrarMascotas">
+                      <component id="c376e" class="javax.swing.JButton" binding="btnMostrarUsuarios">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
