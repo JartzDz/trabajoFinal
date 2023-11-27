@@ -13,9 +13,19 @@ public class GestorUsuario {
     }
 
     public void setUsuarios(ArrayList<Persona> usuarios) {
-        this.usuarios = usuarios;
+        this.usuarios = (usuarios != null) ? new ArrayList<>(usuarios) : new ArrayList<>();
     }
 
+    public void agregarNuevoUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, String tipoUsuario) {
+        // Leer usuarios actuales desde el archivo
+        recuperarUsuarios();
+
+        // Agregar el nuevo usuario
+        agregarUsuario(cedula, nombre, direccion, telefono, correo, contrasenia, tipoUsuario);
+
+        // Serializar y escribir de nuevo en el archivo
+        guardarUsuarios();
+    }
     public void agregarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, String tipoUsuario){
         if(tipoUsuario.equalsIgnoreCase("PROPIETARIO ESTABLECIMIENTO")){
             usuarios.add(new DuenioEstablecimiento(cedula, nombre, direccion, telefono, correo, contrasenia));
@@ -64,6 +74,9 @@ public class GestorUsuario {
             System.out.println("Error al serializar la lista de usuarios: " + e.getMessage());
         }
     }
+
+
+
 
     // Método para deserializar la lista de usuarios
     @SuppressWarnings("unchecked")

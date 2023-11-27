@@ -179,7 +179,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="643ad" class="javax.swing.JTextField" binding="textField6" default-binding="true">
+                  <component id="643ad" class="javax.swing.JTextField" binding="txtFechaAprobacionAA">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -189,7 +189,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="d64ea" class="javax.swing.JTextField" binding="textField7" default-binding="true">
+                  <component id="d64ea" class="javax.swing.JTextField" binding="txtMontoPoliza">
                     <constraints>
                       <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -199,7 +199,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="6760f" class="javax.swing.JTextField" binding="textField8" default-binding="true">
+                  <component id="6760f" class="javax.swing.JTextField" binding="txtNombreConsultor">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -209,7 +209,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="7c975" class="javax.swing.JTextField" binding="textField9" default-binding="true">
+                  <component id="7c975" class="javax.swing.JTextField" binding="txtFechaVenciPoliza">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -219,7 +219,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="8d83c" class="javax.swing.JTextField" binding="textField10" default-binding="true">
+                  <component id="8d83c" class="javax.swing.JTextField" binding="txtNumPoliza">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -229,7 +229,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="d1e4e" class="javax.swing.JTextField" binding="textField11" default-binding="true">
+                  <component id="d1e4e" class="javax.swing.JTextField" binding="txtFechaEmiPoliza">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -251,7 +251,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="320c7" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+                  <component id="320c7" class="javax.swing.JTextField" binding="txtNumLicencia">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -261,7 +261,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="701d7" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+                  <component id="701d7" class="javax.swing.JTextField" binding="txtPeriodo">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -271,7 +271,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="9a5a5" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+                  <component id="9a5a5" class="javax.swing.JTextField" binding="txtFechaEmisionLicencia">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -281,7 +281,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="7befc" class="javax.swing.JButton" binding="button6" default-binding="true">
+                  <component id="7befc" class="javax.swing.JButton" binding="btnOficioAprobacion">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -289,7 +289,7 @@
                       <text value="CARGAR OFICIO"/>
                     </properties>
                   </component>
-                  <component id="a7b42" class="javax.swing.JTextField" binding="textField5" default-binding="true">
+                  <component id="a7b42" class="javax.swing.JTextField" binding="txtFechaAprobacionTDRS">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -299,7 +299,7 @@
                       <font size="18"/>
                     </properties>
                   </component>
-                  <component id="76335" class="javax.swing.JButton" default-binding="true">
+                  <component id="76335" class="javax.swing.JButton" binding="btnCargarOficioAA">
                     <constraints>
                       <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -416,7 +416,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="e1eee" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+                          <component id="e1eee" class="javax.swing.JTextField" binding="txtBuscar">
                             <constraints/>
                             <properties>
                               <font size="18"/>
@@ -434,7 +434,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="f1253" class="javax.swing.JButton" binding="button5" default-binding="true">
+                          <component id="f1253" class="javax.swing.JButton" binding="btnBuscar">
                             <constraints/>
                             <properties>
                               <preferredSize width="150" height="40"/>
@@ -493,28 +493,28 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="61599" class="javax.swing.JButton" binding="button1" default-binding="true">
+                      <component id="61599" class="javax.swing.JButton" binding="btnAgregar">
                         <constraints/>
                         <properties>
                           <preferredSize width="150" height="40"/>
                           <text value="AGREGAR"/>
                         </properties>
                       </component>
-                      <component id="e55ed" class="javax.swing.JButton" binding="button2" default-binding="true">
+                      <component id="e55ed" class="javax.swing.JButton" binding="btnModificar">
                         <constraints/>
                         <properties>
                           <preferredSize width="150" height="40"/>
                           <text value="MODIFICAR"/>
                         </properties>
                       </component>
-                      <component id="fd40e" class="javax.swing.JButton" binding="button3" default-binding="true">
+                      <component id="fd40e" class="javax.swing.JButton" binding="btnEliminar">
                         <constraints/>
                         <properties>
                           <preferredSize width="150" height="40"/>
                           <text value="ELIMINAR"/>
                         </properties>
                       </component>
-                      <component id="3c6a3" class="javax.swing.JButton" binding="button4" default-binding="true">
+                      <component id="3c6a3" class="javax.swing.JButton" binding="btnMostrar">
                         <constraints/>
                         <properties>
                           <preferredSize width="150" height="40"/>
