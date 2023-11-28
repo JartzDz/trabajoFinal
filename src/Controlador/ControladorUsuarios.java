@@ -111,6 +111,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public void cargarUsuario() {
         String cedulaBuscada = vistaUsuario.txtBuscar.getText();
         int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
+        System.out.println("YA DIMEEE");
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("CEDULA");
