@@ -23,6 +23,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         this.modelo = modelo;
         this.controladorMascotas = controladorMascotas;
         this.controladorUsuarios = controladorUsuarios;
+        vista.setTitle("LOGIN");
         vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vista.setResizable(false);
         vista.setSize(700,535);

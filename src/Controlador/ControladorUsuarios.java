@@ -1,14 +1,18 @@
 package Controlador;
 
 import Modelo.GestorUsuario;
-import Modelo.Mascota;
 import Modelo.Persona;
 import Vista.InterfazUsuarios;
+import javax.mail.*;
+import javax.mail.PasswordAuthentication;
 
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,6 +83,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                     if(validarCorreo(correo)){
                         modeloUsuario.agregarUsuario(ID,nombreUsuario, direccion, tel,correo,clave,Integer.parseInt(tipoUsuario));
                         modeloUsuario.guardarUsuarios();
+                        enviarCorreo(correo, ID, clave);
                         limpiar();
                     }else{
                         JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -107,11 +112,41 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         modeloUsuario.guardarUsuarios();
         mostrarUsuarios();
     }
+    private void enviarCorreo(String destino, String ID, String clave) {
+        final String remitente = "designjartz@gmail.com"; // Ingresa tu dirección de correo
+        final String password = "fuuiorpabfajsasz"; // Ingresa tu contraseña
 
+        Properties propiedades = new Properties();
+        propiedades.put("mail.smtp.auth", "true");
+        propiedades.put("mail.smtp.starttls.enable", "true");
+        propiedades.put("mail.smtp.host", "smtp.gmail.com"); // O utiliza el servidor de correo correspondiente
+        propiedades.put("mail.smtp.port", "587"); // O el puerto correspondiente
+
+        Session sesion = Session.getInstance(propiedades,
+                new javax.mail.Authenticator() {
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(remitente, password);
+                    }
+                });
+
+        try {
+            Message mensaje = new MimeMessage(sesion);
+            mensaje.setFrom(new InternetAddress(remitente));
+            mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destino));
+            mensaje.setSubject("Bienvenido a tu aplicación"); // Asunto del correo
+            mensaje.setText("¡Hola " + ID + "!\n\nTu cuenta ha sido creada en la aplicación.\n\nID: " + ID + "\nContraseña: " + clave);
+
+            Transport.send(mensaje);
+
+            System.out.println("Correo enviado con éxito");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void cargarUsuario() {
         String cedulaBuscada = vistaUsuario.txtBuscar.getText();
         int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
-        System.out.println("YA DIMEEE");
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("CEDULA");
@@ -155,13 +190,11 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     }
 
     public static boolean validarCorreo(String correo) {
-        // Patrón para validar direcciones de correo electrónico
-        String patronCorreo = "^[a-zA-Z0-9+&*-]+(?:\\.[a-zA-Z0-9+&-]+)@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        // Compila la expresión regular
+        String patronCorreo = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(patronCorreo);
-        // Crea un objeto Matcher que comparará la cadena proporcionada con el patrón
         Matcher matcher = pattern.matcher(correo);
-        // Devuelve true si la cadena coincide con el patrón, de lo contrario, false
+
+
         return matcher.matches();
     }
 
