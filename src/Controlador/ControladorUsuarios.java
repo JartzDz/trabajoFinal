@@ -35,23 +35,20 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         vista.txtBuscar.addFocusListener(this);
         String[] columnas = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
         modeloTabla = new DefaultTableModel(null, columnas);
+        vistaUsuario.btnBuscar.setFocusable(false);
         activarBotones();
     }
-
     public void activarBotones(){
         if(modeloUsuario.getUsuarios().isEmpty()){
-            vistaUsuario.btnBuscar.setFocusable(false);
             vistaUsuario.txtBuscar.setEnabled(false);
             vistaUsuario.btnMostrarUsuarios.setEnabled(false);
             vistaUsuario.btnBuscar.setEnabled(false);
         }else{
-            vistaUsuario.btnBuscar.setFocusable(true);
             vistaUsuario.txtBuscar.setEnabled(true);
             vistaUsuario.btnMostrarUsuarios.setEnabled(true);
             vistaUsuario.btnBuscar.setEnabled(true);
         }
     }
-
     public void mostrarInterfazUsuarios() {
         vistaUsuario.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vistaUsuario.setLocationRelativeTo(null);
@@ -94,7 +91,6 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
     }
-
     public void buscarUsuario(){
         String cedula = vistaUsuario.txtBuscar.getText();
         int indice= modeloUsuario.buscarUsuario(cedula);
@@ -115,8 +111,6 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public void cargarUsuario() {
         String cedulaBuscada = vistaUsuario.txtBuscar.getText();
         int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
-        System.out.println("cedula buscada"+cedulaBuscada);
-        System.out.println(indice);
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("CEDULA");
@@ -127,16 +121,13 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("CONTRASEÑA");
             }
             modeloTabla.setRowCount(0);
-            for (Persona p : modeloUsuario.getUsuarios()) {
-                Object[] fila = {p.getCedula(), p.getNombre(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getContrasenia()};
-                modeloTabla.addRow(fila);
-            }
+            Object[] fila = {modeloUsuario.getUsuarios().get(indice).getCedula(), modeloUsuario.getUsuarios().get(indice).getNombre(), modeloUsuario.getUsuarios().get(indice).getDireccion(), modeloUsuario.getUsuarios().get(indice).getTelefono(), modeloUsuario.getUsuarios().get(indice).getCorreo(), modeloUsuario.getUsuarios().get(indice).getContrasenia()};
+            modeloTabla.addRow(fila);
             vistaUsuario.tablaUsuarios.setModel(modeloTabla);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     public void mostrarUsuarios() {
         if (!modeloUsuario.getUsuarios().isEmpty()) {
@@ -215,14 +206,14 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public void focusGained(FocusEvent e) {
         vistaUsuario.txtBuscar.setText("");
         vistaUsuario.txtBuscar.setForeground(Color.BLACK);
-        //vistaUsuario.btnBuscar.setEnabled(true);
+        vistaUsuario.btnBuscar.setEnabled(true);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         vistaUsuario.txtBuscar.setForeground(Color.GRAY);
         vistaUsuario.txtBuscar.setText("Ingrese el ID del Usuario");
-        //vistaUsuario.btnBuscar.setEnabled(false);
+        vistaUsuario.btnBuscar.setEnabled(false);
     }
 
     @Override

@@ -13,6 +13,7 @@ public class Main {
         InterfazMascotas interfazMascotas = new InterfazMascotas();
         GestorMascotas gestorMascotas = new GestorMascotas();
         ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
+
         GestorUsuario gestorUsuario = new GestorUsuario();
         InterfazUsuarios interfazUsuarios = new InterfazUsuarios();
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
