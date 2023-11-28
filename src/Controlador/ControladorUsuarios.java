@@ -74,6 +74,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                         vistaUsuario.btnBuscar.setEnabled(true);
                         vistaUsuario.txtBuscar.setEnabled(true);
                         limpiar();
+                        modeloUsuario.guardarUsuarios();
                     }else{
                         JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -97,33 +98,35 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     }
     public void eliminarTabla(){
         int fila=vistaUsuario.tablaUsuarios.getSelectedRow();
-        //String valor= (String) vista.tablaPersonas.getValueAt(fila,0);
+        String valor= (String) vistaUsuario.tablaUsuarios.getValueAt(fila,0);
         modeloUsuario.eliminarUsuario(fila);
     }
 
     public void cargarUsuario() {
-        int valor = modeloUsuario.buscarUsuario((vistaUsuario.txtBuscar.getText()));
+        String cedulaBuscada = vistaUsuario.txtBuscar.getText();
+        int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
 
-        if (!modeloUsuario.getUsuarios().isEmpty()) {
-            if (valor != -1) {
-                String data[][] = {};
-                String[] col = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
-                modeloTabla = new DefaultTableModel(data, col);
-                vistaUsuario.tablaUsuarios.setModel(modeloTabla);
-                modeloTabla.insertRow(modeloTabla.getRowCount(), new Object[]{});
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getCedula(), modeloTabla.getRowCount() - 1, 0);
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getNombre(), modeloTabla.getRowCount() - 1, 1);
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getDireccion(), modeloTabla.getRowCount() - 1, 2);
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getTelefono(), modeloTabla.getRowCount() - 1, 3);
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getCorreo(), modeloTabla.getRowCount() - 1, 4);
-                modeloTabla.setValueAt(modeloUsuario.getUsuarios().get(valor).getContrasenia(), modeloTabla.getRowCount() - 1, 5);
-                vistaUsuario.btnMostrarUsuarios.setEnabled(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
-                vistaUsuario.btnMostrarUsuarios.setEnabled(false);
+        if (indice != -1) {
+            if (modeloTabla.getColumnCount() == 0) {
+                modeloTabla.addColumn("CEDULA");
+                modeloTabla.addColumn("NOMBRE");
+                modeloTabla.addColumn("DIRECCION");
+                modeloTabla.addColumn("TELEFONO");
+                modeloTabla.addColumn("CORREO");
+                modeloTabla.addColumn("CONTRASEÑA");
             }
+
+            modeloTabla.setRowCount(0);
+
+            for (Persona p : modeloUsuario.getUsuarios()) {
+                Object[] fila = {p.getCedula(), p.getNombre(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getContrasenia()};
+                modeloTabla.addRow(fila);
+            }
+
+            vistaUsuario.tablaUsuarios.setModel(modeloTabla);
+            vistaUsuario.btnMostrarUsuarios.setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(null, "No se han ingresado usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
             vistaUsuario.btnMostrarUsuarios.setEnabled(false);
         }
     }
@@ -229,6 +232,12 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     @Override
     public void keyTyped(KeyEvent e){
         char c = e.getKeyChar();
+        if(e.getSource()==vistaUsuario.txtID){
+            validarCedula(vistaUsuario.txtID.getText());
+            if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();}
+        }
         if(e.getSource()== vistaUsuario.txtTelefono){
             if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
                 e.consume();
