@@ -33,12 +33,23 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         vista.txtCorreo.addKeyListener(this);
         vista.txtClave.addKeyListener(this);
         vista.txtBuscar.addFocusListener(this);
-        vista.btnBuscar.setFocusable(false);
-        vista.txtBuscar.setEnabled(false);
         String[] columnas = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
         modeloTabla = new DefaultTableModel(null, columnas);
-        vista.btnMostrarUsuarios.setEnabled(false);
-        vista.btnBuscar.setEnabled(false);
+        activarBotones();
+    }
+
+    public void activarBotones(){
+        if(modeloUsuario.getUsuarios().isEmpty()){
+            vistaUsuario.btnBuscar.setFocusable(false);
+            vistaUsuario.txtBuscar.setEnabled(false);
+            vistaUsuario.btnMostrarUsuarios.setEnabled(false);
+            vistaUsuario.btnBuscar.setEnabled(false);
+        }else{
+            vistaUsuario.btnBuscar.setFocusable(true);
+            vistaUsuario.txtBuscar.setEnabled(true);
+            vistaUsuario.btnMostrarUsuarios.setEnabled(true);
+            vistaUsuario.btnBuscar.setEnabled(true);
+        }
     }
 
     public void mostrarInterfazUsuarios() {
@@ -69,12 +80,9 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
                 if(validarCedula(ID)){
                     if(validarCorreo(correo)){
-                        modeloUsuario.agregarUsuario(ID,nombreUsuario, direccion, tel,correo,clave,tipoUsuario);
-                        vistaUsuario.btnMostrarUsuarios.setEnabled(true);
-                        vistaUsuario.btnBuscar.setEnabled(true);
-                        vistaUsuario.txtBuscar.setEnabled(true);
-                        limpiar();
+                        modeloUsuario.agregarUsuario(ID,nombreUsuario, direccion, tel,correo,clave,Integer.parseInt(tipoUsuario));
                         modeloUsuario.guardarUsuarios();
+                        limpiar();
                     }else{
                         JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -100,12 +108,15 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         int fila=vistaUsuario.tablaUsuarios.getSelectedRow();
         String valor= (String) vistaUsuario.tablaUsuarios.getValueAt(fila,0);
         modeloUsuario.eliminarUsuario(fila);
+        modeloUsuario.guardarUsuarios();
+        mostrarUsuarios();
     }
 
     public void cargarUsuario() {
         String cedulaBuscada = vistaUsuario.txtBuscar.getText();
         int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
-
+        System.out.println("cedula buscada"+cedulaBuscada);
+        System.out.println(indice);
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("CEDULA");
@@ -115,21 +126,17 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("CORREO");
                 modeloTabla.addColumn("CONTRASEÑA");
             }
-
             modeloTabla.setRowCount(0);
-
             for (Persona p : modeloUsuario.getUsuarios()) {
                 Object[] fila = {p.getCedula(), p.getNombre(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getContrasenia()};
                 modeloTabla.addRow(fila);
             }
-
             vistaUsuario.tablaUsuarios.setModel(modeloTabla);
-            vistaUsuario.btnMostrarUsuarios.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
-            vistaUsuario.btnMostrarUsuarios.setEnabled(false);
         }
     }
+
 
     public void mostrarUsuarios() {
         if (!modeloUsuario.getUsuarios().isEmpty()) {
@@ -158,17 +165,13 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public static boolean validarCorreo(String correo) {
         // Patrón para validar direcciones de correo electrónico
         String patronCorreo = "^[a-zA-Z0-9+&*-]+(?:\\.[a-zA-Z0-9+&-]+)@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
         // Compila la expresión regular
         Pattern pattern = Pattern.compile(patronCorreo);
-
         // Crea un objeto Matcher que comparará la cadena proporcionada con el patrón
         Matcher matcher = pattern.matcher(correo);
-
         // Devuelve true si la cadena coincide con el patrón, de lo contrario, false
         return matcher.matches();
     }
-
 
     public static boolean validarCedula(String cedula) {
         // Verificar que la cédula tenga 10 dígitos
@@ -178,14 +181,11 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         try {
             // Verificar que la cédula contenga solo dígitos
             Long.parseLong(cedula);
-
             // Extraer el décimo dígito de la cédula
             int digitoVerificador = Integer.parseInt(cedula.substring(9, 10));
-
             // Aplicar el algoritmo de validación para cédulas en Ecuador
             int suma = 0;
             int coeficientes[] = {2, 1, 2, 1, 2, 1, 2, 1, 2};
-
             for (int i = 0; i < coeficientes.length; i++) {
                 int digito = Integer.parseInt(cedula.substring(i, i + 1));
                 digito *= coeficientes[i];
@@ -194,23 +194,19 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                 }
                 suma += digito;
             }
-
             int resultado = 10 - (suma % 10);
-
             // Verificar si el resultado coincide con el décimo dígito de la cédula
             return (resultado == digitoVerificador || (resultado == 10 && digitoVerificador == 0));
-
         } catch (NumberFormatException e) {
             // Si la cédula no es un número válido
             return false;
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()== vistaUsuario.btnAgregar) agregar();
-        if(e.getSource() == vistaUsuario.btnMostrarUsuarios) mostrarUsuarios();
+        if(e.getSource()==vistaUsuario.btnAgregar) agregar();
+        if(e.getSource()==vistaUsuario.btnMostrarUsuarios) mostrarUsuarios();
         if(e.getSource()==vistaUsuario.btnEliminar)eliminarTabla();
         if(e.getSource()==vistaUsuario.btnBuscar)cargarUsuario();
     }
@@ -219,14 +215,14 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public void focusGained(FocusEvent e) {
         vistaUsuario.txtBuscar.setText("");
         vistaUsuario.txtBuscar.setForeground(Color.BLACK);
-        vistaUsuario.btnBuscar.setEnabled(true);
+        //vistaUsuario.btnBuscar.setEnabled(true);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         vistaUsuario.txtBuscar.setForeground(Color.GRAY);
         vistaUsuario.txtBuscar.setText("Ingrese el ID del Usuario");
-        vistaUsuario.btnBuscar.setEnabled(false);
+        //vistaUsuario.btnBuscar.setEnabled(false);
     }
 
     @Override

@@ -33,7 +33,6 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         vista.btnIngresar.addActionListener(this);
         vista.btnIngresar.addMouseListener(this);
         vista.chkMostrarContra.addActionListener(this);
-        modelo.recuperarUsuarios();
     }
     public void limpiar(){
         vista.txtUsuario.setText("");
