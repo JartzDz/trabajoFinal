@@ -54,6 +54,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         }
     }
     public void mostrarInterfazUsuarios() {
+        vistaUsuario.setTitle("USUARIOS");
         vistaUsuario.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vistaUsuario.setLocationRelativeTo(null);
         vistaUsuario.setResizable(true);

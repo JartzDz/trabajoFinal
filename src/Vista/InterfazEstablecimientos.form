@@ -3,7 +3,7 @@
   <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="985" height="524"/>
+      <xy x="20" y="20" width="1537" height="524"/>
     </constraints>
     <properties>
       <background color="-16477028"/>
@@ -237,6 +237,10 @@
                         </constraints>
                         <properties>
                           <font size="18"/>
+                          <model>
+                            <item value="CENTRO DE ATENCIÓN MÉDICO VETERINARIA"/>
+                            <item value="CENTRO DE MANEJO"/>
+                          </model>
                         </properties>
                       </component>
                       <component id="44d69" class="javax.swing.JTextField" binding="txtCIProp">
@@ -372,7 +376,7 @@
                           <text value="AGREGAR"/>
                         </properties>
                       </component>
-                      <component id="c4b7c" class="javax.swing.JButton" binding="btnMostrarMascotas">
+                      <component id="c4b7c" class="javax.swing.JButton" binding="btnMostrar">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>

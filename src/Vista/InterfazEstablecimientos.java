@@ -14,7 +14,7 @@ public class InterfazEstablecimientos extends JFrame{
     public JComboBox cboTipoEst;
     public JTextField txtCIProp;
     public JButton btnAgregar;
-    public JButton btnMostrarMascotas;
+    public JButton btnMostrar;
     public JButton btnEliminar;
     public JButton btnModificar;
 }
