@@ -58,13 +58,19 @@ public class GestorUsuario {
         }
     }
 
-    public void modificarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, int indice) {
-        usuarios.get(indice).setCedula(cedula);
-        usuarios.get(indice).setNombre(nombre);
-        usuarios.get(indice).setDireccion(direccion);
-        usuarios.get(indice).setTelefono(telefono);
-        usuarios.get(indice).setCorreo(correo);
-        usuarios.get(indice).setContrasenia(contrasenia);
+    public void modificarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, int indice){
+        // Verificar si el índice es válido
+        if (indice >= 0 && indice < usuarios.size()) {
+            usuarios.get(indice).setCedula(cedula);
+            usuarios.get(indice).setNombre(nombre);
+            usuarios.get(indice).setDireccion(direccion);
+            usuarios.get(indice).setTelefono(telefono);
+            usuarios.get(indice).setCorreo(correo);
+            usuarios.get(indice).setContrasenia(contrasenia);
+            System.out.println("Usuario modificado correctamente.");
+        } else {
+            System.out.println("Índice no válido. No se puede modificar el usuario.");
+        }
     }
 
 

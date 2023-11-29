@@ -177,12 +177,19 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
             if (validarCedula(ID)) {
                 if (validarCorreo(correo)) {
-                    // Llama al método modificarUsuario en el modelo
-                    modeloUsuario.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
-                    modeloUsuario.guardarUsuarios();
-                    JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
-                    limpiar();
-                    mostrarUsuarios();
+                    // Obtener el índice del usuario a modificar
+                    int indice = modeloUsuario.buscarUsuario(ID);
+                    // Verificar si el índice es válido
+                    if (indice != -1) {
+                        // Llama al método modificarUsuario en el modelo
+                        modeloUsuario.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
+                        modeloUsuario.guardarUsuarios();
+                        JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
+                        limpiar();
+                        mostrarUsuarios();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontró el usuario con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -193,6 +200,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void mostrarUsuarios() {
         if (!modeloUsuario.getUsuarios().isEmpty()) {
             if (modeloTabla.getColumnCount() == 0) {
@@ -262,7 +270,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         if(e.getSource()==vistaUsuario.btnMostrarUsuarios) mostrarUsuarios();
         if(e.getSource()==vistaUsuario.btnEliminar)eliminarTabla();
         if(e.getSource()==vistaUsuario.btnBuscar)cargarUsuario();
-        if(e.getSource()==vistaUsuario.btnModificar)modificarUsuario();
+        if(e.getSource()==vistaUsuario.btnModificar) modificarUsuario();
     }
 
     @Override
