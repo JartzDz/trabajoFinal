@@ -42,14 +42,7 @@ public class GestorUsuario {
         return -1;
     }
 
-    public void modificarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, int indice){
-        usuarios.get(indice).setCedula(cedula);
-        usuarios.get(indice).setNombre(nombre);
-        usuarios.get(indice).setDireccion(direccion);
-        usuarios.get(indice).setTelefono(telefono);
-        usuarios.get(indice).setCorreo(correo);
-        usuarios.get(indice).setContrasenia(contrasenia);
-    }
+
 
     public void eliminarUsuario(int indice){
         usuarios.remove(indice);
@@ -65,7 +58,14 @@ public class GestorUsuario {
         }
     }
 
-
+    public void modificarUsuario(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia, int indice) {
+        usuarios.get(indice).setCedula(cedula);
+        usuarios.get(indice).setNombre(nombre);
+        usuarios.get(indice).setDireccion(direccion);
+        usuarios.get(indice).setTelefono(telefono);
+        usuarios.get(indice).setCorreo(correo);
+        usuarios.get(indice).setContrasenia(contrasenia);
+    }
 
 
     // Método para deserializar la lista de usuarios

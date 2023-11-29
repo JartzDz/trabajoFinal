@@ -83,7 +83,8 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                     if(validarCorreo(correo)){
                         modeloUsuario.agregarUsuario(ID,nombreUsuario, direccion, tel,correo,clave,Integer.parseInt(tipoUsuario));
                         modeloUsuario.guardarUsuarios();
-                        enviarCorreo(correo, ID, clave);
+                        enviarCorreo(correo, ID, clave,nombreUsuario);
+                        JOptionPane.showMessageDialog(null,"Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
                         limpiar();
                     }else{
                         JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -112,15 +113,15 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         modeloUsuario.guardarUsuarios();
         mostrarUsuarios();
     }
-    private void enviarCorreo(String destino, String ID, String clave) {
-        final String remitente = "designjartz@gmail.com"; // Ingresa tu dirección de correo
-        final String password = "fuuiorpabfajsasz"; // Ingresa tu contraseña
+    private void enviarCorreo(String destino, String ID, String clave,String Nombre) {
+        final String remitente = "designjartz@gmail.com";
+        final String password = "fuuiorpabfajsasz";
 
         Properties propiedades = new Properties();
         propiedades.put("mail.smtp.auth", "true");
         propiedades.put("mail.smtp.starttls.enable", "true");
-        propiedades.put("mail.smtp.host", "smtp.gmail.com"); // O utiliza el servidor de correo correspondiente
-        propiedades.put("mail.smtp.port", "587"); // O el puerto correspondiente
+        propiedades.put("mail.smtp.host", "smtp.gmail.com");
+        propiedades.put("mail.smtp.port", "587");
 
         Session sesion = Session.getInstance(propiedades,
                 new javax.mail.Authenticator() {
@@ -133,8 +134,8 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             Message mensaje = new MimeMessage(sesion);
             mensaje.setFrom(new InternetAddress(remitente));
             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destino));
-            mensaje.setSubject("Bienvenido a tu aplicación"); // Asunto del correo
-            mensaje.setText("¡Hola " + ID + "!\n\nTu cuenta ha sido creada en la aplicación.\n\nID: " + ID + "\nContraseña: " + clave);
+            mensaje.setSubject("Bienvenido a tu aplicación");
+            mensaje.setText("¡Hola " + Nombre + "!\n\nTu cuenta ha sido creada en la aplicación.\n\nUsuario: " + ID + "\nContraseña: " + clave);
 
             Transport.send(mensaje);
 
@@ -164,7 +165,34 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public void modificarUsuario() {
+        String ID = vistaUsuario.txtID.getText();
+        String nombreUsuario = vistaUsuario.txtNombre.getText();
+        String tel = vistaUsuario.txtTelefono.getText();
+        String direccion = vistaUsuario.txtDireccion.getText();
+        String correo = vistaUsuario.txtCorreo.getText();
+        String clave = vistaUsuario.txtClave.getText();
+        String tipoUsuario = String.valueOf(vistaUsuario.cbTipoUsuario.getSelectedIndex());
 
+        if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
+            if (validarCedula(ID)) {
+                if (validarCorreo(correo)) {
+                    // Llama al método modificarUsuario en el modelo
+                    modeloUsuario.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
+                    modeloUsuario.guardarUsuarios();
+                    JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
+                    limpiar();
+                    mostrarUsuarios();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese cédula válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     public void mostrarUsuarios() {
         if (!modeloUsuario.getUsuarios().isEmpty()) {
             if (modeloTabla.getColumnCount() == 0) {
@@ -234,6 +262,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         if(e.getSource()==vistaUsuario.btnMostrarUsuarios) mostrarUsuarios();
         if(e.getSource()==vistaUsuario.btnEliminar)eliminarTabla();
         if(e.getSource()==vistaUsuario.btnBuscar)cargarUsuario();
+        if(e.getSource()==vistaUsuario.btnModificar)modificarUsuario();
     }
 
     @Override
