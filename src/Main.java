@@ -23,5 +23,6 @@ public class Main {
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos);
 
         ControladorLogin controladorLogin = new ControladorLogin(interfazLogin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, controladorAdministrador);
+        System.out.println("cambios realizados");
     }
 }
