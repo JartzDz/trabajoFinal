@@ -18,6 +18,7 @@ public class InterfazEstablecimientos extends JFrame{
     public JButton btnEliminar;
     public JButton btnModificar;
     public JPanel contenedor;
+    public JLabel btnRegresar;
 
     public InterfazEstablecimientos() {
         setContentPane(contenedor);

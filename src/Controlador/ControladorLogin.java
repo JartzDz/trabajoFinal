@@ -10,22 +10,23 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Objects;
 
 public class ControladorLogin extends MouseAdapter implements ActionListener, KeyListener {
     InterfazLogin vista;
     GestorUsuario modelo;
     ControladorMascotas controladorMascotas;
     ControladorUsuarios controladorUsuarios;
+    ControladorRegistro controladorRegistro;
     ControladorEstablecimientos controladorEstablecimientos;
     ControladorAdministrador controladorAdministrador;
-    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios,ControladorEstablecimientos controladorEstablecimientos,ControladorAdministrador controladorAdministrador) {
+    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios,ControladorEstablecimientos controladorEstablecimientos,ControladorAdministrador controladorAdministrador,ControladorRegistro controladorRegistro) {
         this.vista = vista;
         this.modelo = modelo;
         this.controladorMascotas = controladorMascotas;
         this.controladorUsuarios = controladorUsuarios;
         this.controladorEstablecimientos = controladorEstablecimientos;
         this.controladorAdministrador = controladorAdministrador;
+        this.controladorRegistro=controladorRegistro;
         mostrarInterfaz();
         vista.txtContra.setHorizontalAlignment(SwingConstants.LEFT);
         vista.btnIngresar.setBorder(new RoundedBorder(10));
@@ -35,20 +36,26 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         vista.chkMostrarContra.addActionListener(this);
         vista.btnSalir.addActionListener(this);
         vista.btnSalir.addMouseListener(this);
+        vista.btnCrearCuenta.addMouseListener(this);
 
     }
     public void mostrarInterfaz(){
-        vista.setUndecorated(true);
         vista.setTitle("LOGIN");
-        vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         vista.setResizable(false);
-        vista.setSize(700,500);
+        vista.setSize(700,520);
         vista.setLocationRelativeTo(null);
         vista.setVisible(true);
     }
+    
     public void limpiar(){
         vista.txtUsuario.setText("");
         vista.txtContra.setText("");
+    }
+
+    public void minimizarYMostrarVentanaRegistro() {
+        vista.setVisible(false);
+        controladorRegistro.mostrarInterfaz();
     }
 
     public void validarIngreso() {
@@ -97,6 +104,10 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             vista.btnSalir.setForeground(fg);
             vista.btnSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
+        if(e.getSource() == vista.btnCrearCuenta){
+            vista.btnCrearCuenta.setForeground(bg);
+            vista.btnCrearCuenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
 
     }
     public void mostrarContrasenia(){
@@ -104,7 +115,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             vista.txtContra.setEchoChar((char)0);
         }
         else {
-            vista.txtContra.setEchoChar('*');
+            vista.txtContra.setEchoChar('•');
         }
     }
     @Override
@@ -127,8 +138,16 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             vista.btnSalir.setBackground(bg2);
             vista.btnSalir.setForeground(fg2);
         }
+        if(e.getSource() == vista.btnCrearCuenta){
+            vista.btnCrearCuenta.setForeground(new Color(0,0,0));
+            vista.btnCrearCuenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
     }
-
+    public void mouseClicked(MouseEvent e) {
+        if(e.getSource()==vista.btnCrearCuenta){
+            minimizarYMostrarVentanaRegistro();
+        }
+    }
 
 
     @Override

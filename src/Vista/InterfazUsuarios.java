@@ -18,6 +18,7 @@ public class InterfazUsuarios extends JFrame{
     public JButton btnEliminar;
     public JButton btnModificar;
     public JTextField txtClave;
+    public JLabel btnRegresar;
 
     public InterfazUsuarios(){
         setContentPane(contenedor);

@@ -1,11 +1,9 @@
 package Controlador;
 
-import Modelo.GestorEstablecimiento;
 import Modelo.GestorUsuario;
 import Vista.InterfazAdmin;
 import Vista.InterfazLogin;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +17,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     ControladorUsuarios controladorUsuarios;
     ControladorEstablecimientos controladorEstablecimientos;
 
-    public ControladorAdministrador(InterfazAdmin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios, ControladorEstablecimientos controladorEstablecimientos) {
+    public ControladorAdministrador(InterfazAdmin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios, ControladorEstablecimientos controladorEstablecimientos, InterfazLogin interfazLogin) {
         this.vista = vista;
         this.modelo = modelo;
         this.controladorMascotas = controladorMascotas;

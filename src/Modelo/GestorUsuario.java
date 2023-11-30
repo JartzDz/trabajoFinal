@@ -1,5 +1,6 @@
 package Modelo;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -73,7 +74,34 @@ public class GestorUsuario {
         }
     }
 
+    public boolean validarCedulaUnica(String cedula) {
+        for (Persona usuarioExistente : usuarios) {
+            if (usuarioExistente.getCedula().equals(cedula)) {
+                JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public boolean validarTelefonoUnico(String telefono) {
+        for (Persona usuarioExistente : usuarios) {
+            if (usuarioExistente.getTelefono().equals(telefono)) {
+                JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validarCorreoUnico(String correo) {
+        for (Persona usuarioExistente : usuarios) {
+            if (usuarioExistente.getCorreo().equals(correo)) {
+                return false;
+            }
+        }
+        return true;
+    }
     // Método para deserializar la lista de usuarios
     @SuppressWarnings("unchecked")
     public void recuperarUsuarios() {

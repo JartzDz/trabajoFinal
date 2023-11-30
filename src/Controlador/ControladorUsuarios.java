@@ -40,6 +40,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         String[] columnas = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
         modeloTabla = new DefaultTableModel(null, columnas);
         vistaUsuario.btnBuscar.setFocusable(false);
+        vistaUsuario.btnRegresar.addMouseListener(this);
         activarBotones();
     }
     public void activarBotones(){
@@ -54,6 +55,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         }
     }
     public void mostrarInterfazUsuarios() {
+        vistaUsuario.setUndecorated(true);
         vistaUsuario.setTitle("USUARIOS");
         vistaUsuario.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vistaUsuario.setLocationRelativeTo(null);
@@ -70,34 +72,28 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         vistaUsuario.txtClave.setText("");
     }
 
-    public void agregar(){
-            String ID = vistaUsuario.txtID.getText();
-            String nombreUsuario= vistaUsuario.txtNombre.getText();
-            String tel = vistaUsuario.txtTelefono.getText();
-            String direccion = vistaUsuario.txtDireccion.getText();
-            String correo = vistaUsuario.txtCorreo.getText();
-            String clave = vistaUsuario.txtClave.getText();
-            String tipoUsuario= String.valueOf(vistaUsuario.cbTipoUsuario.getSelectedIndex());
+    public void agregar() {
+        String ID = vistaUsuario.txtID.getText();
+        String nombreUsuario = vistaUsuario.txtNombre.getText();
+        String tel = vistaUsuario.txtTelefono.getText();
+        String direccion = vistaUsuario.txtDireccion.getText();
+        String correo = vistaUsuario.txtCorreo.getText();
+        String clave = vistaUsuario.txtClave.getText();
+        String tipoUsuario = String.valueOf(vistaUsuario.cbTipoUsuario.getSelectedIndex());
 
-            if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-                if(validarCedula(ID)){
-                    if(validarCorreo(correo)){
-                        modeloUsuario.agregarUsuario(ID,nombreUsuario, direccion, tel,correo,clave,Integer.parseInt(tipoUsuario));
-                        modeloUsuario.guardarUsuarios();
-                        enviarCorreo(correo, ID, clave,nombreUsuario);
-                        JOptionPane.showMessageDialog(null,"Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                        limpiar();
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese cédula válida.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
+            if (modeloUsuario.validarCedulaUnica(ID) && modeloUsuario.validarTelefonoUnico(tel) && modeloUsuario.validarCorreoUnico(correo)) {
+                modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
+                modeloUsuario.guardarUsuarios();
+                enviarCorreo(correo, ID, clave, nombreUsuario);
+                JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                limpiar();
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
     public void buscarUsuario(){
         String cedula = vistaUsuario.txtBuscar.getText();
         int indice= modeloUsuario.buscarUsuario(cedula);
@@ -135,7 +131,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             Message mensaje = new MimeMessage(sesion);
             mensaje.setFrom(new InternetAddress(remitente));
             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destino));
-            mensaje.setSubject("Bienvenido a tu aplicación");
+            mensaje.setSubject("Bienvenido");
             mensaje.setText("¡Hola " + Nombre + "!\n\nTu cuenta ha sido creada en la aplicación.\n\nUsuario: " + ID + "\nContraseña: " + clave);
 
             Transport.send(mensaje);
@@ -263,6 +259,22 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             // Si la cédula no es un número válido
             return false;
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getSource()==vistaUsuario.btnRegresar) {
+            limpiar();
+            vistaUsuario.dispose();
+        }
+    }
+    public void mouseEntered(MouseEvent e) {
+        vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     @Override

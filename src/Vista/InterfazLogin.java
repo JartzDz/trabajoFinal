@@ -10,6 +10,7 @@ public class InterfazLogin extends JFrame {
     public JPanel contenedor;
     public JCheckBox chkMostrarContra;
     public JButton btnSalir;
+    public JLabel btnCrearCuenta;
 
     public InterfazLogin() {
 

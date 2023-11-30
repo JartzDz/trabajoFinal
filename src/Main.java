@@ -1,28 +1,36 @@
 import Controlador.*;
-import Modelo.GestorEstablecimiento;
-import Modelo.GestorUsuario;
-import Modelo.GestorMascotas;
+import Modelo.*;
 import Vista.*;
 
 public class Main {
     public static void main(String[] args) {
-        InterfazMascotas interfazMascotas = new InterfazMascotas();
+        // Modelos
         GestorMascotas gestorMascotas = new GestorMascotas();
-        ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
-
         GestorUsuario gestorUsuario = new GestorUsuario();
+        GestorEstablecimiento gestorEstablecimiento = new GestorEstablecimiento();
+
+        // Vistas
+        InterfazMascotas interfazMascotas = new InterfazMascotas();
         InterfazUsuarios interfazUsuarios = new InterfazUsuarios();
-        ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         InterfazLogin interfazLogin = new InterfazLogin();
         InterfazAdmin interfazAdmin = new InterfazAdmin();
-
         InterfazEstablecimientos interfazEstablecimientos = new InterfazEstablecimientos();
-        GestorEstablecimiento gestorEstablecimiento = new GestorEstablecimiento();
+        InterfazRegistro interfazRegistro = new InterfazRegistro();
+
+        // Controladores
+        ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
+        ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos);
 
-        ControladorAdministrador controladorAdministrador = new ControladorAdministrador(interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos);
 
-        ControladorLogin controladorLogin = new ControladorLogin(interfazLogin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, controladorAdministrador);
-        System.out.println("cambios realizados");
+        ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
+                interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin);
+
+        ControladorRegistro controladorRegistro = new ControladorRegistro(interfazRegistro, gestorUsuario, controladorAdministrador, null);
+        ControladorLogin controladorLogin = new ControladorLogin(interfazLogin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, controladorAdministrador, controladorRegistro);
+
+        controladorRegistro.setControladorLogin(controladorLogin);
+
     }
 }
+

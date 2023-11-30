@@ -5,9 +5,11 @@ import Vista.InterfazEstablecimientos;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ControladorEstablecimientos extends MouseAdapter implements ActionListener {
     private GestorEstablecimiento modeloEstablecimiento;
@@ -23,9 +25,11 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.btnMostrar.addActionListener(this);
         vista.btnModificar.addActionListener(this);
         vista.btnBuscar.setFocusable(false);
+        vista.btnRegresar.addMouseListener(this);
 
     }
     public void mostrarInterfazEstablecimiento() {
+        vistaEstablecimiento.setUndecorated(true);
         vistaEstablecimiento.setTitle("ESTABLECIMIENTO");
         vistaEstablecimiento.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vistaEstablecimiento.setLocationRelativeTo(null);
@@ -50,6 +54,21 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
             vistaEstablecimiento.btnMostrar.setEnabled(true);
             vistaEstablecimiento.btnBuscar.setEnabled(true);
         }
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getSource()==vistaEstablecimiento.btnRegresar) {
+            limpiar();
+            vistaEstablecimiento.dispose();
+        }
+    }
+    public void mouseEntered(MouseEvent e) {
+        vistaEstablecimiento.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        vistaEstablecimiento.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
     @Override
     public void actionPerformed(ActionEvent e) {

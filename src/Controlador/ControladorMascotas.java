@@ -253,8 +253,20 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vista.btnBuscar.setEnabled(false);
 
     }
+    public void mouseEntered(MouseEvent e) {
+        vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
-        vista.dispose();
+        if(e.getSource()==vista.btnRegresar){
+            limpiar();
+            vista.dispose();
+        }
     }
+
 }
