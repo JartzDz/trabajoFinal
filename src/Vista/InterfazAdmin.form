@@ -8,7 +8,7 @@
     <properties>
       <background color="-16477028"/>
       <minimumSize width="650" height="528"/>
-      <preferredSize width="450" height="528"/>
+      <preferredSize width="450" height="700"/>
     </properties>
     <border type="none"/>
     <children>
@@ -74,7 +74,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="7f214" class="javax.swing.JButton" binding="GESTIÓNUSUARIOSButton" default-binding="true">
+                          <component id="7f214" class="javax.swing.JButton" binding="btnUsuarios">
                             <constraints/>
                             <properties>
                               <background color="-2298694"/>
@@ -95,7 +95,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="1d824" class="javax.swing.JButton" default-binding="true">
+                          <component id="1d824" class="javax.swing.JButton" binding="btnSalir">
                             <constraints/>
                             <properties>
                               <background color="-2298694"/>
@@ -115,7 +115,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="9ecd3" class="javax.swing.JButton" default-binding="true">
+                          <component id="9ecd3" class="javax.swing.JButton" binding="btnPersonalCGA">
                             <constraints/>
                             <properties>
                               <background color="-2298694"/>
@@ -137,7 +137,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="ee199" class="javax.swing.JButton" default-binding="true">
+                          <component id="ee199" class="javax.swing.JButton" binding="btnMascotas">
                             <constraints/>
                             <properties>
                               <background color="-2298694"/>
@@ -164,7 +164,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="490f8" class="javax.swing.JButton" default-binding="true">
+                          <component id="490f8" class="javax.swing.JButton" binding="btnEstablecimientos">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>

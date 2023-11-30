@@ -1,6 +1,7 @@
 package Controlador;
 
 import Modelo.Administrador;
+import Modelo.DuenioEstablecimiento;
 import Modelo.DuenioMascota;
 import Modelo.GestorUsuario;
 import Vista.InterfazLogin;
@@ -15,25 +16,35 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
     InterfazLogin vista;
     GestorUsuario modelo;
     ControladorMascotas controladorMascotas;
-
     ControladorUsuarios controladorUsuarios;
-
-    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios) {
+    ControladorEstablecimientos controladorEstablecimientos;
+    ControladorAdministrador controladorAdministrador;
+    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios,ControladorEstablecimientos controladorEstablecimientos,ControladorAdministrador controladorAdministrador) {
         this.vista = vista;
         this.modelo = modelo;
         this.controladorMascotas = controladorMascotas;
         this.controladorUsuarios = controladorUsuarios;
-        vista.setTitle("LOGIN");
-        vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        vista.setResizable(false);
-        vista.setSize(700,535);
-        vista.setLocationRelativeTo(null);
-        vista.setVisible(true);
+        this.controladorEstablecimientos = controladorEstablecimientos;
+        this.controladorAdministrador = controladorAdministrador;
+        mostrarInterfaz();
         vista.txtContra.setHorizontalAlignment(SwingConstants.LEFT);
         vista.btnIngresar.setBorder(new RoundedBorder(10));
+        vista.btnSalir.setBorder(new RoundedBorder(10));
         vista.btnIngresar.addActionListener(this);
         vista.btnIngresar.addMouseListener(this);
         vista.chkMostrarContra.addActionListener(this);
+        vista.btnSalir.addActionListener(this);
+        vista.btnSalir.addMouseListener(this);
+
+    }
+    public void mostrarInterfaz(){
+        vista.setUndecorated(true);
+        vista.setTitle("LOGIN");
+        vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        vista.setResizable(false);
+        vista.setSize(700,500);
+        vista.setLocationRelativeTo(null);
+        vista.setVisible(true);
     }
     public void limpiar(){
         vista.txtUsuario.setText("");
@@ -48,11 +59,21 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         if (indice!=-1) {
             if(modelo.getUsuarios().get(indice).getContrasenia().equals(new String(passwordChars))){
                 if(modelo.getUsuarios().get(indice) instanceof Administrador){
-                    controladorUsuarios.mostrarInterfazUsuarios();
+                    limpiar();
+                    controladorAdministrador.mostrarInterfaz();
+
                 }
                 if(modelo.getUsuarios().get(indice) instanceof DuenioMascota){
+                    limpiar();
                     controladorMascotas.mostrarInterfazMascotas();
+
                 }
+                if(modelo.getUsuarios().get(indice) instanceof DuenioEstablecimiento){
+                    limpiar();
+                    controladorEstablecimientos.mostrarInterfazEstablecimiento();
+
+                }
+
             }else{
                 JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES INCORRECTAS");
                 limpiar();
@@ -71,6 +92,11 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             vista.btnIngresar.setForeground(fg);
             vista.btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
+        if (e.getSource() == vista.btnSalir) {
+            vista.btnSalir.setBackground(bg);
+            vista.btnSalir.setForeground(fg);
+            vista.btnSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
 
     }
     public void mostrarContrasenia(){
@@ -85,6 +111,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
     public void actionPerformed(ActionEvent e) {
         if ((e.getSource()==vista.btnIngresar))validarIngreso();
         if((e.getSource()==vista.chkMostrarContra))mostrarContrasenia();
+        if(e.getSource()==vista.btnSalir)System.exit(0);
     }
 
     public void mouseExited(MouseEvent e) {
@@ -95,6 +122,10 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         if (e.getSource() == vista.btnIngresar) {
             vista.btnIngresar.setBackground(bg2);
             vista.btnIngresar.setForeground(fg2);
+        }
+        if (e.getSource() == vista.btnSalir) {
+            vista.btnSalir.setBackground(bg2);
+            vista.btnSalir.setForeground(fg2);
         }
     }
 

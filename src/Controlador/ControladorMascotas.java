@@ -40,6 +40,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.btnBuscar.setEnabled(false);
         vista.btnSubirFotoCarnet.addActionListener(this);
         vista.btnSubirFotoMascota.addActionListener(this);
+        vista.btnRegresar.addMouseListener(this);
+        vista.setUndecorated(true);
 
     }
 
@@ -250,5 +252,9 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vista.txtBuscar.setText("Ingrese el ID de la mascota");
             vista.btnBuscar.setEnabled(false);
 
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        vista.dispose();
     }
 }

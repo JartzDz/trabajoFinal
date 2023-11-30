@@ -9,6 +9,7 @@ public class InterfazLogin extends JFrame {
     public JComboBox cboTipoUsuario;
     public JPanel contenedor;
     public JCheckBox chkMostrarContra;
+    public JButton btnSalir;
 
     public InterfazLogin() {
 
