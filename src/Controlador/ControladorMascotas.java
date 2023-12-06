@@ -9,8 +9,6 @@ import Vista.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.List;
-import java.util.Objects;
 
 public class ControladorMascotas extends MouseAdapter implements ActionListener, KeyListener, FocusListener {
     private InterfazMascotas vista;
@@ -21,6 +19,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     public ControladorMascotas(GestorMascotas modelo, InterfazMascotas vista) {
         this.modelo = modelo;
         this.vista = vista;
+        modelo.recuperarMascotas();
         vista.btnAgregar.addActionListener(this);
         vista.btnEliminar.addActionListener(this);
         vista.btnModificar.addActionListener(this);
@@ -31,6 +30,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.txtBuscar.addKeyListener(this);
         vista.txtRaza.addKeyListener(this);
         vista.txtNombre.addKeyListener(this);
+        vista.txtColor.addKeyListener(this);
         vista.txtBuscar.addFocusListener(this);
         vista.btnBuscar.setFocusable(false);
         vista.txtBuscar.setEnabled(false);
@@ -39,23 +39,42 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.btnMostrarMascotas.setEnabled(false);
         vista.btnBuscar.setEnabled(false);
         vista.btnSubirFotoCarnet.addActionListener(this);
-        vista.btnSubirFotoMascota.addActionListener(this);
         vista.btnRegresar.addMouseListener(this);
         vista.setUndecorated(true);
+        activarBotones();
 
     }
 
     public void mostrarInterfazMascotas() {
         vista.setLocationRelativeTo(null);
         vista.setResizable(false);
+        vista.setTitle("MASCOTAS");
         vista.setVisible(true);
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+    public void activarBotones(){
+        if(modelo.getListaMascotas().isEmpty()){
+            vista.txtBuscar.setEnabled(false);
+            vista.btnMostrarMascotas.setEnabled(false);
+            vista.btnBuscar.setEnabled(false);
+        }else{
+            vista.txtBuscar.setEnabled(true);
+            vista.btnMostrarMascotas.setEnabled(true);
+            vista.btnBuscar.setEnabled(true);
+        }
+    }
+
     public void limpiar(){
         vista.txtID.setText("");
         vista.txtNombre.setText("");
         vista.txtRaza.setText("");
         vista.txtDuenio.setText("");
+        vista.txtBuscar.setText("");
+        vista.txtColor.setText("");
+        vista.spnEdad.setValue(0);
+        vista.panelImagen.removeAll();
+        vista.panelImagen.revalidate();
+        vista.panelImagen.repaint();
     }
 
     public void agregar(){
@@ -75,11 +94,9 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             boolean desparacitaciones= Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
             boolean otrasCirugias= Boolean.parseBoolean(vista.chkCirugias.getText());
 
-            if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty()) {
-                modelo.agregarMascota(ID,edad, nombreMascota, sexo,raza,color, duenio, foto, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
-                vista.btnMostrarMascotas.setEnabled(true);
-                vista.btnBuscar.setEnabled(true);
-                vista.txtBuscar.setEnabled(true);
+            if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
+                modelo.agregarMascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+                modelo.guardarMascotas();
 
                 limpiar();
             } else {
@@ -171,11 +188,52 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 vista.btnMostrarMascotas.setEnabled(true);
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
-                vista.btnMostrarMascotas.setEnabled(false);
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "No se han ingresado mascotas", "Error", JOptionPane.ERROR_MESSAGE);
-            vista.btnMostrarMascotas.setEnabled(false);
+
+        }
+
+    }
+
+    public void modificarMascota() {
+
+        int ID = Integer.parseInt(vista.txtID.getText());
+        String nombreMascota= vista.txtNombre.getText();
+        String raza = vista.txtRaza.getText();
+        String duenio = vista.txtDuenio.getText();
+        int edad= (int) vista.spnEdad.getValue();
+        String sexo= String.valueOf(vista.cboSexo.getSelectedIndex());
+        String color=vista.txtColor.getText();
+        Image foto = null;
+        Image fotoCarnet = null;
+        boolean vacunas= Boolean.parseBoolean(vista.chkVacunas.getText());
+        boolean esterilizacion= Boolean.parseBoolean(vista.chkEsterilizacion.getText());
+        boolean desparacitaciones= Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
+        boolean otrasCirugias= Boolean.parseBoolean(vista.chkCirugias.getText());
+
+        if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
+
+            try {
+
+                int indice = modelo.buscarMascota(ID);
+                if (indice != -1) {
+
+                    modelo.modificarMascota(ID, edad,
+                            nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
+                    modelo.guardarMascotas();
+                    JOptionPane.showMessageDialog(null, "Mascota modificada con éxito.");
+                    limpiar();
+                    mostrarMascotas();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "El ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     public void mostrarMascotas() {
@@ -185,29 +243,31 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("NOMBRE");
                 modeloTabla.addColumn("RAZA");
                 modeloTabla.addColumn("DUEÑO");
+                modeloTabla.addColumn("EDAD");
+                modeloTabla.addColumn("FOTO CARNET");
             }
             modeloTabla.setRowCount(0);
             for (Mascota p : modelo.mostrarMascotas()) {
-                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getDuenio()};
+                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getDuenio(), p.getEdad(), p.getFotoCarnet()};
                 modeloTabla.addRow(fila);
             }
             vista.tablaMascotas.setModel(modeloTabla);
-            vista.btnMostrarMascotas.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
             modeloTabla.setRowCount(0);
-            vista.btnMostrarMascotas.setEnabled(false);
+            vista.tablaMascotas.setModel(modeloTabla);
         }
     }
+
     //validaciones
     public void keyTyped(KeyEvent e){
         char c = e.getKeyChar();
-        if(e.getSource()==vista.txtID || e.getSource()==vista.txtBuscar){
+        if(e.getSource()==vista.txtID || e.getSource()==vista.txtBuscar || e.getSource()==vista.txtDuenio){
             if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vista.txtNombre  || e.getSource()==vista.txtRaza  || e.getSource()==vista.txtDuenio){
+        if(e.getSource()==vista.txtNombre  || e.getSource()==vista.txtRaza || e.getSource()==vista.txtColor){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 
@@ -233,10 +293,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vista.btnAgregar) agregar();
-        if(e.getSource() == vista.btnMostrarMascotas) mostrarMascotas();
+        if(e.getSource()==vista.btnMostrarMascotas) mostrarMascotas();
         if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
-        if(e.getSource()==vista.btnSubirFotoMascota)cargarFoto();
+        if(e.getSource()==vista.btnSubirFotoCarnet)cargarFoto();
     }
 
     @Override

@@ -22,7 +22,7 @@ public class DuenioMascota extends Persona implements Serializable {
     public void agregarMascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
                                Image foto, Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                                boolean otrasCirugias){
-        Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, foto, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+        Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
         listaMascotas.add(nuevaMascota);
     }
     public int buscarMascota(int ID){
