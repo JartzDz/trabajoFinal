@@ -15,8 +15,13 @@ public class GestorEstablecimiento {
     public void setEstablecimientos(ArrayList<Persona> usuarios) {
         this.establecimientos = (usuarios != null) ? new ArrayList<>(establecimientos) : new ArrayList<>();
     }
-    public void agregarEstablecimiento(String RUC,String nombre,String direccion,String telefono,String correo,String CIDuenio,String tipoEst){
-        establecimientos.add(new Establecimiento(RUC,tipoEst,telefono,nombre,direccion,correo,CIDuenio));
+    public void agregarEstablecimiento(String RUC,String nombre,String direccion,String telefono,String correo,String CIDuenio,int tipoEst){
+        if(tipoEst == 0){
+            establecimientos.add(new Establecimiento(RUC,nombre,telefono,direccion,correo,CIDuenio, "CENTRO DE ATENCIÓN MÉDICO VETERINARIA"));
+        }
+        if(tipoEst == 1){
+            establecimientos.add(new Establecimiento(RUC,nombre,telefono,direccion,correo,CIDuenio, "CENTRO DE MANEJO"));
+        }
     }
     public int buscarEstablecimiento(String RUC){
         int contador=0;
@@ -65,7 +70,7 @@ public class GestorEstablecimiento {
     // Método para deserializar la lista de usuarios
     @SuppressWarnings("unchecked")
     public void recuperarEstablecimientos() {
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Usuarios.bin"))) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Establecimientos.bin"))) {
             establecimientos = (ArrayList<Establecimiento>) entrada.readObject();
             System.out.println("La lista de establecimientos se ha deserializado correctamente.");
         } catch (IOException | ClassNotFoundException e) {

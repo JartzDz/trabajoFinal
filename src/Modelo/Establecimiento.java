@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Establecimiento implements Serializable {
-    private String ruc,tipoEstablecimiento,telefono,nombreEst,direccion,correo,CIRepresentante;
+    private String ruc,nombreEst,telefono,direccion,correo,CIRepresentante, tipoEstablecimiento;
 
 
-    public Establecimiento(String ruc, String tipoEstablecimiento, String telefono, String nombreEst, String direccion, String correo, String CIRepresentante) {
+    public Establecimiento(String ruc, String nombreEst, String telefono, String direccion, String correo, String CIRepresentante, String tipoEstablecimiento) {
         this.ruc = ruc;
-        this.tipoEstablecimiento = tipoEstablecimiento;
         this.telefono = telefono;
         this.nombreEst = nombreEst;
         this.direccion = direccion;
         this.correo = correo;
         this.CIRepresentante = CIRepresentante;
+        this.tipoEstablecimiento = tipoEstablecimiento;
     }
 
     public String getRuc() {
@@ -72,4 +72,5 @@ public class Establecimiento implements Serializable {
     public void setCIRepresentante(String CIRepresentante) {
         this.CIRepresentante = CIRepresentante;
     }
+
 }
