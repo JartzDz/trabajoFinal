@@ -11,7 +11,7 @@ public class Mascota implements Serializable {
     private boolean vacunas, desparacitaciones, esterilizacion, otrasCirugias;
 
     public Mascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
-                   Image foto, Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
+                   Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                    boolean otrasCirugias) {
         this.ID = ID;
         this.edad = edad;
@@ -20,7 +20,6 @@ public class Mascota implements Serializable {
         this.raza = raza;
         this.color = color;
         this.duenio = duenio;
-        this.foto = foto;
         this.fotoCarnet = fotoCarnet;
         this.vacunas = vacunas;
         this.desparacitaciones = desparacitaciones;
@@ -52,13 +51,6 @@ public class Mascota implements Serializable {
         this.color = color;
     }
 
-    public Image getFoto() {
-        return foto;
-    }
-
-    public void setFoto(Image foto) {
-        this.foto = foto;
-    }
 
     public Image getFotoCarnet() {
         return fotoCarnet;
