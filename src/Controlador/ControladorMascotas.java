@@ -40,6 +40,11 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.btnBuscar.setEnabled(false);
         vista.btnSubirFotoCarnet.addActionListener(this);
         vista.btnRegresar.addMouseListener(this);
+        vista.btnModificar.addMouseListener(this);
+        vista.btnBuscar.addMouseListener(this);
+        vista.btnAgregar.addMouseListener(this);
+        vista.btnEliminar.addMouseListener(this);
+        vista.btnMostrarMascotas.addMouseListener(this);
         vista.setUndecorated(true);
         activarBotones();
 
@@ -108,10 +113,18 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void eliminarTabla(){
-        int fila=vista.tablaMascotas.getSelectedRow();
-        //String valor= (String) vista.tablaPersonas.getValueAt(fila,0);
-        modelo.eliminarMascota(fila);
+        int fila = vista.tablaMascotas.getSelectedRow();
+
+        if (fila != -1) {
+            int idMascota = (int) vista.tablaMascotas.getValueAt(fila, 0);
+            modelo.eliminarMascota(idMascota);
+            modelo.guardarMascotas();
+            mostrarMascotas();
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
     public void buscarMascota(){
         String valor = vista.txtBuscar.getText();
         int indice= modelo.buscarMascota(Integer.parseInt(valor));
@@ -139,8 +152,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 Image imagenOriginal = imagenIcon.getImage();
 
                 // Calcular el nuevo tamaño manteniendo la relación de aspecto
-                int nuevoAncho = 120;
-                int nuevoAlto = 120;
+                int nuevoAncho = 200;
+                int nuevoAlto = 200;
 
                 // Escalar la imagen al nuevo tamaño
                 Image imagenEscalada = imagenOriginal.getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
@@ -177,15 +190,19 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         if (!modelo.mostrarMascotas().isEmpty()) {
             if (valor != -1) {
                 String data[][] = {};
-                String col[] = {"ID", "NOMBRE", "RAZA", "DUEÑO"};
+                String col[] = {"ID", "NOMBRE", "RAZA", "EDAD","DUEÑO","SEXO","COLOR","FOTO CARNET"};
                 modeloTabla = new DefaultTableModel(data, col);
                 vista.tablaMascotas.setModel(modeloTabla);
                 modeloTabla.insertRow(modeloTabla.getRowCount(), new Object[]{});
                 modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getID(), modeloTabla.getRowCount() - 1, 0);
                 modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getNombreMascota(), modeloTabla.getRowCount() - 1, 1);
                 modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getRaza(), modeloTabla.getRowCount() - 1, 2);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getDuenio(), modeloTabla.getRowCount() - 1, 3);
-                vista.btnMostrarMascotas.setEnabled(true);
+                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getEdad(), modeloTabla.getRowCount() - 1, 3);
+                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getDuenio(), modeloTabla.getRowCount() - 1, 4);
+                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getSexo(), modeloTabla.getRowCount() - 1, 5);
+                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getColor(), modeloTabla.getRowCount() - 1, 6);
+                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getFotoCarnet(), modeloTabla.getRowCount() - 1, 7);
+
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -198,30 +215,27 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void modificarMascota() {
-
-        int ID = Integer.parseInt(vista.txtID.getText());
-        String nombreMascota= vista.txtNombre.getText();
+        String textoID = vista.txtID.getText();
+        String nombreMascota = vista.txtNombre.getText();
         String raza = vista.txtRaza.getText();
         String duenio = vista.txtDuenio.getText();
-        int edad= (int) vista.spnEdad.getValue();
-        String sexo= String.valueOf(vista.cboSexo.getSelectedIndex());
-        String color=vista.txtColor.getText();
+        int edad = (int) vista.spnEdad.getValue();
+        String sexo = String.valueOf(vista.cboSexo.getSelectedIndex());
+        String color = vista.txtColor.getText();
         Image foto = null;
         Image fotoCarnet = null;
-        boolean vacunas= Boolean.parseBoolean(vista.chkVacunas.getText());
-        boolean esterilizacion= Boolean.parseBoolean(vista.chkEsterilizacion.getText());
-        boolean desparacitaciones= Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
-        boolean otrasCirugias= Boolean.parseBoolean(vista.chkCirugias.getText());
+        boolean vacunas = Boolean.parseBoolean(vista.chkVacunas.getText());
+        boolean esterilizacion = Boolean.parseBoolean(vista.chkEsterilizacion.getText());
+        boolean desparacitaciones = Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
+        boolean otrasCirugias = Boolean.parseBoolean(vista.chkCirugias.getText());
 
-        if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
-
+        if (!textoID.isEmpty() && !nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
             try {
-
+                int ID = Integer.parseInt(textoID);
                 int indice = modelo.buscarMascota(ID);
-                if (indice != -1) {
 
-                    modelo.modificarMascota(ID, edad,
-                            nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
+                if (indice != -1) {
+                    modelo.modificarMascota(ID, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
                     modelo.guardarMascotas();
                     JOptionPane.showMessageDialog(null, "Mascota modificada con éxito.");
                     limpiar();
@@ -236,26 +250,102 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void mostrarMascotas() {
+        // Limpia el modelo de la tabla antes de agregar columnas y filas
+        modeloTabla.setRowCount(0);
+
         if (!modelo.mostrarMascotas().isEmpty()) {
+            // Verifica si las columnas ya han sido agregadas al modelo de la tabla
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("ID");
                 modeloTabla.addColumn("NOMBRE");
                 modeloTabla.addColumn("RAZA");
                 modeloTabla.addColumn("DUEÑO");
                 modeloTabla.addColumn("EDAD");
+                modeloTabla.addColumn("COLOR");
                 modeloTabla.addColumn("FOTO CARNET");
             }
-            modeloTabla.setRowCount(0);
+
             for (Mascota p : modelo.mostrarMascotas()) {
-                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getDuenio(), p.getEdad(), p.getFotoCarnet()};
+                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getDuenio(), p.getEdad(), p.getColor(), p.getFotoCarnet()};
                 modeloTabla.addRow(fila);
             }
+
+            // Actualiza el modelo de la tabla después de agregar filas
             vista.tablaMascotas.setModel(modeloTabla);
         } else {
             JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
-            modeloTabla.setRowCount(0);
-            vista.tablaMascotas.setModel(modeloTabla);
+        }
+    }
+
+
+    public void mouseEntered(MouseEvent e){
+        Color bg = new Color(4, 148, 156);
+        Color fg = new Color(255,255,255);
+
+        if (e.getSource() == vista.btnAgregar) {
+            vista.btnAgregar.setBackground(bg);
+            vista.btnAgregar.setForeground(fg);
+            vista.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista.btnModificar) {
+            vista.btnModificar.setBackground(bg);
+            vista.btnModificar.setForeground(fg);
+            vista.btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnMostrarMascotas){
+            vista.btnMostrarMascotas.setBackground(bg);
+            vista.btnMostrarMascotas.setForeground(fg);
+            vista.btnMostrarMascotas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnEliminar){
+            vista.btnEliminar.setBackground(bg);
+            vista.btnEliminar.setForeground(fg);
+            vista.btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnBuscar){
+            vista.btnBuscar.setBackground(bg);
+            vista.btnBuscar.setForeground(fg);
+            vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnRegresar){
+            vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+
+    }
+    public void mouseExited(MouseEvent e) {
+
+        Color bg2 = new Color(229, 236, 186);
+        Color fg2 = new Color(0, 0, 0);
+
+        if (e.getSource() == vista.btnAgregar) {
+            vista.btnAgregar.setBackground(bg2);
+            vista.btnAgregar.setForeground(fg2);
+            vista.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista.btnModificar) {
+            vista.btnModificar.setBackground(bg2);
+            vista.btnModificar.setForeground(fg2);
+            vista.btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnMostrarMascotas){
+            vista.btnMostrarMascotas.setBackground(bg2);
+            vista.btnMostrarMascotas.setForeground(fg2);
+            vista.btnMostrarMascotas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnEliminar){
+            vista.btnEliminar.setBackground(bg2);
+            vista.btnEliminar.setForeground(fg2);
+            vista.btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnBuscar){
+            vista.btnBuscar.setBackground(bg2);
+            vista.btnBuscar.setForeground(fg2);
+            vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource()==vista.btnRegresar){
+            vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
@@ -296,6 +386,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         if(e.getSource()==vista.btnMostrarMascotas) mostrarMascotas();
         if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
+        if(e.getSource()==vista.btnModificar)modificarMascota();
         if(e.getSource()==vista.btnSubirFotoCarnet)cargarFoto();
     }
 
@@ -313,14 +404,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vista.btnBuscar.setEnabled(false);
 
     }
-    public void mouseEntered(MouseEvent e) {
-        vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-        vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    }
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource()==vista.btnRegresar){
