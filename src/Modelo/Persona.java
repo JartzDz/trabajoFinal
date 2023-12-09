@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Persona implements Serializable {
     private String cedula, nombre, direccion, telefono, correo, contrasenia;
-
+    private static final long serialVersionUID = 1L;
     public Persona(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia) {
         this.cedula = cedula;
         this.nombre = nombre;

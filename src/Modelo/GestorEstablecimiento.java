@@ -23,7 +23,18 @@ public class GestorEstablecimiento {
             establecimientos.add(new Establecimiento(RUC,nombre,telefono,direccion,correo,CIDuenio, "CENTRO DE MANEJO"));
         }
     }
-    public int buscarEstablecimiento(String RUC){
+
+    public ArrayList<Establecimiento>  buscarEstablecimientosDuenio(String cedula){
+        ArrayList<Establecimiento> establecimientosDuenio = new ArrayList<>();
+        for (Establecimiento establecimiento : establecimientos) {
+            if (establecimiento.getCIRepresentante().equals(cedula)) {
+                establecimientosDuenio.add(establecimiento);
+            }
+        }
+        return establecimientosDuenio;
+    }
+
+    public static int buscarEstablecimiento(String RUC, ArrayList<Establecimiento> establecimientos){
         int contador=0;
         for (Establecimiento establecimiento : establecimientos) {
             if (establecimiento.getRuc().equals(RUC)) {

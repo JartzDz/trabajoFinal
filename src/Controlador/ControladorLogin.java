@@ -67,6 +67,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
             if(modelo.getUsuarios().get(indice).getContrasenia().equals(new String(passwordChars))){
                 if(modelo.getUsuarios().get(indice) instanceof Administrador){
                     limpiar();
+                    controladorAdministrador.setUsuario(modelo.getUsuarios().get(indice).getCedula());
                     controladorAdministrador.mostrarInterfaz();
 
                 }
@@ -77,10 +78,9 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
                 }
                 if(modelo.getUsuarios().get(indice) instanceof DuenioEstablecimiento){
                     limpiar();
+                    controladorEstablecimientos.setUsuario(modelo.getUsuarios().get(indice).getCedula());
                     controladorEstablecimientos.mostrarInterfazEstablecimiento();
-
                 }
-
             }else{
                 JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES INCORRECTAS");
                 limpiar();

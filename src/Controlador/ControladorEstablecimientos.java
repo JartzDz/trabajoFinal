@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     private GestorUsuario modeloPropietarios;
     private InterfazEstablecimientos vistaEstablecimiento;
     DefaultTableModel modeloTabla;
+    private String usuario="";
     public ControladorEstablecimientos (GestorEstablecimiento modelo, InterfazEstablecimientos vista, GestorUsuario modeloPropietarios){
         modeloEstablecimiento=modelo;
         vistaEstablecimiento=vista;
@@ -34,21 +37,34 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.txtNombre.addKeyListener(this);
         vista.txtCorreo.addKeyListener(this);
         vista.txtBuscar.addFocusListener(this);
+        modeloPropietarios.recuperarUsuarios();
         String[] columnas = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
         modeloTabla = new DefaultTableModel(null, columnas);
         activarBotones();
-        cargarCombo();
+    }
+
+    public boolean esPropietario(){
+        int indice = modeloPropietarios.buscarUsuario(usuario);
+        if(modeloPropietarios.getUsuarios().get(indice) instanceof Administrador){
+            return false;
+        }
+        return true;
     }
 
     public void cargarCombo(){
-        for (Persona p : modeloPropietarios.getUsuarios()) {
-            if(p instanceof DuenioEstablecimiento){
-                vistaEstablecimiento.cboCIProp.addItem(p.getCedula());
+        if(esPropietario()){
+            vistaEstablecimiento.cboCIProp.addItem(usuario);
+        }else{
+            for (Persona p : modeloPropietarios.getUsuarios()) {
+                if(p instanceof DuenioEstablecimiento){
+                    vistaEstablecimiento.cboCIProp.addItem(p.getCedula());
+                }
             }
         }
     }
 
     public void mostrarInterfazEstablecimiento() {
+        cargarCombo();
         vistaEstablecimiento.setUndecorated(true);
         vistaEstablecimiento.setTitle("ESTABLECIMIENTO");
         vistaEstablecimiento.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -100,7 +116,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         }
     }
 
-    public void buscarEstablecimiento(){
+    /*public void buscarEstablecimiento(){
         String RUC = vistaEstablecimiento.txtBuscar.getText();
         int indice= modeloEstablecimiento.buscarEstablecimiento(RUC);
         if(indice!=-1){
@@ -108,7 +124,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         }else{
             JOptionPane.showMessageDialog(null, "Establecimiento No Encontrado", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 
     public void eliminarTabla(){
         int fila=vistaEstablecimiento.tablaEstablecimientos.getSelectedRow();
@@ -130,7 +146,13 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                 modeloTabla.addColumn("TIPO");
             }
             modeloTabla.setRowCount(0);
-            for (Establecimiento p : modeloEstablecimiento.getEstablecimiento()) {
+            ArrayList<Establecimiento> listaEstablecimiento;
+            if(esPropietario()){
+                listaEstablecimiento = modeloEstablecimiento.buscarEstablecimientosDuenio(usuario);
+            }else{
+                listaEstablecimiento = modeloEstablecimiento.getEstablecimiento();
+            }
+            for (Establecimiento p : listaEstablecimiento) {
                 Object[] fila = {p.getRuc(), p.getNombreEst(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getCIRepresentante(), p.getTipoEstablecimiento()};
                 modeloTabla.addRow(fila);
             }
@@ -145,7 +167,12 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
 
     public void cargarEstablecimiento() {
         String cedulaBuscada = vistaEstablecimiento.txtBuscar.getText();
-        int indice = modeloEstablecimiento.buscarEstablecimiento(cedulaBuscada);
+        int indice = 0;
+        if(esPropietario()){
+            indice = GestorEstablecimiento.buscarEstablecimiento(cedulaBuscada,modeloEstablecimiento.buscarEstablecimientosDuenio(usuario));
+        }else{
+            indice = GestorEstablecimiento.buscarEstablecimiento(cedulaBuscada, modeloEstablecimiento.getEstablecimiento());
+        }
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("RUC");
@@ -179,7 +206,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
                 if (validarCorreo(correo)) {
                     // Obtener el índice del usuario a modificar
-                    int indice = modeloEstablecimiento.buscarEstablecimiento(RUC);
+                    int indice = GestorEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
                     // Verificar si el índice es válido
                     if (indice != -1) {
                         // Llama al método modificarUsuario en el modelo
@@ -218,6 +245,14 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     }
     public void mouseEntered(MouseEvent e) {
         vistaEstablecimiento.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     @Override

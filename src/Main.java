@@ -4,10 +4,15 @@ import Vista.*;
 
 public class Main {
     public static void main(String[] args) {
+
         // Modelos
         GestorMascotas gestorMascotas = new GestorMascotas();
         GestorUsuario gestorUsuario = new GestorUsuario();
         GestorEstablecimiento gestorEstablecimiento = new GestorEstablecimiento();
+
+        /*gestorUsuario.agregarUsuario("0106397821", "Juli",
+                "Av Salado", "2386024", "nicole@ucuenca", "123", 3);
+        gestorUsuario.guardarUsuarios();*/
 
         // Vistas
         InterfazMascotas interfazMascotas = new InterfazMascotas();
