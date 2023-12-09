@@ -19,6 +19,7 @@ public class InterfazEstablecimientos extends JFrame{
     public JButton btnModificar;
     public JPanel contenedor;
     public JLabel btnRegresar;
+    private JComboBox cboCIProp;
 
     public InterfazEstablecimientos() {
         setContentPane(contenedor);
