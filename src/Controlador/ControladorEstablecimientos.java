@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ControladorEstablecimientos extends MouseAdapter implements ActionListener,KeyListener, FocusListener {
     private GestorEstablecimiento modeloEstablecimiento;
@@ -25,7 +27,6 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.btnModificar.addActionListener(this);
         vista.btnBuscar.setFocusable(false);
         vista.btnRegresar.addMouseListener(this);
-        vista.txtCIProp.addActionListener(this);
         vista.txtRUC.addKeyListener(this);
         vista.txtTelefono.addKeyListener(this);
         vista.txtBuscar.addKeyListener(this);
@@ -33,9 +34,18 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.txtNombre.addKeyListener(this);
         vista.txtCorreo.addKeyListener(this);
         vista.txtBuscar.addFocusListener(this);
-        String[] columnas = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO"};
+        String[] columnas = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
         modeloTabla = new DefaultTableModel(null, columnas);
         activarBotones();
+        cargarCombo();
+    }
+
+    public void cargarCombo(){
+        for (Persona p : modeloPropietarios.getUsuarios()) {
+            if(p instanceof DuenioEstablecimiento){
+                vistaEstablecimiento.cboCIProp.addItem(p.getCedula());
+            }
+        }
     }
 
     public void mostrarInterfazEstablecimiento() {
@@ -52,7 +62,6 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vistaEstablecimiento.txtTelefono.setText("");
         vistaEstablecimiento.txtDireccion.setText("");
         vistaEstablecimiento.txtCorreo.setText("");
-        vistaEstablecimiento.txtCIProp.setText("");
     }
     public void activarBotones(){
         if(modeloEstablecimiento.getEstablecimiento().isEmpty()){
@@ -72,28 +81,19 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         String tel = vistaEstablecimiento.txtTelefono.getText();
         String direccion = vistaEstablecimiento.txtDireccion.getText();
         String correo = vistaEstablecimiento.txtCorreo.getText();
-        String CIPropietario = vistaEstablecimiento.txtCIProp.getText();
+        String CIPropietario = vistaEstablecimiento.cboCIProp.getSelectedItem().toString();
         String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboTipoEst.getSelectedIndex());
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
-            if (modeloPropietarios.validarCedulaUnica(CIPropietario) && modeloPropietarios.validarTelefonoUnico(tel) && modeloPropietarios.validarCorreoUnico(correo)) {
-                int buscarPropietario = modeloPropietarios.buscarUsuario(CIPropietario);
-                if(buscarPropietario!=-1){
-                    if (modeloPropietarios.getUsuarios().get(buscarPropietario) instanceof DuenioEstablecimiento) {
-                        modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                        ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                        modeloEstablecimiento.guardarEstablecimientos();
-                        //enviarCorreo(correo, ID, clave, nombreUsuario);
-                        JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                    }else{
-                        JOptionPane.showMessageDialog(null, "La cédula ingresada no pertenece a un Propietario", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-
-                }else{
-                    JOptionPane.showMessageDialog(null, "El Propietario NO Existe", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            int buscarPropietario = modeloPropietarios.buscarUsuario(CIPropietario);
+            if (validarCorreo(correo)) {
+                modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                modeloEstablecimiento.guardarEstablecimientos();
+                //enviarCorreo(correo, ID, clave, nombreUsuario);
+                JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
                 limpiar();
             }else{
-                JOptionPane.showMessageDialog(null, "Cédula, Teléfono o Correo Inválidos", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -127,10 +127,11 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                 modeloTabla.addColumn("TELEFONO");
                 modeloTabla.addColumn("CORREO");
                 modeloTabla.addColumn("PROPIETARIO");
+                modeloTabla.addColumn("TIPO");
             }
             modeloTabla.setRowCount(0);
             for (Establecimiento p : modeloEstablecimiento.getEstablecimiento()) {
-                Object[] fila = {p.getRuc(), p.getNombreEst(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getCIRepresentante()};
+                Object[] fila = {p.getRuc(), p.getNombreEst(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getCIRepresentante(), p.getTipoEstablecimiento()};
                 modeloTabla.addRow(fila);
             }
             vistaEstablecimiento.tablaEstablecimientos.setModel(modeloTabla);
@@ -153,14 +154,59 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                 modeloTabla.addColumn("TELEFONO");
                 modeloTabla.addColumn("CORREO");
                 modeloTabla.addColumn("PROPIETARIO");
+                modeloTabla.addColumn("TIPO");
             }
             modeloTabla.setRowCount(0);
-            Object[] fila = {modeloEstablecimiento.getEstablecimiento().get(indice).getRuc(), modeloEstablecimiento.getEstablecimiento().get(indice).getNombreEst(), modeloEstablecimiento.getEstablecimiento().get(indice).getDireccion(), modeloEstablecimiento.getEstablecimiento().get(indice).getTelefono(), modeloEstablecimiento.getEstablecimiento().get(indice).getCorreo(), modeloEstablecimiento.getEstablecimiento().get(indice).getCIRepresentante()};
+            Object[] fila = {modeloEstablecimiento.getEstablecimiento().get(indice).getRuc(), modeloEstablecimiento.getEstablecimiento().get(indice).getNombreEst(),
+                    modeloEstablecimiento.getEstablecimiento().get(indice).getDireccion(), modeloEstablecimiento.getEstablecimiento().get(indice).getTelefono(), modeloEstablecimiento.getEstablecimiento().get(indice).getCorreo(),
+                    modeloEstablecimiento.getEstablecimiento().get(indice).getCIRepresentante(), modeloEstablecimiento.getEstablecimiento().get(indice).getTipoEstablecimiento()};
             modeloTabla.addRow(fila);
             vistaEstablecimiento.tablaEstablecimientos.setModel(modeloTabla);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void modificarEstablecimiento() {
+        String RUC = vistaEstablecimiento.txtRUC.getText();
+        String nombreEstablecimiento = vistaEstablecimiento.txtNombre.getText();
+        String tel = vistaEstablecimiento.txtTelefono.getText();
+        String direccion = vistaEstablecimiento.txtDireccion.getText();
+        String correo = vistaEstablecimiento.txtCorreo.getText();
+        String CIPropietario = vistaEstablecimiento.cboCIProp.getSelectedItem().toString();
+        String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboTipoEst.getSelectedIndex());
+
+        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
+                if (validarCorreo(correo)) {
+                    // Obtener el índice del usuario a modificar
+                    int indice = modeloEstablecimiento.buscarEstablecimiento(RUC);
+                    // Verificar si el índice es válido
+                    if (indice != -1) {
+                        // Llama al método modificarUsuario en el modelo
+                        modeloEstablecimiento.modificarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento, indice);
+                        modeloEstablecimiento.guardarEstablecimientos();
+                        JOptionPane.showMessageDialog(null, "Establecimiento modificado con éxito.");
+                        limpiar();
+                        mostrarEstablecimiento();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static boolean validarCorreo(String correo) {
+        String patronCorreo = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(patronCorreo);
+        Matcher matcher = pattern.matcher(correo);
+
+
+        return matcher.matches();
     }
 
     @Override
@@ -184,22 +230,45 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         if(e.getSource()==vistaEstablecimiento.btnMostrar) mostrarEstablecimiento();
         if(e.getSource()==vistaEstablecimiento.btnEliminar)eliminarTabla();
         if(e.getSource()==vistaEstablecimiento.btnBuscar)cargarEstablecimiento();
-        if(e.getSource()==vistaEstablecimiento.btnModificar){} //modificarUsuario();
+        if(e.getSource()==vistaEstablecimiento.btnModificar) modificarEstablecimiento();
     }
 
     @Override
     public void focusGained(FocusEvent e) {
-
+        vistaEstablecimiento.txtBuscar.setText("");
+        vistaEstablecimiento.txtBuscar.setForeground(Color.BLACK);
+        vistaEstablecimiento.btnBuscar.setEnabled(true);
     }
 
     @Override
     public void focusLost(FocusEvent e) {
-
+        vistaEstablecimiento.txtBuscar.setForeground(Color.GRAY);
+        vistaEstablecimiento.txtBuscar.setText("Ingrese el ID del Usuario");
+        vistaEstablecimiento.btnBuscar.setEnabled(false);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        if(e.getSource()==vistaEstablecimiento.txtRUC){
+            if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();}
+        }
+        if(e.getSource()== vistaEstablecimiento.txtTelefono){
+            if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();}
+        }
+        if(e.getSource()==vistaEstablecimiento.txtNombre || e.getSource()==vistaEstablecimiento.txtDireccion){
+            if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
+                e.setKeyChar(Character.toUpperCase(c));
 
+            }else{
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }
 
     @Override
