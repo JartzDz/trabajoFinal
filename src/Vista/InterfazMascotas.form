@@ -633,7 +633,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="efae1" class="javax.swing.JLabel">
+                      <component id="efae1" class="javax.swing.JLabel" binding="lblImagen">
                         <constraints/>
                         <properties>
                           <background color="-35"/>

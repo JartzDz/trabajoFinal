@@ -25,7 +25,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.btnModificar.addActionListener(this);
         vista.btnBuscar.setFocusable(false);
         vista.btnRegresar.addMouseListener(this);
-        vista.txtCIProp.addActionListener(this);
+        vista.cboCIProp.addActionListener(this);
         vista.txtRUC.addKeyListener(this);
         vista.txtTelefono.addKeyListener(this);
         vista.txtBuscar.addKeyListener(this);

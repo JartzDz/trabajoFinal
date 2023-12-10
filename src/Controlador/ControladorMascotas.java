@@ -1,4 +1,5 @@
 package Controlador;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +10,12 @@ import Vista.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 public class ControladorMascotas extends MouseAdapter implements ActionListener, KeyListener, FocusListener {
     private InterfazMascotas vista;
@@ -34,7 +41,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.txtBuscar.addFocusListener(this);
         vista.btnBuscar.setFocusable(false);
         vista.txtBuscar.setEnabled(false);
-        String[] columnas = {"ID", "NOMBRE", "RAZA", "DUEÑO"};
+
+        String[] columnas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO"};
         modeloTabla = new DefaultTableModel(null, columnas);
         vista.btnMostrarMascotas.setEnabled(false);
         vista.btnBuscar.setEnabled(false);
@@ -90,7 +98,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             String raza = vista.txtRaza.getText();
             String duenio = vista.txtDuenio.getText();
             int edad= (int) vista.spnEdad.getValue();
-            String sexo= String.valueOf(vista.cboSexo.getSelectedIndex());
+            String sexo= vista.cboSexo.getSelectedItem().toString();
+            System.out.println(sexo);
             String color=vista.txtColor.getText();
             Image foto = null;
             Image fotoCarnet = null;
@@ -113,16 +122,11 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void eliminarTabla(){
-        int fila = vista.tablaMascotas.getSelectedRow();
-
-        if (fila != -1) {
-            int idMascota = (int) vista.tablaMascotas.getValueAt(fila, 0);
-            modelo.eliminarMascota(idMascota);
-            modelo.guardarMascotas();
-            mostrarMascotas();
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        int fila=vista.tablaMascotas.getSelectedRow();
+        int valor= (int) vista.tablaMascotas.getValueAt(fila,0);
+        modelo.eliminarMascota(fila);
+        modelo.guardarMascotas();
+        mostrarMascotas();
     }
 
     public void buscarMascota(){
@@ -185,34 +189,57 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
     public void cargarMascota() {
-        int valor = modelo.buscarMascota(Integer.parseInt(vista.txtBuscar.getText()));
+        // Obtener el ID de la mascota a buscar
+        String textoID = vista.txtBuscar.getText();
 
-        if (!modelo.mostrarMascotas().isEmpty()) {
-            if (valor != -1) {
-                String data[][] = {};
-                String col[] = {"ID", "NOMBRE", "RAZA", "EDAD","DUEÑO","SEXO","COLOR","FOTO CARNET"};
-                modeloTabla = new DefaultTableModel(data, col);
-                vista.tablaMascotas.setModel(modeloTabla);
-                modeloTabla.insertRow(modeloTabla.getRowCount(), new Object[]{});
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getID(), modeloTabla.getRowCount() - 1, 0);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getNombreMascota(), modeloTabla.getRowCount() - 1, 1);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getRaza(), modeloTabla.getRowCount() - 1, 2);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getEdad(), modeloTabla.getRowCount() - 1, 3);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getDuenio(), modeloTabla.getRowCount() - 1, 4);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getSexo(), modeloTabla.getRowCount() - 1, 5);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getColor(), modeloTabla.getRowCount() - 1, 6);
-                modeloTabla.setValueAt(modelo.mostrarMascotas().get(valor).getFotoCarnet(), modeloTabla.getRowCount() - 1, 7);
+        // Verificar si el campo ID no está vacío
+        if (!textoID.isEmpty()) {
+            try {
+                int idBusqueda = Integer.parseInt(textoID);
+                int indice = modelo.buscarMascota(idBusqueda);
 
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+                if (indice != -1) {
+                    // Limpiar el modelo de la tabla antes de agregar columnas y filas
+                    modeloTabla.setRowCount(0);
 
+                    // Verificar si las columnas ya han sido agregadas al modelo de la tabla
+                    if (modeloTabla.getColumnCount() == 0) {
+                        modeloTabla.addColumn("ID");
+                        modeloTabla.addColumn("NOMBRE");
+                        modeloTabla.addColumn("RAZA");
+                        modeloTabla.addColumn("EDAD");
+                        modeloTabla.addColumn("DUEÑO");
+                        modeloTabla.addColumn("SEXO");
+                        modeloTabla.addColumn("COLOR");
+                        modeloTabla.addColumn("FOTO CARNET");
+                    }
+
+                    Object[] fila = {
+                            modelo.mostrarMascotas().get(indice).getID(),
+                            modelo.mostrarMascotas().get(indice).getNombreMascota(),
+                            modelo.mostrarMascotas().get(indice).getRaza(),
+                            modelo.mostrarMascotas().get(indice).getEdad(),
+                            modelo.mostrarMascotas().get(indice).getDuenio(),
+                            modelo.mostrarMascotas().get(indice).getSexo(),
+                            modelo.mostrarMascotas().get(indice).getColor(),
+                            (modelo.mostrarMascotas().get(indice).getFotoCarnet() != null)
+                                    ? new ImageIcon(modelo.mostrarMascotas().get(indice).getFotoCarnet())
+                                    : null
+                    };
+
+                    modeloTabla.addRow(fila);
+                    vista.tablaMascotas.setModel(modeloTabla);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingrese un ID válido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "No se han ingresado mascotas", "Error", JOptionPane.ERROR_MESSAGE);
-
+            JOptionPane.showMessageDialog(null, "Ingrese un ID para buscar mascota", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }
+
 
     public void modificarMascota() {
         String textoID = vista.txtID.getText();
@@ -220,7 +247,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         String raza = vista.txtRaza.getText();
         String duenio = vista.txtDuenio.getText();
         int edad = (int) vista.spnEdad.getValue();
-        String sexo = String.valueOf(vista.cboSexo.getSelectedIndex());
+        String sexo = vista.cboSexo.getSelectedItem().toString();
         String color = vista.txtColor.getText();
         Image foto = null;
         Image fotoCarnet = null;
@@ -264,20 +291,61 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("DUEÑO");
                 modeloTabla.addColumn("EDAD");
                 modeloTabla.addColumn("COLOR");
+                modeloTabla.addColumn("SEXO");
                 modeloTabla.addColumn("FOTO CARNET");
             }
 
-            for (Mascota p : modelo.mostrarMascotas()) {
-                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getDuenio(), p.getEdad(), p.getColor(), p.getFotoCarnet()};
+            for (Mascota mascota : modelo.mostrarMascotas()) {
+                //Image fotoCarnet = mascota.getFotoCarnet();
+                //ImageIcon imagenIcon = (fotoCarnet != null) ? new ImageIcon(fotoCarnet) : null;
+
+                Object[] fila = {
+                        mascota.getID(),
+                        mascota.getNombreMascota(),
+                        mascota.getRaza(),
+                        mascota.getDuenio(),
+                        mascota.getEdad(),
+                        mascota.getColor(),
+                        mascota.getSexo(),
+                        //imagenIcon  // Esto será la imagen en la celda
+                };
                 modeloTabla.addRow(fila);
             }
 
             // Actualiza el modelo de la tabla después de agregar filas
             vista.tablaMascotas.setModel(modeloTabla);
+
+            // Ajusta el ancho de la columna de la foto carnet
+            //vista.tablaMascotas.getColumnModel().getColumn(7).setPreferredWidth(100);
         } else {
             JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+
+    private void cargarImagen() {
+        JFileChooser file = new JFileChooser();
+        file.showOpenDialog(null);
+        File archivo = file.getSelectedFile();
+
+        if (archivo != null) {
+            String origen = archivo.getPath();
+            try {
+                Image image = ImageIO.read(archivo);
+                Image imagenEscalada = image.getScaledInstance(vista.lblImagen.getWidth(), vista.lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon icon = new ImageIcon(imagenEscalada);
+                vista.lblImagen.setIcon(icon);
+                // Guardar la ruta de la imagen en el modelo o en una variable local según tus necesidades
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una Imagen");
+        }
+    }
+
+
+
 
 
     public void mouseEntered(MouseEvent e){
@@ -387,7 +455,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
         if(e.getSource()==vista.btnModificar)modificarMascota();
-        if(e.getSource()==vista.btnSubirFotoCarnet)cargarFoto();
+        if(e.getSource()==vista.btnSubirFotoCarnet)cargarImagen();
     }
 
     @Override

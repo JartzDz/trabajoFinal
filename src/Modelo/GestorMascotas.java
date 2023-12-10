@@ -79,7 +79,7 @@ public class GestorMascotas {
         return ListaMascotas;
     }
     public void guardarMascotas() {
-        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("ListaMascotas.bin"))) {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("Mascotas.bin"))) {
             salida.writeObject(ListaMascotas);
             System.out.println("La lista de mascotas se ha serializado correctamente.");
         } catch (IOException e) {
@@ -89,11 +89,13 @@ public class GestorMascotas {
 
     @SuppressWarnings("unchecked")
     public void recuperarMascotas() {
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("ListaMascotas.bin"))) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Mascotas.bin"))) {
             ListaMascotas = (ArrayList<Mascota>) entrada.readObject();
             System.out.println("La lista de mascotas se ha deserializado correctamente.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error al deserializar la lista de mascotas: " + e.getMessage());
         }
     }
+
+
 }

@@ -27,6 +27,7 @@ public class InterfazMascotas extends JFrame {
     public JCheckBox chkCirugias;
     public JSpinner spnEdad;
     public JLabel btnRegresar;
+    public JLabel lblImagen;
 
 
     public InterfazMascotas() {

@@ -5,9 +5,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Mascota implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int ID,edad;
+    private Image fotoCarnet;
     private String nombreMascota, sexo, raza, color, duenio;
-    private Image foto, fotoCarnet;
+    private String rutaFotoCarnet;
     private boolean vacunas, desparacitaciones, esterilizacion, otrasCirugias;
 
     public Mascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
@@ -26,7 +28,6 @@ public class Mascota implements Serializable {
         this.esterilizacion = esterilizacion;
         this.otrasCirugias = otrasCirugias;
     }
-
     public int getEdad() {
         return edad;
     }
@@ -52,12 +53,12 @@ public class Mascota implements Serializable {
     }
 
 
-    public Image getFotoCarnet() {
-        return fotoCarnet;
+    public String getRutaFotoCarnet() {
+        return rutaFotoCarnet;
     }
 
-    public void setFotoCarnet(Image fotoCarnet) {
-        this.fotoCarnet = fotoCarnet;
+    public void setRutaFotoCarnet(String rutaFotoCarnet) {
+        this.rutaFotoCarnet = rutaFotoCarnet;
     }
 
     public boolean isVacunas() {
@@ -122,6 +123,14 @@ public class Mascota implements Serializable {
 
     public void setDuenio(String duenio) {
         this.duenio = duenio;
+    }
+
+    public Image getFotoCarnet() {
+        return fotoCarnet;
+    }
+
+    public void setFotoCarnet(Image fotoCarnet) {
+        this.fotoCarnet = fotoCarnet;
     }
 
     @Override
