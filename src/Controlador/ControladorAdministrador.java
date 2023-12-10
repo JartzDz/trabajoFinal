@@ -16,6 +16,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     ControladorMascotas controladorMascotas;
     ControladorUsuarios controladorUsuarios;
     ControladorEstablecimientos controladorEstablecimientos;
+    private String usuario="";
 
     public ControladorAdministrador(InterfazAdmin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios, ControladorEstablecimientos controladorEstablecimientos, InterfazLogin interfazLogin) {
         this.vista = vista;
@@ -42,6 +43,14 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.setLocationRelativeTo(null);
         vista.setResizable(true);
         vista.setVisible(true);
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public void mouseEntered(MouseEvent e){
@@ -110,7 +119,11 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vista.btnPersonalCGA || e.getSource()==vista.btnUsuarios)controladorUsuarios.mostrarInterfazUsuarios();
         if(e.getSource()==vista.btnMascotas)controladorMascotas.mostrarInterfazMascotas();
-        if(e.getSource()==vista.btnEstablecimientos)controladorEstablecimientos.mostrarInterfazEstablecimiento();
+        if(e.getSource()==vista.btnEstablecimientos){
+            controladorEstablecimientos.setUsuario(usuario);
+            controladorEstablecimientos.mostrarInterfazEstablecimiento();
+        }
+
         if(e.getSource()==vista.btnSalir){
             Color bg2 = new Color(229, 236, 186);
             Color fg2 = new Color(0, 0, 0);

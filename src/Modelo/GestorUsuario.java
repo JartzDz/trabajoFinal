@@ -51,7 +51,7 @@ public class GestorUsuario {
 
     // Método para serializar la lista de usuarios
     public void guardarUsuarios() {
-        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("Usuarios.bin"))) {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("ListaUsuarios.bin"))) {
             salida.writeObject(usuarios);
             System.out.println("La lista de usuarios se ha serializado correctamente.");
         } catch (IOException e) {
@@ -105,7 +105,7 @@ public class GestorUsuario {
     // Método para deserializar la lista de usuarios
     @SuppressWarnings("unchecked")
     public void recuperarUsuarios() {
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Usuarios.bin"))) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("ListaUsuarios.bin"))) {
             usuarios = (ArrayList<Persona>) entrada.readObject();
             System.out.println("La lista de usuarios se ha deserializado correctamente.");
         } catch (IOException | ClassNotFoundException e) {

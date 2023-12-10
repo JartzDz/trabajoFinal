@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DuenioEstablecimiento extends Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     private ArrayList<Establecimiento> listaEstablecimiento;
     public DuenioEstablecimiento(String cedula, String nombre, String direccion, String telefono, String correo, String contrasenia) {
         super(cedula, nombre, direccion, telefono, correo, contrasenia);
@@ -39,7 +40,7 @@ public class DuenioEstablecimiento extends Persona implements Serializable {
         }
     }
 
-    public int buscarEstablecimiento(String RUC){
+    public static int buscarEstablecimiento(String RUC, ArrayList<Establecimiento> listaEstablecimiento){
         int contador=0;
         for (Establecimiento establecimiento : listaEstablecimiento) {
             if (establecimiento.getRuc().equals(RUC)) {

@@ -4,6 +4,7 @@ import Vista.*;
 
 public class Main {
     public static void main(String[] args) {
+
         // Modelos
         GestorMascotas gestorMascotas = new GestorMascotas();
         GestorUsuario gestorUsuario = new GestorUsuario();
@@ -21,7 +22,7 @@ public class Main {
         ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos, gestorUsuario);
-
+        
 
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
                 interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin);
