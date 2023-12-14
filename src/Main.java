@@ -20,9 +20,9 @@ public class Main {
 
         // Controladores
         ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
+
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos, gestorUsuario);
-        
 
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
                 interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin);

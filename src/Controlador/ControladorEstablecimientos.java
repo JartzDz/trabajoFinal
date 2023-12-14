@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,19 +53,47 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         return true;
     }
 
-    public void cargarCombo(){
-        if(esPropietario()){
+    public void cargarCombo() {
+        if (esPropietario()) {
             vistaEstablecimiento.cboCIProp.addItem(usuario);
-        }else{
+        } else {
             for (Persona p : modeloPropietarios.getUsuarios()) {
-                if(p instanceof DuenioEstablecimiento){
-                    vistaEstablecimiento.cboCIProp.addItem(p.getCedula());
+                if (p instanceof DuenioEstablecimiento) {
+                    vistaEstablecimiento.cboCIProp.addItem(p.getCedula() + "-" + p.getNombre());
                 }
+            }
+
+            ArrayList<String> cedulas = separarCedula();
+            for (String cedula : cedulas) {
+                System.out.println(cedula);
             }
         }
     }
 
+    public ArrayList<String> separarCedula() {
+        ArrayList<String> cedulas = new ArrayList<>();
+
+        int itemCount = vistaEstablecimiento.cboCIProp.getItemCount();
+
+        for (int i = 0; i < itemCount; i++) {
+            Object item = vistaEstablecimiento.cboCIProp.getItemAt(i);
+            String combo = item.toString();
+            String[] partes = combo.split("-");
+
+            if (partes.length > 0) {
+                String cedula = partes[0].trim();
+                cedulas.add(cedula);
+            } else {
+                System.out.println("Error al separar cédula y nombre para: " + combo);
+            }
+        }
+
+        return cedulas;
+    }
+
+
     public void mostrarInterfazEstablecimiento() {
+        vistaEstablecimiento.cboCIProp.removeAllItems();
         cargarCombo();
         vistaEstablecimiento.setUndecorated(true);
         vistaEstablecimiento.setTitle("ESTABLECIMIENTO");

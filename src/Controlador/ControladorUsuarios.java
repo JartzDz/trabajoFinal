@@ -94,15 +94,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         }
     }
 
-    public void buscarUsuario(){
-        String cedula = vistaUsuario.txtBuscar.getText();
-        int indice= modeloUsuario.buscarUsuario(cedula);
-        if(indice!=-1){
-            JOptionPane.showMessageDialog(null, "Persona Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Persona No Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+
     public void eliminarTabla(){
         int fila=vistaUsuario.tablaUsuarios.getSelectedRow();
         String valor= (String) vistaUsuario.tablaUsuarios.getValueAt(fila,0);
@@ -145,6 +137,8 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     public void cargarUsuario() {
         String cedulaBuscada = vistaUsuario.txtBuscar.getText();
         int indice = modeloUsuario.buscarUsuario(cedulaBuscada);
+
+        System.out.println(cedulaBuscada);
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("CEDULA");
