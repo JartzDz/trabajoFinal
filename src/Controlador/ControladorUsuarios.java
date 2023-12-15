@@ -82,12 +82,40 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         String tipoUsuario = String.valueOf(vistaUsuario.cbTipoUsuario.getSelectedIndex());
 
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-            if (modeloUsuario.validarCedulaUnica(ID) && modeloUsuario.validarTelefonoUnico(tel) && modeloUsuario.validarCorreoUnico(correo)) {
-                modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
-                modeloUsuario.guardarUsuarios();
-                enviarCorreo(correo, ID, clave, nombreUsuario);
-                JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                limpiar();
+            if(validarCedula(ID)) {
+                if(validarCorreo(correo)) {
+                    if(modeloUsuario.validarCedulaUnica(ID)) {
+                        if (modeloUsuario.validarCorreoUnico(correo)) {
+                            if (modeloUsuario.validarTelefonoUnico(tel)) {
+                                if (modeloUsuario.validarCedulaUnica(ID) && modeloUsuario.validarTelefonoUnico(tel) && modeloUsuario.validarCorreoUnico(correo)) {
+                                    modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
+                                    modeloUsuario.guardarUsuarios();
+                                    enviarCorreo(correo, ID, clave, nombreUsuario);
+                                    JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                    limpiar();
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                vistaUsuario.txtTelefono.setText("");
+                                vistaUsuario.txtTelefono.requestFocus();
+                            }
+                        }else {
+                                JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                vistaUsuario.txtCorreo.setText("");vistaUsuario.txtCorreo.requestFocus();
+                            }
+                    }else {
+                        JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vistaUsuario.txtID.setText("");vistaUsuario.txtID.requestFocus();
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vistaUsuario.txtCorreo.setText("");
+                    vistaUsuario.txtCorreo.requestFocus();
+                }
+            }else {
+                JOptionPane.showMessageDialog(null, "Cédula INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
+                vistaUsuario.txtID.setText("");
+                vistaUsuario.txtID.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);

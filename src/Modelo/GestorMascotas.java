@@ -18,15 +18,15 @@ public class GestorMascotas {
         this.ListaMascotas = (listaMascotas != null) ? new ArrayList<>(listaMascotas) : new ArrayList<>();
     }
 
-    public void agregarMascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
+    public void agregarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
                                Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                                boolean otrasCirugias){
         Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
         ListaMascotas.add(nuevaMascota);
     }
-    public int buscarMascota(int ID){
+    public int buscarMascota(String ID){
         for(Mascota i: ListaMascotas){
-            if(i.getID()==ID){
+            if(i.getID().equals(ID)){
                 return ListaMascotas.indexOf(i);
             }
         }
@@ -35,7 +35,7 @@ public class GestorMascotas {
     public ArrayList<Mascota> buscarMascotaArray(int ID){
         ArrayList<Mascota> resultados=new ArrayList<>();
         for(Mascota i: ListaMascotas){
-            if(i.getID()==ID){
+            if(i.getID().equals(ID)){
                 resultados.add(i);
             }
         }
@@ -51,7 +51,7 @@ public class GestorMascotas {
         nuevaMascota.setDuenio(duenio);
     }
 
-    public void modificarMascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
+    public void modificarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
                                  Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                                  boolean otrasCirugias, int indice){
         // Verificar si el índice es válido
@@ -79,7 +79,7 @@ public class GestorMascotas {
         return ListaMascotas;
     }
     public void guardarMascotas() {
-        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("Mascotas.bin"))) {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("ListaMascotas.bin"))) {
             salida.writeObject(ListaMascotas);
             System.out.println("La lista de mascotas se ha serializado correctamente.");
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class GestorMascotas {
 
     @SuppressWarnings("unchecked")
     public void recuperarMascotas() {
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("Mascotas.bin"))) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("ListaMascotas.bin"))) {
             ListaMascotas = (ArrayList<Mascota>) entrada.readObject();
             System.out.println("La lista de mascotas se ha deserializado correctamente.");
         } catch (IOException | ClassNotFoundException e) {

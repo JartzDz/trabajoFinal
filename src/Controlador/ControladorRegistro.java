@@ -52,35 +52,47 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
         String direccion = vista.txtDireccion.getText();
         String correo = vista.txtCorreo.getText();
         String clave = vista.txtContra.getText();
-        String claveRep = vista.txtContraRep.getText(); // Asumo que esta línea fue un error tipográfico y debería ser txtContraRep
+        String claveRep = vista.txtContraRep.getText();
 
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-            if (modeloUsuario.validarCedulaUnica(ID)) {
-                if (modeloUsuario.validarTelefonoUnico(tel)) {
-                    if (modeloUsuario.validarCorreoUnico(correo)) {
-                        if (validarContrasenias()) {
-                            int tipoUsuario = 1;
-                            modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, tipoUsuario);
-                            modeloUsuario.guardarUsuarios();
-                            enviarCorreo(correo, ID, clave, nombreUsuario);
-                            JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                            limpiar();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Las contraseñas deben ser iguales", "Error", JOptionPane.ERROR_MESSAGE);
+            if(validarCedula(ID)) {
+                if (validarCorreo(correo)) {
+                    if (modeloUsuario.validarCedulaUnica(ID)) {
+                        if (modeloUsuario.validarTelefonoUnico(tel)) {
+                            if (modeloUsuario.validarCorreoUnico(correo)) {
+                                if (validarContrasenias()) {
+                                    int tipoUsuario = 1;
+                                    modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, tipoUsuario);
+                                    modeloUsuario.guardarUsuarios();
+                                    enviarCorreo(correo, ID, clave, nombreUsuario);
+                                    JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                    limpiar();
+                                } else JOptionPane.showMessageDialog(null, "Las contraseñas deben ser iguales", "Error", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                vista.txtCorreo.setText("");vista.txtCorreo.requestFocus();
+                                }
+                            } else {
+                            JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                            vista.txtTelefono.setText("");vista.txtTelefono.requestFocus();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtCedula.setText("");vista.txtCedula.requestFocus();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtCorreo.setText("");vista.txtCorreo.requestFocus();
+
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+            }else {
+                JOptionPane.showMessageDialog(null, "Cédula INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
+                vista.txtCedula.setText("");vista.txtCedula.requestFocus();
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }else  JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+
     }
+
 
     public void limpiar(){
         vista.txtCedula.setText("");

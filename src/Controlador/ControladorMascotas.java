@@ -15,17 +15,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Random;
 
 public class ControladorMascotas extends MouseAdapter implements ActionListener, KeyListener, FocusListener {
     private InterfazMascotas vista;
     private GestorMascotas modelo;
-
-    DefaultTableModel modeloTabla;
-
+    private HashSet<String> idSet;
+    private DefaultTableModel modeloTabla;
+    private ControladorUsuarios controladorUsuarios;
     public ControladorMascotas(GestorMascotas modelo, InterfazMascotas vista) {
         this.modelo = modelo;
         this.vista = vista;
+        idSet = new HashSet<>();
+        generarYMostrarID();
         modelo.recuperarMascotas();
         vista.btnAgregar.addActionListener(this);
         vista.btnEliminar.addActionListener(this);
@@ -90,29 +94,34 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.panelImagen.repaint();
     }
 
-    public void agregar(){
-
+    public void agregar() {
         try {
-            int ID = Integer.parseInt(vista.txtID.getText());
-            String nombreMascota= vista.txtNombre.getText();
+
+            String idMascota = vista.txtID.getText();
+            String nombreMascota = vista.txtNombre.getText();
             String raza = vista.txtRaza.getText();
             String duenio = vista.txtDuenio.getText();
-            int edad= (int) vista.spnEdad.getValue();
-            String sexo= vista.cboSexo.getSelectedItem().toString();
+            int edad = (int) vista.spnEdad.getValue();
+            String sexo = vista.cboSexo.getSelectedItem().toString();
             System.out.println(sexo);
-            String color=vista.txtColor.getText();
+            String color = vista.txtColor.getText();
             Image foto = null;
             Image fotoCarnet = null;
-            boolean vacunas= Boolean.parseBoolean(vista.chkVacunas.getText());
-            boolean esterilizacion= Boolean.parseBoolean(vista.chkEsterilizacion.getText());
-            boolean desparacitaciones= Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
-            boolean otrasCirugias= Boolean.parseBoolean(vista.chkCirugias.getText());
+            boolean vacunas = vista.chkVacunas.isSelected();
+            boolean esterilizacion = vista.chkEsterilizacion.isSelected();
+            boolean desparacitaciones = vista.chkDesparacitaciones.isSelected();
+            boolean otrasCirugias = vista.chkCirugias.isSelected();
 
             if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
-                modelo.agregarMascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
-                modelo.guardarMascotas();
-
-                limpiar();
+                if(ControladorUsuarios.validarCedula(duenio)) {
+                    modelo.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+                    modelo.guardarMascotas();
+                    limpiar();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtDuenio.setText("");
+                    vista.txtDuenio.requestFocus();
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -121,17 +130,60 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
 
-    public void eliminarTabla(){
-        int fila=vista.tablaMascotas.getSelectedRow();
-        int valor= (int) vista.tablaMascotas.getValueAt(fila,0);
-        modelo.eliminarMascota(fila);
-        modelo.guardarMascotas();
-        mostrarMascotas();
+    private void generarYMostrarID() {
+        String idMascota = generarID();
+        vista.txtID.setText(idMascota);
     }
+    private String generarID() {
+
+        char letra = (char) ('A' + new Random().nextInt(26));
+        String digitos = generarDigitosUnicos();
+        return letra + digitos;
+    }
+
+
+    private String generarDigitosUnicos() {
+        Random random = new Random();
+        StringBuilder digitos = new StringBuilder();
+
+        while (digitos.length() < 4) {
+            int digito = random.nextInt(10);
+            if (!digitos.toString().contains(String.valueOf(digito))) {
+                digitos.append(digito);
+            }
+        }
+
+        return digitos.toString();
+    }
+
+
+    public void eliminarTabla() {
+        // Verifica si hay una fila seleccionada
+        int fila = vista.tablaMascotas.getSelectedRow();
+        if (fila != -1) {
+
+            String idMascota = (String) vista.tablaMascotas.getValueAt(fila, 0);
+
+            try {
+
+                int pos=modelo.buscarMascota(idMascota);
+                modelo.eliminarMascota(pos);
+                modelo.guardarMascotas();
+                mostrarMascotas();
+            } catch (NumberFormatException e) {
+
+                JOptionPane.showMessageDialog(null, "Error al convertir el ID a entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecciona una fila antes de eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
 
     public void buscarMascota(){
         String valor = vista.txtBuscar.getText();
-        int indice= modelo.buscarMascota(Integer.parseInt(valor));
+        int indice= modelo.buscarMascota(valor);
         if(indice!=-1){
             JOptionPane.showMessageDialog(null, "Mascota Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
@@ -189,14 +241,14 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
     public void cargarMascota() {
-        // Obtener el ID de la mascota a buscar
+
         String textoID = vista.txtBuscar.getText();
 
-        // Verificar si el campo ID no está vacío
+
         if (!textoID.isEmpty()) {
             try {
-                int idBusqueda = Integer.parseInt(textoID);
-                int indice = modelo.buscarMascota(idBusqueda);
+
+                int indice = modelo.buscarMascota(textoID);
 
                 if (indice != -1) {
                     // Limpiar el modelo de la tabla antes de agregar columnas y filas
@@ -258,11 +310,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
         if (!textoID.isEmpty() && !nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
             try {
-                int ID = Integer.parseInt(textoID);
-                int indice = modelo.buscarMascota(ID);
+                int indice = modelo.buscarMascota(textoID);
 
                 if (indice != -1) {
-                    modelo.modificarMascota(ID, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
+                    modelo.modificarMascota(textoID, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
                     modelo.guardarMascotas();
                     JOptionPane.showMessageDialog(null, "Mascota modificada con éxito.");
                     limpiar();
@@ -288,10 +339,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("ID");
                 modeloTabla.addColumn("NOMBRE");
                 modeloTabla.addColumn("RAZA");
-                modeloTabla.addColumn("DUEÑO");
                 modeloTabla.addColumn("EDAD");
-                modeloTabla.addColumn("COLOR");
+                modeloTabla.addColumn("DUEÑO");
                 modeloTabla.addColumn("SEXO");
+                modeloTabla.addColumn("COLOR");
                 modeloTabla.addColumn("FOTO CARNET");
             }
 
@@ -323,7 +374,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
 
-    private void cargarImagen() {
+    public void cargarImagen() {
         JFileChooser file = new JFileChooser();
         file.showOpenDialog(null);
         File archivo = file.getSelectedFile();
@@ -420,18 +471,23 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     //validaciones
     public void keyTyped(KeyEvent e){
         char c = e.getKeyChar();
-        if(e.getSource()==vista.txtID || e.getSource()==vista.txtBuscar || e.getSource()==vista.txtDuenio){
+        if(e.getSource()==vista.txtDuenio){
             if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vista.txtNombre  || e.getSource()==vista.txtRaza || e.getSource()==vista.txtColor){
+        if(e.getSource()==vista.txtNombre  || e.getSource()==vista.txtRaza || e.getSource()==vista.txtColor ){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 
             }else{
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if(e.getSource()==vista.txtBuscar){
+            if (Character.isLetter(c) || Character.isDigit(c)|| (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)){
+                e.setKeyChar(Character.toUpperCase(c));
             }
         }
     }
@@ -450,7 +506,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vista.btnAgregar) agregar();
+        if(e.getSource()==vista.btnAgregar)  {
+            generarYMostrarID();
+            agregar();
+        }
         if(e.getSource()==vista.btnMostrarMascotas) mostrarMascotas();
         if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();

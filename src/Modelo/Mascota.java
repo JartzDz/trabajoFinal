@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class Mascota implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int ID,edad;
+    private int edad;
     private Image fotoCarnet;
-    private String nombreMascota, sexo, raza, color, duenio;
+    private String nombreMascota, sexo, raza, color, duenio,ID;
     private String rutaFotoCarnet;
     private boolean vacunas, desparacitaciones, esterilizacion, otrasCirugias;
 
-    public Mascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
+    public Mascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
                    Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                    boolean otrasCirugias) {
         this.ID = ID;
@@ -93,11 +93,11 @@ public class Mascota implements Serializable {
         this.otrasCirugias = otrasCirugias;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 

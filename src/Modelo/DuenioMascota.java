@@ -19,7 +19,7 @@ public class DuenioMascota extends Persona implements Serializable {
         this.listaMascotas = listaMascotas;
     }
 
-    public void agregarMascota(int ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
+    public void agregarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
                                Image foto, Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
                                boolean otrasCirugias){
         Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
@@ -27,7 +27,7 @@ public class DuenioMascota extends Persona implements Serializable {
     }
     public int buscarMascota(int ID){
         for(Mascota i:listaMascotas){
-            if(i.getID()==ID){
+            if(i.getID().equals(ID)){
                 return listaMascotas.indexOf(i);
             }
         }
@@ -36,7 +36,7 @@ public class DuenioMascota extends Persona implements Serializable {
     public ArrayList<Mascota> buscarMascotaArray(int ID){
         ArrayList<Mascota> resultados=new ArrayList<>();
         for(Mascota i:listaMascotas){
-            if(i.getID()==ID){
+            if(i.getID().equals(ID)){
                 resultados.add(i);
             }
         }
