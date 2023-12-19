@@ -29,7 +29,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         this.modelo = modelo;
         this.vista = vista;
         idSet = new HashSet<>();
-        generarYMostrarID();
         modelo.recuperarMascotas();
         vista.btnAgregar.addActionListener(this);
         vista.btnEliminar.addActionListener(this);
@@ -63,6 +62,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void mostrarInterfazMascotas() {
+        generarYMostrarID();
         vista.setLocationRelativeTo(null);
         vista.setResizable(false);
         vista.setTitle("MASCOTAS");
@@ -92,6 +92,9 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.panelImagen.removeAll();
         vista.panelImagen.revalidate();
         vista.panelImagen.repaint();
+        DefaultTableModel modelo = (DefaultTableModel)  vista.tablaMascotas.getModel();
+        modelo.setRowCount(0);
+
     }
 
     public void agregar() {
@@ -507,13 +510,15 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vista.btnAgregar)  {
-            generarYMostrarID();
             agregar();
+            generarYMostrarID();
         }
         if(e.getSource()==vista.btnMostrarMascotas) mostrarMascotas();
         if(e.getSource()==vista.btnEliminar)eliminarTabla();
         if(e.getSource()==vista.btnBuscar)cargarMascota();
-        if(e.getSource()==vista.btnModificar)modificarMascota();
+        if(e.getSource()==vista.btnModificar){
+            modificarMascota();
+        }
         if(e.getSource()==vista.btnSubirFotoCarnet)cargarImagen();
     }
 
