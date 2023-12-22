@@ -185,6 +185,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/lupa.png"/>
                           <text value="BUSCAR"/>
                         </properties>
                       </component>
@@ -538,7 +539,11 @@
                             <properties>
                               <background color="-2298694"/>
                               <font name="Bahnschrift" size="18"/>
+                              <horizontalTextPosition value="4"/>
+                              <icon value="Vista/imagenes/boton-agregar.png"/>
                               <text value="AGREGAR"/>
+                              <verticalAlignment value="0"/>
+                              <verticalTextPosition value="0"/>
                             </properties>
                           </component>
                           <component id="cbb9f" class="javax.swing.JButton" binding="btnMostrarMascotas">
@@ -548,6 +553,7 @@
                             <properties>
                               <background color="-2298694"/>
                               <font name="Bahnschrift" size="18"/>
+                              <icon value="Vista/imagenes/lista-de-verificacion.png"/>
                               <text value="MOSTRAR MASCOTAS"/>
                             </properties>
                           </component>
@@ -558,6 +564,7 @@
                             <properties>
                               <background color="-2298694"/>
                               <font name="Bahnschrift" size="18"/>
+                              <icon value="Vista/imagenes/eliminar.png"/>
                               <text value="ELIMINAR"/>
                             </properties>
                           </component>
@@ -568,6 +575,7 @@
                             <properties>
                               <background color="-2298694"/>
                               <font name="Bahnschrift" size="18"/>
+                              <icon value="Vista/imagenes/editar.png"/>
                               <text value="MODIFICAR"/>
                             </properties>
                           </component>
@@ -651,6 +659,7 @@
                 <properties>
                   <background color="-2298694"/>
                   <font name="Bahnschrift" size="18"/>
+                  <icon value="Vista/imagenes/tarjeta-de-identificacion.png"/>
                   <preferredSize width="265" height="35"/>
                   <text value="SUBIR FOTO CARNET"/>
                 </properties>

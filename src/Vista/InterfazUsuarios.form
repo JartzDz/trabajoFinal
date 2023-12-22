@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="contenedor" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="1282" height="1104"/>
+      <xy x="20" y="20" width="1293" height="1104"/>
     </constraints>
     <properties>
       <background color="-16477028"/>
@@ -194,6 +194,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/lupa.png"/>
                           <text value="BUSCAR"/>
                         </properties>
                       </component>
@@ -428,6 +429,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/boton-agregar.png"/>
                           <text value="AGREGAR"/>
                         </properties>
                       </component>
@@ -438,6 +440,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/lista-de-verificacion.png"/>
                           <text value="MOSTRAR USUARIOS"/>
                         </properties>
                       </component>
@@ -448,6 +451,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/eliminar.png"/>
                           <text value="ELIMINAR"/>
                         </properties>
                       </component>
@@ -458,6 +462,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/editar.png"/>
                           <text value="MODIFICAR"/>
                         </properties>
                       </component>

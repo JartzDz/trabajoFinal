@@ -194,6 +194,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/lupa.png"/>
                           <text value="BUSCAR"/>
                         </properties>
                       </component>
@@ -424,6 +425,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/boton-agregar.png"/>
                           <text value="AGREGAR"/>
                         </properties>
                       </component>
@@ -434,6 +436,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/lista-de-verificacion.png"/>
                           <text value="MOSTRAR ESTABLECIMIENTOS"/>
                         </properties>
                       </component>
@@ -444,6 +447,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/eliminar.png"/>
                           <text value="ELIMINAR"/>
                         </properties>
                       </component>
@@ -454,6 +458,7 @@
                         <properties>
                           <background color="-2298694"/>
                           <font name="Bahnschrift" size="18"/>
+                          <icon value="Vista/imagenes/editar.png"/>
                           <text value="MODIFICAR"/>
                         </properties>
                       </component>
