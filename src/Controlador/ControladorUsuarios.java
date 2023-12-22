@@ -41,6 +41,12 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         modeloTabla = new DefaultTableModel(null, columnas);
         vistaUsuario.btnBuscar.setFocusable(false);
         vistaUsuario.btnRegresar.addMouseListener(this);
+        vistaUsuario.btnMostrarUsuarios.addMouseListener(this);
+        vistaUsuario.btnAgregar.addMouseListener(this);
+        vistaUsuario.btnModificar.addMouseListener(this);
+        vistaUsuario.btnEliminar.addMouseListener(this);
+        vistaUsuario.btnBuscar.addMouseListener(this);
+
         activarBotones();
     }
     public void activarBotones(){
@@ -290,13 +296,73 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
             vistaUsuario.dispose();
         }
     }
-    public void mouseEntered(MouseEvent e) {
-        vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
+    public void mouseEntered(MouseEvent e){
+        Color bg = new Color(4, 148, 156);
+        Color fg = new Color(255,255,255);
 
-    @Override
+        if (e.getSource() == vistaUsuario.btnAgregar) {
+            vistaUsuario.btnAgregar.setBackground(bg);
+            vistaUsuario.btnAgregar.setForeground(fg);
+            vistaUsuario.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vistaUsuario.btnModificar) {
+            vistaUsuario.btnModificar.setBackground(bg);
+            vistaUsuario.btnModificar.setForeground(fg);
+            vistaUsuario.btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnMostrarUsuarios){
+            vistaUsuario.btnMostrarUsuarios.setBackground(bg);
+            vistaUsuario.btnMostrarUsuarios.setForeground(fg);
+            vistaUsuario.btnMostrarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnEliminar){
+            vistaUsuario.btnEliminar.setBackground(bg);
+            vistaUsuario.btnEliminar.setForeground(fg);
+            vistaUsuario.btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnBuscar){
+            vistaUsuario.btnBuscar.setBackground(bg);
+            vistaUsuario.btnBuscar.setForeground(fg);
+            vistaUsuario.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnRegresar){
+            vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+
+    }
     public void mouseExited(MouseEvent e) {
-        vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+        Color bg2 = new Color(229, 236, 186);
+        Color fg2 = new Color(0, 0, 0);
+
+        if (e.getSource() == vistaUsuario.btnAgregar) {
+            vistaUsuario.btnAgregar.setBackground(bg2);
+            vistaUsuario.btnAgregar.setForeground(fg2);
+            vistaUsuario.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vistaUsuario.btnModificar) {
+            vistaUsuario.btnModificar.setBackground(bg2);
+            vistaUsuario.btnModificar.setForeground(fg2);
+            vistaUsuario.btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnMostrarUsuarios){
+            vistaUsuario.btnMostrarUsuarios.setBackground(bg2);
+            vistaUsuario.btnMostrarUsuarios.setForeground(fg2);
+            vistaUsuario.btnMostrarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnEliminar){
+            vistaUsuario.btnEliminar.setBackground(bg2);
+            vistaUsuario.btnEliminar.setForeground(fg2);
+            vistaUsuario.btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vistaUsuario.btnBuscar){
+            vistaUsuario.btnBuscar.setBackground(bg2);
+            vistaUsuario.btnBuscar.setForeground(fg2);
+            vistaUsuario.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource()==vistaUsuario.btnRegresar){
+            vistaUsuario.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     @Override

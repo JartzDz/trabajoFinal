@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 public class ControladorAdministrador extends MouseAdapter implements ActionListener {
     InterfazAdmin vista;
     GestorUsuario modelo;
+    InterfazLogin interfazLogin;
     ControladorMascotas controladorMascotas;
     ControladorUsuarios controladorUsuarios;
     ControladorEstablecimientos controladorEstablecimientos;
@@ -24,6 +25,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         this.controladorMascotas = controladorMascotas;
         this.controladorUsuarios = controladorUsuarios;
         this.controladorEstablecimientos = controladorEstablecimientos;
+        this.interfazLogin = interfazLogin;
         vista.btnEstablecimientos.addActionListener(this);
         vista.btnMascotas.addActionListener(this);
         vista.btnUsuarios.addActionListener(this);
@@ -117,11 +119,18 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vista.btnPersonalCGA || e.getSource()==vista.btnUsuarios)controladorUsuarios.mostrarInterfazUsuarios();
-        if(e.getSource()==vista.btnMascotas)controladorMascotas.mostrarInterfazMascotas();
+        if(e.getSource()==vista.btnPersonalCGA || e.getSource()==vista.btnUsuarios) {
+            controladorUsuarios.mostrarInterfazUsuarios();
+            interfazLogin.setVisible(false);
+        }
+        if(e.getSource()==vista.btnMascotas) {
+            controladorMascotas.mostrarInterfazMascotas();
+            interfazLogin.setVisible(false);
+        }
         if(e.getSource()==vista.btnEstablecimientos){
             controladorEstablecimientos.setUsuario(usuario);
             controladorEstablecimientos.mostrarInterfazEstablecimiento();
+            interfazLogin.setVisible(false);
         }
 
         if(e.getSource()==vista.btnSalir){
@@ -129,8 +138,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             Color fg2 = new Color(0, 0, 0);
             vista.btnSalir.setBackground(bg2);
             vista.btnSalir.setForeground(fg2);
-            vista.dispose();
-
+            System.exit(0);
         }
 
     }

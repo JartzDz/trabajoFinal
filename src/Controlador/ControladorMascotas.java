@@ -56,6 +56,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.btnAgregar.addMouseListener(this);
         vista.btnEliminar.addMouseListener(this);
         vista.btnMostrarMascotas.addMouseListener(this);
+        vista.btnSubirFotoCarnet.addMouseListener(this);
         vista.setUndecorated(true);
         activarBotones();
 
@@ -63,12 +64,14 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
     public void mostrarInterfazMascotas() {
         generarYMostrarID();
-        vista.setLocationRelativeTo(null);
-        vista.setResizable(false);
-        vista.setTitle("MASCOTAS");
-        vista.setVisible(true);
+        vista.setUndecorated(true);
+        vista.setTitle("USUARIOS");
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        vista.setLocationRelativeTo(null);
+        vista.setResizable(true);
+        vista.setVisible(true);
     }
+
     public void activarBotones(){
         if(modelo.getListaMascotas().isEmpty()){
             vista.txtBuscar.setEnabled(false);
@@ -426,6 +429,11 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vista.btnBuscar.setForeground(fg);
             vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
+        if(e.getSource() == vista.btnSubirFotoCarnet){
+            vista.btnSubirFotoCarnet.setBackground(bg);
+            vista.btnSubirFotoCarnet.setForeground(fg);
+            vista.btnSubirFotoCarnet.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
         if(e.getSource() == vista.btnRegresar){
             vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
@@ -460,6 +468,11 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vista.btnBuscar.setBackground(bg2);
             vista.btnBuscar.setForeground(fg2);
             vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnSubirFotoCarnet){
+            vista.btnSubirFotoCarnet.setBackground(bg2);
+            vista.btnSubirFotoCarnet.setForeground(fg2);
+            vista.btnSubirFotoCarnet.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         if(e.getSource()==vista.btnRegresar){
             vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
