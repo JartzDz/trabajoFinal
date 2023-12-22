@@ -151,7 +151,7 @@
                         <properties>
                           <font size="18"/>
                           <foreground color="-6117446"/>
-                          <text value="Ingrese el ID de la mascota"/>
+                          <text value="Ingrese el ID,NOMBRE de la mascota o CEDULA del PROPIETARIO"/>
                         </properties>
                       </component>
                     </children>

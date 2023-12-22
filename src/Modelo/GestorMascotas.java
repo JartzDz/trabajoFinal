@@ -24,10 +24,10 @@ public class GestorMascotas {
         Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
         ListaMascotas.add(nuevaMascota);
     }
-    public int buscarMascota(String ID){
-        for(Mascota i: ListaMascotas){
-            if(i.getID().equals(ID)){
-                return ListaMascotas.indexOf(i);
+    public int buscarMascota(String criterio) {
+        for (Mascota mascota : ListaMascotas) {
+            if (mascota.getID().equals(criterio) || mascota.getNombreMascota().equalsIgnoreCase(criterio) || mascota.getDuenio().equalsIgnoreCase(criterio)) {
+                return ListaMascotas.indexOf(mascota);
             }
         }
         return -1;

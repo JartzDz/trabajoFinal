@@ -350,8 +350,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             }
 
             for (Mascota mascota : modelo.mostrarMascotas()) {
-                //Image fotoCarnet = mascota.getFotoCarnet();
-                //ImageIcon imagenIcon = (fotoCarnet != null) ? new ImageIcon(fotoCarnet) : null;
 
                 Object[] fila = {
                         mascota.getID(),
@@ -361,16 +359,13 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                         mascota.getEdad(),
                         mascota.getColor(),
                         mascota.getSexo(),
-                        //imagenIcon  // Esto será la imagen en la celda
                 };
                 modeloTabla.addRow(fila);
             }
 
-            // Actualiza el modelo de la tabla después de agregar filas
             vista.tablaMascotas.setModel(modeloTabla);
 
-            // Ajusta el ancho de la columna de la foto carnet
-            //vista.tablaMascotas.getColumnModel().getColumn(7).setPreferredWidth(100);
+
         } else {
             JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -532,7 +527,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     @Override
     public void focusLost(FocusEvent e) {
             vista.txtBuscar.setForeground(Color.GRAY);
-            vista.txtBuscar.setText("Ingrese el ID de la mascota");
+            vista.txtBuscar.setText("Ingrese el ID,NOMBRE de la mascota o CEDULA del PROPIETARIO");
             vista.btnBuscar.setEnabled(false);
 
     }
