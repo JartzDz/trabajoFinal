@@ -1,5 +1,11 @@
 package Vista;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.jtattoo.plaf.fast.FastLookAndFeel;
+
 import javax.swing.*;
 
 public class InterfazMascotas extends JFrame {
@@ -20,7 +26,6 @@ public class InterfazMascotas extends JFrame {
     public JComboBox cboSexo;
     public JCheckBox chkVacunas;
     public JButton btnSubirFotoCarnet;
-    public JButton btnSubirFotoMascota;
     public JTextField txtColor;
     public JCheckBox chkDesparacitaciones;
     public JCheckBox chkEsterilizacion;
@@ -32,6 +37,12 @@ public class InterfazMascotas extends JFrame {
 
     public InterfazMascotas() {
         setContentPane(JPanelFondo);
+        try {
+            UIManager.setLookAndFeel(new FlatMacLightLaf());
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
+
     }
 
 

@@ -7,6 +7,8 @@
       <root url="jar://$PROJECT_DIR$/javax.faces-api-2.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/javax.ejb.jar!/" />
       <root url="jar://$PROJECT_DIR$/javax.activation-1.1.0.v201105071233.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/flatlaf-3.2.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/JTattoo-1.6.13.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
