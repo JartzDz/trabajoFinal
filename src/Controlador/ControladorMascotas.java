@@ -25,6 +25,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     private HashSet<String> idSet;
     private DefaultTableModel modeloTabla;
     private ControladorUsuarios controladorUsuarios;
+    private File dirImagen;
+    private String rutaDestino;
     public ControladorMascotas(GestorMascotas modelo, InterfazMascotas vista) {
         this.modelo = modelo;
         this.vista = vista;
@@ -92,9 +94,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vista.txtBuscar.setText("");
         vista.txtColor.setText("");
         vista.spnEdad.setValue(0);
-        vista.panelImagen.removeAll();
-        vista.panelImagen.revalidate();
-        vista.panelImagen.repaint();
+        vista.lblImagen.setIcon(null);
         DefaultTableModel modelo = (DefaultTableModel)  vista.tablaMascotas.getModel();
         modelo.setRowCount(0);
 
@@ -102,7 +102,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
     public void agregar() {
         try {
-
             String idMascota = vista.txtID.getText();
             String nombreMascota = vista.txtNombre.getText();
             String raza = vista.txtRaza.getText();
@@ -111,19 +110,24 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             String sexo = vista.cboSexo.getSelectedItem().toString();
             System.out.println(sexo);
             String color = vista.txtColor.getText();
-            Image foto = null;
-            Image fotoCarnet = null;
             boolean vacunas = vista.chkVacunas.isSelected();
             boolean esterilizacion = vista.chkEsterilizacion.isSelected();
             boolean desparacitaciones = vista.chkDesparacitaciones.isSelected();
             boolean otrasCirugias = vista.chkCirugias.isSelected();
 
             if (!nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
-                if(ControladorUsuarios.validarCedula(duenio)) {
-                    modelo.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+                if (ControladorUsuarios.validarCedula(duenio)) {
+                    // Verificar si la imagen en lblImagen no es null
+                    if (vista.lblImagen.getIcon() == null) {
+                        JOptionPane.showMessageDialog(null, "Por favor, seleccione una imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    guardarImagen(dirImagen);
+                    modelo.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                     modelo.guardarMascotas();
                     limpiar();
-                }else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
                     vista.txtDuenio.setText("");
                     vista.txtDuenio.requestFocus();
@@ -167,23 +171,24 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         // Verifica si hay una fila seleccionada
         int fila = vista.tablaMascotas.getSelectedRow();
         if (fila != -1) {
-
             String idMascota = (String) vista.tablaMascotas.getValueAt(fila, 0);
-
             try {
-
-                int pos=modelo.buscarMascota(idMascota);
+                int pos = modelo.buscarMascota(idMascota);
                 modelo.eliminarMascota(pos);
                 modelo.guardarMascotas();
-                mostrarMascotas();
-            } catch (NumberFormatException e) {
 
+                // Remueve la fila seleccionada del modelo de la tabla
+                modeloTabla.removeRow(fila);
+
+                JOptionPane.showMessageDialog(null, "Mascota eliminada con éxito.");
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error al convertir el ID a entero.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Selecciona una fila antes de eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
 
 
@@ -196,6 +201,51 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "Mascota No Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public void cargarImagen() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+        int result = fileChooser.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+
+            if (archivo != null) {
+                String origen = archivo.getPath();
+                Path org = Paths.get(origen);
+
+                try {
+                    Image image = ImageIO.read(archivo);
+                    Image imagenEscalada = image.getScaledInstance(vista.lblImagen.getWidth(), vista.lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                    ImageIcon icon = new ImageIcon(imagenEscalada);
+                    vista.lblImagen.setIcon(icon);
+                    dirImagen = archivo;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cargar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una Imagen");
+        }
+    }
+
+
+
+    public void guardarImagen(File archivo) {
+        try {
+            String dest = "./src/vista/imagenes/" + archivo.getName();
+            Path destino = Paths.get(dest);
+            String origen = archivo.getPath();
+            Path org = Paths.get(origen);
+
+            Files.copy(org, destino, StandardCopyOption.REPLACE_EXISTING);
+            rutaDestino = archivo.getName();
+        } catch (IOException ex) {
+            System.out.println("No se guardó la imagen" + ex.getMessage());
+        }
+    }
+
     public void cargarFoto(){
         JFileChooser jf = new JFileChooser();
         FileNameExtensionFilter filtrado = new FileNameExtensionFilter("Imágenes", "jpg", "png", "gif");
@@ -247,13 +297,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
     public void cargarMascota() {
-
         String textoID = vista.txtBuscar.getText();
-
 
         if (!textoID.isEmpty()) {
             try {
-
                 int indice = modelo.buscarMascota(textoID);
 
                 if (indice != -1) {
@@ -280,13 +327,16 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                             modelo.mostrarMascotas().get(indice).getDuenio(),
                             modelo.mostrarMascotas().get(indice).getSexo(),
                             modelo.mostrarMascotas().get(indice).getColor(),
-                            (modelo.mostrarMascotas().get(indice).getFotoCarnet() != null)
-                                    ? new ImageIcon(modelo.mostrarMascotas().get(indice).getFotoCarnet())
-                                    : null
+                            modelo.mostrarMascotas().get(indice).getRutaFotoCarnet()
                     };
 
                     modeloTabla.addRow(fila);
                     vista.tablaMascotas.setModel(modeloTabla);
+
+                    // Cargar la imagen de la mascota en lblImagenMascota
+                    String rutaImagen = modelo.mostrarMascotas().get(indice).getRutaFotoCarnet();
+                    System.out.println("Ruta de la imagen: " + rutaImagen); // Añade este mensaje para verificar la ruta en la consola
+                    cargarImagenMascota(rutaImagen);
                 } else {
                     JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -298,6 +348,28 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
 
+    // Método para cargar la imagen de la mascota en lblImagen
+    private void cargarImagenMascota(String rutaImagen) {
+        try {
+            if (rutaImagen != null) {
+                File file = new File(rutaImagen);
+
+                // Verificar si el archivo existe
+                if (file.exists()) {
+                    Image image = ImageIO.read(file);
+                    Image imagenEscalada = image.getScaledInstance(vista.lblImagen.getWidth(), vista.lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                    vista.lblImagen.setIcon(new ImageIcon(imagenEscalada));
+                } else {
+                    JOptionPane.showMessageDialog(null, "El archivo de imagen no existe: " + rutaImagen, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "La ruta de la imagen es nula", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al cargar la imagen de la mascota", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     public void modificarMascota() {
         String textoID = vista.txtID.getText();
@@ -307,20 +379,26 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         int edad = (int) vista.spnEdad.getValue();
         String sexo = vista.cboSexo.getSelectedItem().toString();
         String color = vista.txtColor.getText();
-        Image foto = null;
-        Image fotoCarnet = null;
-        boolean vacunas = Boolean.parseBoolean(vista.chkVacunas.getText());
-        boolean esterilizacion = Boolean.parseBoolean(vista.chkEsterilizacion.getText());
-        boolean desparacitaciones = Boolean.parseBoolean(vista.chkDesparacitaciones.getText());
-        boolean otrasCirugias = Boolean.parseBoolean(vista.chkCirugias.getText());
+
+        boolean vacunas = vista.chkVacunas.isSelected();
+        boolean esterilizacion = vista.chkEsterilizacion.isSelected();
+        boolean desparacitaciones = vista.chkDesparacitaciones.isSelected();
+        boolean otrasCirugias = vista.chkCirugias.isSelected();
 
         if (!textoID.isEmpty() && !nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
             try {
                 int indice = modelo.buscarMascota(textoID);
 
                 if (indice != -1) {
-                    modelo.modificarMascota(textoID, edad, nombreMascota, sexo, raza, color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
+                    guardarImagen(dirImagen);
+                    String nuevaRutaFotoCarnet = modelo.modificarMascota(textoID, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
+
+                    // Guardas las mascotas actualizadas en el modelo
                     modelo.guardarMascotas();
+
+                    // Cargas la nueva imagen en la vista
+                    cargarImagenMascota(nuevaRutaFotoCarnet);
+
                     JOptionPane.showMessageDialog(null, "Mascota modificada con éxito.");
                     limpiar();
                     mostrarMascotas();
@@ -373,32 +451,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
-    public void cargarImagen() {
-        JFileChooser file = new JFileChooser();
-        file.showOpenDialog(null);
-        File archivo = file.getSelectedFile();
-
-        if (archivo != null) {
-            String origen = archivo.getPath();
-            try {
-                Image image = ImageIO.read(archivo);
-                Image imagenEscalada = image.getScaledInstance(vista.lblImagen.getWidth(), vista.lblImagen.getHeight(), Image.SCALE_SMOOTH);
-                ImageIcon icon = new ImageIcon(imagenEscalada);
-                vista.lblImagen.setIcon(icon);
-                // Guardar la ruta de la imagen en el modelo o en una variable local según tus necesidades
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una Imagen");
-        }
-    }
-
-
-
-
 
     public void mouseEntered(MouseEvent e){
         Color bg = new Color(4, 148, 156);
@@ -518,16 +570,29 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vista.btnAgregar)  {
+
             agregar();
             generarYMostrarID();
         }
-        if(e.getSource()==vista.btnMostrarMascotas) mostrarMascotas();
-        if(e.getSource()==vista.btnEliminar)eliminarTabla();
-        if(e.getSource()==vista.btnBuscar)cargarMascota();
+        if(e.getSource()==vista.btnMostrarMascotas) {
+
+            mostrarMascotas();
+        }
+        if(e.getSource()==vista.btnEliminar){
+
+            eliminarTabla();
+        }
+        if(e.getSource()==vista.btnBuscar) {
+
+            cargarMascota();
+        }
         if(e.getSource()==vista.btnModificar){
+
             modificarMascota();
         }
-        if(e.getSource()==vista.btnSubirFotoCarnet)cargarImagen();
+        if(e.getSource()==vista.btnSubirFotoCarnet) {
+            cargarImagen();
+        }
     }
 
     @Override

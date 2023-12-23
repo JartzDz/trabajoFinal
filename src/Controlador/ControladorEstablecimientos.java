@@ -129,22 +129,30 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         String correo = vistaEstablecimiento.txtCorreo.getText();
         String CIPropietario = vistaEstablecimiento.cboCIProp.getSelectedItem().toString();
         String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboTipoEst.getSelectedIndex());
+
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
             int buscarPropietario = modeloPropietarios.buscarUsuario(CIPropietario);
-            if (validarCorreo(correo)) {
-                modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                modeloEstablecimiento.guardarEstablecimientos();
-                //enviarCorreo(correo, ID, clave, nombreUsuario);
-                JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                limpiar();
-            }else{
-                JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Validar RUC antes de agregar el establecimiento
+            if (validarRUC(RUC)) {
+                if (validarCorreo(correo)) {
+                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    modeloEstablecimiento.guardarEstablecimientos();
+                    // enviarCorreo(correo, ID, clave, nombreUsuario);
+                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                    limpiar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     /*public void buscarEstablecimiento(){
         String RUC = vistaEstablecimiento.txtBuscar.getText();
@@ -264,6 +272,30 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
 
 
         return matcher.matches();
+    }
+
+    public boolean validarRUC(String ruc) {
+        if (ruc.length() != 13) {
+            return false;
+        }
+
+        int[] coeficientes = {4, 3, 2, 7, 6, 5, 4, 3, 2};
+        int suma = 0;
+
+        if (ruc.charAt(1) != '9') {
+            return false;
+        }
+
+        for (int i = 0; i < 9; i++) {
+            suma += Character.getNumericValue(ruc.charAt(i)) * coeficientes[i];
+        }
+
+        int residuo = suma % 11;
+        int digitoVerificador = (residuo == 0) ? 0 : 11 - residuo;
+
+        System.out.println(digitoVerificador == Character.getNumericValue(ruc.charAt(9)));
+
+        return digitoVerificador == Character.getNumericValue(ruc.charAt(9));
     }
 
     @Override

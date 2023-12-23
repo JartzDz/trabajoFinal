@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="JPanelFondo" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="1896" height="2184"/>
+      <xy x="20" y="20" width="1282" height="1389"/>
     </constraints>
     <properties>
       <background color="-16477028"/>
@@ -587,10 +587,10 @@
               </grid>
             </children>
           </grid>
-          <grid id="d1e0f" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="d1e0f" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>
@@ -639,12 +639,13 @@
                     <properties>
                       <background color="-35"/>
                     </properties>
-                    <border type="none"/>
+                    <border type="etched"/>
                     <children>
                       <component id="efae1" class="javax.swing.JLabel" binding="lblImagen">
                         <constraints/>
                         <properties>
                           <background color="-35"/>
+                          <opaque value="false"/>
                           <text value=""/>
                         </properties>
                       </component>
@@ -654,7 +655,7 @@
               </grid>
               <component id="efac1" class="javax.swing.JButton" binding="btnSubirFotoCarnet">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-2298694"/>

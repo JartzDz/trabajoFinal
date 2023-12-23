@@ -18,12 +18,20 @@ public class GestorMascotas {
         this.ListaMascotas = (listaMascotas != null) ? new ArrayList<>(listaMascotas) : new ArrayList<>();
     }
 
-    public void agregarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
-                               Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
-                               boolean otrasCirugias){
-        Mascota nuevaMascota=new Mascota(ID,edad, nombreMascota, sexo,raza,color, duenio, fotoCarnet, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+    public void agregarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color,
+                               String duenio, File fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
+                               boolean otrasCirugias) {
+
+        String rutaFotoCarnet = "./src/vista/imagenes/" + fotoCarnet.getName();
+
+        // Crear una nueva instancia de Mascota
+        Mascota nuevaMascota = new Mascota(ID, edad, nombreMascota, sexo, raza, color, duenio, rutaFotoCarnet,
+                vacunas, desparacitaciones, esterilizacion, otrasCirugias);
+
+        // Agregar la nueva mascota a la lista o estructura de datos que estés usando en tu modelo
         ListaMascotas.add(nuevaMascota);
     }
+
     public int buscarMascota(String criterio) {
         for (Mascota mascota : ListaMascotas) {
             if (mascota.getID().equals(criterio) || mascota.getNombreMascota().equalsIgnoreCase(criterio) || mascota.getDuenio().equalsIgnoreCase(criterio)) {
@@ -43,37 +51,39 @@ public class GestorMascotas {
     }
     public void eliminarMascota(int indice){
         ListaMascotas.remove(indice);
-    }
-    public void modificarMascota(int indice,String nombre,String raza, String duenio){
-        Mascota nuevaMascota= ListaMascotas.get(indice);
-        nuevaMascota.setNombreMascota(nombre);
-        nuevaMascota.setRaza(raza);
-        nuevaMascota.setDuenio(duenio);
+
     }
 
-    public void modificarMascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
-                                 Image fotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
-                                 boolean otrasCirugias, int indice){
-        // Verificar si el índice es válido
-        if (indice >= 0 && indice < ListaMascotas.size()) {
-            ListaMascotas.get(indice).setID(ID);
-            ListaMascotas.get(indice).setNombreMascota(nombreMascota);
-            ListaMascotas.get(indice).setSexo(sexo);
-            ListaMascotas.get(indice).setRaza(raza);
-            ListaMascotas.get(indice).setColor(color);
-            ListaMascotas.get(indice).setDuenio(duenio);
-            ListaMascotas.get(indice).setFotoCarnet(fotoCarnet);
-            ListaMascotas.get(indice).setDesparacitaciones(desparacitaciones);
-            ListaMascotas.get(indice).setEsterilizacion(esterilizacion);
-            ListaMascotas.get(indice).setVacunas(vacunas);
-            ListaMascotas.get(indice).setOtrasCirugias(otrasCirugias);
 
+    public String modificarMascota(String idMascota, int edad, String nombreMascota, String sexo, String raza,
+                                   String color, String duenio, File nuevaFotoCarnet, boolean vacunas, boolean desparacitaciones,
+                                   boolean esterilizacion, boolean otrasCirugias, int indice) {
 
-            System.out.println("Usuario modificado correctamente.");
-        } else {
-            System.out.println("Índice no válido. No se puede modificar el usuario.");
-        }
+        Mascota mascotaExistente = ListaMascotas.get(indice);
+
+        // Ahora actualiza los atributos de la mascota existente
+        mascotaExistente.setID(idMascota);
+        mascotaExistente.setEdad(edad);
+        mascotaExistente.setNombreMascota(nombreMascota);
+        mascotaExistente.setSexo(sexo);
+        mascotaExistente.setRaza(raza);
+        mascotaExistente.setColor(color);
+        mascotaExistente.setDuenio(duenio);
+
+        // Actualiza la ruta de la foto del carnet
+        String nuevaRutaFotoCarnet = "./src/vista/imagenes/" + nuevaFotoCarnet.getName();
+        mascotaExistente.setRutaFotoCarnet(nuevaRutaFotoCarnet);
+        mascotaExistente.setVacunas(vacunas);
+        mascotaExistente.setDesparacitaciones(desparacitaciones);
+        mascotaExistente.setEsterilizacion(esterilizacion);
+        mascotaExistente.setOtrasCirugias(otrasCirugias);
+
+        // Devuelve la nueva ruta de la foto del carnet
+        return nuevaRutaFotoCarnet;
     }
+
+
+
 
     public ArrayList<Mascota> mostrarMascotas(){
         return ListaMascotas;
