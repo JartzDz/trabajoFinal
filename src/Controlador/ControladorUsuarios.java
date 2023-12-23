@@ -138,7 +138,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     }
     private void enviarCorreo(String destino, String ID, String clave,String Nombre) {
         final String remitente = "designjartz@gmail.com";
-        final String password = "fuuiorpabfajsasz";
+        final String password = "qpwwrokprrzpgofd";
 
         Properties propiedades = new Properties();
         propiedades.put("mail.smtp.auth", "true");

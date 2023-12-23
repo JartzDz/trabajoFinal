@@ -82,6 +82,17 @@ public class GestorMascotas {
         return nuevaRutaFotoCarnet;
     }
 
+    public ArrayList<Mascota> obtenerMascotasPorDuenio(String idDuenio) {
+        ArrayList<Mascota> mascotasPorDuenio = new ArrayList<>();
+
+        for (Mascota mascota : ListaMascotas) {
+            if (mascota.getDuenio().equals(idDuenio)) {
+                mascotasPorDuenio.add(mascota);
+            }
+        }
+
+        return mascotasPorDuenio;
+    }
 
 
 
