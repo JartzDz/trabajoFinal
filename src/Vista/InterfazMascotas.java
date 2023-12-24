@@ -1,25 +1,21 @@
 package Vista;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import com.jtattoo.plaf.fast.FastLookAndFeel;
 
 import javax.swing.*;
 
 public class InterfazMascotas extends JFrame {
     public JPanel JPanelFondo;
-    public JButton btnAgregar;
+    public JButton btnAgregarMascota;
     public JButton btnMostrarMascotas;
-    public JButton btnEliminar;
-    public JButton btnModificar;
-    public JTextField txtID;
-    public JTextField txtNombre;
+    public JButton btnEliminarMascota;
+    public JButton btnModificarMascota;
+    public JTextField txtIDMascota;
+    public JTextField txtNombreMascota;
     public JTextField txtRaza;
     public JTextField txtDuenio;
-    public JTextField txtBuscar;
-    public JButton btnBuscar;
+    public JTextField txtBuscarMascota;
+    public JButton btnBuscarMascota;
     public JTable tablaMascotas;
 
     public JPanel panelImagen;

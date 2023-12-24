@@ -14,7 +14,7 @@ public class Main {
         InterfazMascotas interfazMascotas = new InterfazMascotas();
         InterfazUsuarios interfazUsuarios = new InterfazUsuarios();
         InterfazLogin interfazLogin = new InterfazLogin();
-        InterfazAdmin interfazAdmin = new InterfazAdmin();
+        InterfazPrincipalAdmin interfazAdmin = new InterfazPrincipalAdmin();
         InterfazEstablecimientos interfazEstablecimientos = new InterfazEstablecimientos();
         InterfazRegistro interfazRegistro = new InterfazRegistro();
 
@@ -25,7 +25,7 @@ public class Main {
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos, gestorUsuario);
 
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
-                interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin);
+                interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin,gestorMascotas);
 
         ControladorRegistro controladorRegistro = new ControladorRegistro(interfazRegistro, gestorUsuario, controladorAdministrador, null);
         ControladorLogin controladorLogin = new ControladorLogin(interfazLogin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, controladorAdministrador, controladorRegistro);

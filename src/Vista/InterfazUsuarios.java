@@ -27,7 +27,7 @@ public class InterfazUsuarios extends JFrame{
     public JLabel btnRegresar;
 
     public InterfazUsuarios(){
-        setContentPane(contenedor);
+
         try {
             UIManager.setLookAndFeel(new FlatMacLightLaf());
         } catch( Exception ex ) {
