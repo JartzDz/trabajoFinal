@@ -1,9 +1,6 @@
 package Controlador;
 
-import Modelo.GestorMascotas;
-import Modelo.GestorUsuario;
-import Modelo.Mascota;
-import Modelo.Persona;
+import Modelo.*;
 import Vista.InterfazLogin;
 import Vista.InterfazPrincipalAdmin;
 
@@ -23,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
@@ -31,27 +29,31 @@ import java.util.regex.Pattern;
 
 public class ControladorAdministrador extends MouseAdapter implements ActionListener, KeyListener,FocusListener  {
     InterfazPrincipalAdmin vista;
-    GestorUsuario modelo;
+    GestorUsuario modeloUsuarios;
     InterfazLogin interfazLogin;
     ControladorMascotas controladorMascotas;
     ControladorUsuarios controladorUsuarios;
     ControladorEstablecimientos controladorEstablecimientos;
+    GestorEstablecimiento modeloEstablecimiento;
     GestorMascotas modeloMascota;
     HashSet<String> idSet;
-    DefaultTableModel modeloTabla;
+    DefaultTableModel modeloTablaEst;
+    DefaultTableModel modeloTablaUsuarios;
+    DefaultTableModel modeloTablaMascotas;
     File dirImagen;
     String rutaDestino;
     String usuario="";
     CardLayout cardLayout;
     JPanel panelCards;
 
-    public ControladorAdministrador(InterfazPrincipalAdmin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios, ControladorEstablecimientos controladorEstablecimientos, InterfazLogin interfazLogin,GestorMascotas modeloMascota) {
+    public ControladorAdministrador(InterfazPrincipalAdmin vista, GestorUsuario modeloUsuarios, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios, ControladorEstablecimientos controladorEstablecimientos, InterfazLogin interfazLogin, GestorMascotas modeloMascota, GestorEstablecimiento modeloEstablecimiento) {
         this.vista = vista;
-        this.modelo = modelo;
+        this.modeloUsuarios = modeloUsuarios;
         this.controladorMascotas = controladorMascotas;
         this.controladorUsuarios = controladorUsuarios;
         this.modeloMascota = modeloMascota;
         this.controladorEstablecimientos = controladorEstablecimientos;
+        this.modeloEstablecimiento=modeloEstablecimiento;
         this.interfazLogin = interfazLogin;
         cardLayout = new CardLayout();
         vista.btnGestionEst.addMouseListener(this);
@@ -75,7 +77,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         cardLayout.show(vista.panelPrincipal, "Bienvenida");
         modeloMascota.recuperarMascotas();
         //Usuarios
-        modelo.recuperarUsuarios();
+        modeloUsuarios.recuperarUsuarios();
         vista.btnAgregar.addActionListener(this);
         vista.btnBuscar.addActionListener(this);
         vista.btnMostrarUsuarios.addActionListener(this);
@@ -89,8 +91,8 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.txtCorreo.addKeyListener(this);
         vista.txtClave.addKeyListener(this);
         vista.txtBuscar.addFocusListener(this);
-        String[] columnas = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
-        modeloTabla = new DefaultTableModel(null, columnas);
+        String[] columnasUsuarios = {"CEDULA", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "CONTRASEÑA"};
+        modeloTablaUsuarios = new DefaultTableModel(null, columnasUsuarios);
         vista.btnBuscar.setFocusable(false);
         vista.btnRegresar.addMouseListener(this);
         vista.btnMostrarUsuarios.addMouseListener(this);
@@ -114,8 +116,8 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.btnBuscarMascota.setFocusable(false);
         vista.txtBuscarMascota.setEnabled(false);
 
-        String[] columnasUsuarios = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO"};
-        modeloTabla = new DefaultTableModel(null, columnas);
+        String[] columnasMascotas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO"};
+        modeloTablaMascotas = new DefaultTableModel(null, columnasMascotas);
         vista.btnMostrarMascotas.setEnabled(false);
         vista.btnBuscarMascota.setEnabled(false);
         vista.btnSubirFotoCarnet.addActionListener(this);
@@ -132,9 +134,34 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.btnSubirFotoCarnet.addMouseListener(this);
         vista.setUndecorated(true);
         activarBotones();
+
+        //Establecimientos
+        modeloEstablecimiento.recuperarEstablecimientos();
+        //cargarCombo();
+        vista.btnBuscarEst.addActionListener(this);
+        vista.btnAgregarEst.addActionListener(this);
+        vista.btnEliminarEst.addActionListener(this);
+        vista.btnMostrarEst.addActionListener(this);
+        vista.btnModificarEst.addActionListener(this);
+        vista.btnBuscarEst.setFocusable(false);
+        vista.cboCIProp.addActionListener(this);
+        vista.txtRUC.addKeyListener(this);
+        vista.txtTelefono.addKeyListener(this);
+        vista.txtBuscar.addKeyListener(this);
+        vista.txtDireccion.addKeyListener(this);
+        vista.txtNombre.addKeyListener(this);
+        vista.txtCorreo.addKeyListener(this);
+        vista.txtBuscarEst.addFocusListener(this);
+        modeloUsuarios.recuperarUsuarios();
+        String[] columnasEst = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
+        modeloTablaEst = new DefaultTableModel(null, columnasEst);
+        activarBotonesEst();
+
+
     }
 
     public void mostrarInterfaz(){
+        cargarCombo();
         vista.setTitle("ADMINISTRADOR");
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vista.setLocationRelativeTo(null);
@@ -144,7 +171,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     //funciones Usuario
     public void activarBotonesUsuario(){
-        if(modelo.getUsuarios().isEmpty()){
+        if(modeloUsuarios.getUsuarios().isEmpty()){
             vista.txtBuscar.setEnabled(false);
             vista.btnMostrarUsuarios.setEnabled(false);
             vista.btnBuscar.setEnabled(false);
@@ -176,12 +203,12 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
             if(validarCedula(ID)) {
                 if(validarCorreo(correo)) {
-                    if(modelo.validarCedulaUnica(ID)) {
-                        if (modelo.validarCorreoUnico(correo)) {
-                            if (modelo.validarTelefonoUnico(tel)) {
-                                if (modelo.validarCedulaUnica(ID) && modelo.validarTelefonoUnico(tel) && modelo.validarCorreoUnico(correo)) {
-                                    modelo.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
-                                    modelo.guardarUsuarios();
+                    if(modeloUsuarios.validarCedulaUnica(ID)) {
+                        if (modeloUsuarios.validarCorreoUnico(correo)) {
+                            if (modeloUsuarios.validarTelefonoUnico(tel)) {
+                                if (modeloUsuarios.validarCedulaUnica(ID) && modeloUsuarios.validarTelefonoUnico(tel) && modeloUsuarios.validarCorreoUnico(correo)) {
+                                    modeloUsuarios.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
+                                    modeloUsuarios.guardarUsuarios();
                                     enviarCorreo(correo, ID, clave, nombreUsuario);
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
                                     limpiarUsuarios();
@@ -214,7 +241,6 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         }
     }
 
-
     public void eliminarTablaUsuarios() {
         int fila = vista.tablaUsuarios.getSelectedRow();
 
@@ -223,8 +249,8 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             JOptionPane.showMessageDialog(vista, "Seleccione la fila que desea eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             String valor = (String) vista.tablaUsuarios.getValueAt(fila, 0);
-            modelo.eliminarUsuario(fila);
-            modelo.guardarUsuarios();
+            modeloUsuarios.eliminarUsuario(fila);
+            modeloUsuarios.guardarUsuarios();
             mostrarUsuarios();
         }
     }
@@ -263,22 +289,22 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
     public void cargarUsuario() {
         String cedulaBuscada = vista.txtBuscar.getText();
-        int indice = modelo.buscarUsuario(cedulaBuscada);
+        int indice = modeloUsuarios.buscarUsuario(cedulaBuscada);
 
         System.out.println(cedulaBuscada);
         if (indice != -1) {
-            if (modeloTabla.getColumnCount() == 0) {
-                modeloTabla.addColumn("CEDULA");
-                modeloTabla.addColumn("NOMBRE");
-                modeloTabla.addColumn("DIRECCION");
-                modeloTabla.addColumn("TELEFONO");
-                modeloTabla.addColumn("CORREO");
-                modeloTabla.addColumn("CONTRASEÑA");
+            if (modeloTablaUsuarios.getColumnCount() == 0) {
+                modeloTablaUsuarios.addColumn("CEDULA");
+                modeloTablaUsuarios.addColumn("NOMBRE");
+                modeloTablaUsuarios.addColumn("DIRECCION");
+                modeloTablaUsuarios.addColumn("TELEFONO");
+                modeloTablaUsuarios.addColumn("CORREO");
+                modeloTablaUsuarios.addColumn("CONTRASEÑA");
             }
-            modeloTabla.setRowCount(0);
-            Object[] fila = {modelo.getUsuarios().get(indice).getCedula(), modelo.getUsuarios().get(indice).getNombre(), modelo.getUsuarios().get(indice).getDireccion(), modelo.getUsuarios().get(indice).getTelefono(), modelo.getUsuarios().get(indice).getCorreo(), modelo.getUsuarios().get(indice).getContrasenia()};
-            modeloTabla.addRow(fila);
-            vista.tablaUsuarios.setModel(modeloTabla);
+            modeloTablaUsuarios.setRowCount(0);
+            Object[] fila = {modeloUsuarios.getUsuarios().get(indice).getCedula(), modeloUsuarios.getUsuarios().get(indice).getNombre(), modeloUsuarios.getUsuarios().get(indice).getDireccion(), modeloUsuarios.getUsuarios().get(indice).getTelefono(), modeloUsuarios.getUsuarios().get(indice).getCorreo(), modeloUsuarios.getUsuarios().get(indice).getContrasenia()};
+            modeloTablaUsuarios.addRow(fila);
+            vista.tablaUsuarios.setModel(modeloTablaUsuarios);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -296,12 +322,12 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             if (validarCedula(ID)) {
                 if (validarCorreo(correo)) {
                     // Obtener el índice del usuario a modificar
-                    int indice = modelo.buscarUsuario(ID);
+                    int indice = modeloUsuarios.buscarUsuario(ID);
                     // Verificar si el índice es válido
                     if (indice != -1) {
                         // Llama al método modificarUsuario en el modelo
-                        modelo.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
-                        modelo.guardarUsuarios();
+                        modeloUsuarios.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
+                        modeloUsuarios.guardarUsuarios();
                         JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
                         limpiarUsuarios();
                         mostrarUsuarios();
@@ -320,25 +346,25 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
 
     public void mostrarUsuarios() {
-        if (!modelo.getUsuarios().isEmpty()) {
-            if (modeloTabla.getColumnCount() == 0) {
-                modeloTabla.addColumn("CEDULA");
-                modeloTabla.addColumn("NOMBRE");
-                modeloTabla.addColumn("DIRECCION");
-                modeloTabla.addColumn("TELEFONO");
-                modeloTabla.addColumn("CORREO");
-                modeloTabla.addColumn("CONTRASEÑA");
+        if (!modeloUsuarios.getUsuarios().isEmpty()) {
+            if (modeloTablaUsuarios.getColumnCount() == 0) {
+                modeloTablaUsuarios.addColumn("CEDULA");
+                modeloTablaUsuarios.addColumn("NOMBRE");
+                modeloTablaUsuarios.addColumn("DIRECCION");
+                modeloTablaUsuarios.addColumn("TELEFONO");
+                modeloTablaUsuarios.addColumn("CORREO");
+                modeloTablaUsuarios.addColumn("CONTRASEÑA");
             }
-            modeloTabla.setRowCount(0);
-            for (Persona p : modelo.getUsuarios()) {
+            modeloTablaUsuarios.setRowCount(0);
+            for (Persona p : modeloUsuarios.getUsuarios()) {
                 Object[] fila = {p.getCedula(), p.getNombre(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getContrasenia()};
-                modeloTabla.addRow(fila);
+                modeloTablaUsuarios.addRow(fila);
             }
-            vista.tablaUsuarios.setModel(modeloTabla);
+            vista.tablaUsuarios.setModel(modeloTablaUsuarios);
             vista.btnMostrarUsuarios.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "No existen usuarios ingresados", "Error", JOptionPane.ERROR_MESSAGE);
-            modeloTabla.setRowCount(0);
+            modeloTablaUsuarios.setRowCount(0);
             vista.btnMostrarUsuarios.setEnabled(false);
         }
     }
@@ -405,7 +431,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.txtColor.setText("");
         vista.spnEdad.setValue(0);
         vista.lblImagen.setIcon(null);
-        DefaultTableModel modelo = (DefaultTableModel)  vista.tablaMascotas.getModel();
+        DefaultTableModel modelo = (DefaultTableModel)  vista.tablaEstablecimientos.getModel();
         modelo.setRowCount(0);
         vista.chkCirugias.setSelected(false);
         vista.chkDesparacitaciones.setSelected(false);
@@ -483,16 +509,16 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     public void eliminarTabla() {
         // Verifica si hay una fila seleccionada
-        int fila = vista.tablaMascotas.getSelectedRow();
+        int fila = vista.tablaEstablecimientos.getSelectedRow();
         if (fila != -1) {
-            String idMascota = (String) vista.tablaMascotas.getValueAt(fila, 0);
+            String idMascota = (String) vista.tablaEstablecimientos.getValueAt(fila, 0);
             try {
                 int pos = modeloMascota.buscarMascota(idMascota);
                 modeloMascota.eliminarMascota(pos);
                 modeloMascota.guardarMascotas();
 
                 // Remueve la fila seleccionada del modelo de la tabla
-                modeloTabla.removeRow(fila);
+                modeloTablaMascotas.removeRow(fila);
 
                 JOptionPane.showMessageDialog(null, "Mascota eliminada con éxito.");
             } catch (NumberFormatException e) {
@@ -532,56 +558,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         }
     }
 
-    public void cargarFoto(){
-        JFileChooser jf = new JFileChooser();
-        FileNameExtensionFilter filtrado = new FileNameExtensionFilter("Imágenes", "jpg", "png", "gif");
-        jf.setFileFilter(filtrado);
 
-        int seleccion = jf.showOpenDialog(null);
-
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            // Obtener el archivo seleccionado
-            File archivo = jf.getSelectedFile();
-
-            JLabel imagenLabel = new JLabel();
-
-            // Escalar la imagen manteniendo la relación de aspecto original
-            ImageIcon imagenIcon = new ImageIcon(archivo.getPath());
-            Image imagenOriginal = imagenIcon.getImage();
-
-            // Calcular el nuevo tamaño manteniendo la relación de aspecto
-            int nuevoAncho = 200;
-            int nuevoAlto = 200;
-
-            // Escalar la imagen al nuevo tamaño
-            Image imagenEscalada = imagenOriginal.getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
-            imagenIcon = new ImageIcon(imagenEscalada);
-
-            imagenLabel.setIcon(imagenIcon);
-
-            // Establecer la posición y tamaño del JLabel en el JPanel para centrarlo
-            int x = (vista.panelImagen.getWidth() - nuevoAncho) / 2;  // Centrar la imagen horizontalmente
-            int y = (vista.panelImagen.getHeight() - nuevoAlto) / 2;    // Centrar la imagen verticalmente
-
-            imagenLabel.setBounds(x, y, nuevoAncho, nuevoAlto);
-
-            // Establecer un diseño nulo en el panelImagen
-            vista.panelImagen.setLayout(null);
-
-            // Limpiar el panel y agregar el JLabel con la imagen
-            vista.panelImagen.removeAll();
-            vista.panelImagen.add(imagenLabel);
-
-            vista.panelImagen.revalidate();
-            vista.panelImagen.repaint();
-
-
-
-        } else if (seleccion == JFileChooser.CANCEL_OPTION) {
-
-            System.out.println("Operación cancelada");
-        }
-    }
     public void cargarMascota() {
         String textoID = vista.txtBuscarMascota.getText();
 
@@ -591,18 +568,18 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
                 if (indice != -1) {
                     // Limpiar el modelo de la tabla antes de agregar columnas y filas
-                    modeloTabla.setRowCount(0);
+                    modeloTablaMascotas.setRowCount(0);
 
                     // Verificar si las columnas ya han sido agregadas al modelo de la tabla
-                    if (modeloTabla.getColumnCount() == 0) {
-                        modeloTabla.addColumn("ID");
-                        modeloTabla.addColumn("NOMBRE");
-                        modeloTabla.addColumn("RAZA");
-                        modeloTabla.addColumn("EDAD");
-                        modeloTabla.addColumn("DUEÑO");
-                        modeloTabla.addColumn("SEXO");
-                        modeloTabla.addColumn("COLOR");
-                        modeloTabla.addColumn("FOTO CARNET");
+                    if (modeloTablaMascotas.getColumnCount() == 0) {
+                        modeloTablaMascotas.addColumn("ID");
+                        modeloTablaMascotas.addColumn("NOMBRE");
+                        modeloTablaMascotas.addColumn("RAZA");
+                        modeloTablaMascotas.addColumn("EDAD");
+                        modeloTablaMascotas.addColumn("DUEÑO");
+                        modeloTablaMascotas.addColumn("SEXO");
+                        modeloTablaMascotas.addColumn("COLOR");
+                        modeloTablaMascotas.addColumn("FOTO CARNET");
                     }
 
                     Object[] fila = {
@@ -616,8 +593,8 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                             modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet()
                     };
 
-                    modeloTabla.addRow(fila);
-                    vista.tablaMascotas.setModel(modeloTabla);
+                    modeloTablaMascotas.addRow(fila);
+                    vista.tablaMascotas.setModel(modeloTablaMascotas);
 
                     // Cargar la imagen de la mascota en lblImagenMascota
                     String rutaImagen = modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet();
@@ -729,19 +706,19 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     public void mostrarMascotas() {
         // Limpia el modelo de la tabla antes de agregar columnas y filas
-        modeloTabla.setRowCount(0);
+        modeloTablaMascotas.setRowCount(0);
 
         if (!modeloMascota.mostrarMascotas().isEmpty()) {
             // Verifica si las columnas ya han sido agregadas al modelo de la tabla
-            if (modeloTabla.getColumnCount() == 0) {
-                modeloTabla.addColumn("ID");
-                modeloTabla.addColumn("NOMBRE");
-                modeloTabla.addColumn("RAZA");
-                modeloTabla.addColumn("EDAD");
-                modeloTabla.addColumn("DUEÑO");
-                modeloTabla.addColumn("SEXO");
-                modeloTabla.addColumn("COLOR");
-                modeloTabla.addColumn("FOTO CARNET");
+            if (modeloTablaMascotas.getColumnCount() == 0) {
+                modeloTablaMascotas.addColumn("ID");
+                modeloTablaMascotas.addColumn("NOMBRE");
+                modeloTablaMascotas.addColumn("RAZA");
+                modeloTablaMascotas.addColumn("EDAD");
+                modeloTablaMascotas.addColumn("DUEÑO");
+                modeloTablaMascotas.addColumn("SEXO");
+                modeloTablaMascotas.addColumn("COLOR");
+                modeloTablaMascotas.addColumn("FOTO CARNET");
             }
 
             for (Mascota mascota : modeloMascota.mostrarMascotas()) {
@@ -755,10 +732,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                         mascota.getColor(),
                         mascota.getSexo(),
                 };
-                modeloTabla.addRow(fila);
+                modeloTablaMascotas.addRow(fila);
             }
 
-            vista.tablaMascotas.setModel(modeloTabla);
+            vista.tablaMascotas.setModel(modeloTablaMascotas);
 
 
         } else {
@@ -766,6 +743,260 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         }
     }
 
+    //Establecimientos
+    public boolean esPropietario(){
+        int indice = modeloUsuarios.buscarUsuario(usuario);
+        if(modeloUsuarios.getUsuarios().get(indice) instanceof Administrador){
+            return false;
+        }
+        return true;
+    }
+
+    public void cargarCombo() {
+        if (!esPropietario()) {
+            for (Persona p : modeloUsuarios.getUsuarios()) {
+                if (p instanceof DuenioEstablecimiento) {
+                    vista.cboCIProp.addItem(p.getCedula() + "-" + p.getNombre());
+                }
+            }
+
+            ArrayList<String> cedulas = separarCedula();
+            for (String cedula : cedulas) {
+                System.out.println(cedula);
+            }
+        }
+
+    }
+
+    public ArrayList<String> separarCedula() {
+        ArrayList<String> cedulas = new ArrayList<>();
+
+        int itemCount = vista.cboCIProp.getItemCount();
+
+        for (int i = 0; i < itemCount; i++) {
+            Object item = vista.cboCIProp.getItemAt(i);
+            String combo = item.toString();
+            String[] partes = combo.split("-");
+
+            if (partes.length > 0) {
+                String cedula = partes[0].trim();
+                cedulas.add(cedula);
+            } else {
+                System.out.println("Error al separar cédula y nombre para: " + combo);
+            }
+        }
+
+        return cedulas;
+    }
+    public void limpiarEst(){
+        vista.txtRUC.setText("");
+        vista.txtNombre.setText("");
+        vista.txtTelefono.setText("");
+        vista.txtDireccion.setText("");
+        vista.txtCorreo.setText("");
+    }
+    public void activarBotonesEst(){
+        if(modeloEstablecimiento.getEstablecimiento().isEmpty()){
+            vista.txtBuscarEst.setEnabled(false);
+            vista.btnMostrarEst.setEnabled(false);
+            vista.btnBuscarEst.setEnabled(false);
+        }else{
+            vista.txtBuscarEst.setEnabled(true);
+            vista.btnMostrarEst.setEnabled(true);
+            vista.btnBuscarEst.setEnabled(true);
+        }
+    }
+
+    public void agregarEst() {
+        String RUC = vista.txtRUC.getText();
+        String nombreEstablecimiento = vista.txtNombre.getText();
+        String tel = vista.txtTelefono.getText();
+        String direccion = vista.txtDireccion.getText();
+        String correo = vista.txtCorreo.getText();
+        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+        String tipoEstablecimiento = String.valueOf(vista.cboTipoEst.getSelectedIndex());
+
+        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
+            int buscarPropietario = modeloUsuarios.buscarUsuario(CIPropietario);
+
+            // Validar RUC antes de agregar el establecimiento
+            if (validarRUC(RUC)) {
+                if (validarCorreo(correo)) {
+                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    ((DuenioEstablecimiento) modeloUsuarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    modeloEstablecimiento.guardarEstablecimientos();
+                    // enviarCorreo(correo, ID, clave, nombreUsuario);
+                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                    limpiarEst();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void eliminarTablaEst() {
+        try {
+            int fila = vista.tablaEstablecimientos.getSelectedRow();
+
+            if (fila == -1) {
+                // No hay fila seleccionada, muestra un mensaje de error
+                throw new Exception("Seleccione la fila que desea eliminar.");
+            }
+
+            String valor = (String) vista.tablaEstablecimientos.getValueAt(fila, 0);
+            modeloEstablecimiento.eliminarEstablecimiento(fila);
+            modeloEstablecimiento.guardarEstablecimientos();
+            mostrarEstablecimiento();
+
+
+            JOptionPane.showMessageDialog(vista, "Registro eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            // Capturar la excepción y mostrar mensaje de error
+            JOptionPane.showMessageDialog(vista, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
+    public void mostrarEstablecimiento() {
+        if (!modeloEstablecimiento.getEstablecimiento().isEmpty()) {
+            if (modeloTablaEst.getColumnCount() == 0) {
+                modeloTablaEst.addColumn("RUC");
+                modeloTablaEst.addColumn("NOMBRE");
+                modeloTablaEst.addColumn("DIRECCION");
+                modeloTablaEst.addColumn("TELEFONO");
+                modeloTablaEst.addColumn("CORREO");
+                modeloTablaEst.addColumn("PROPIETARIO");
+                modeloTablaEst.addColumn("TIPO");
+            }
+            modeloTablaEst.setRowCount(0);
+            ArrayList<Establecimiento> listaEstablecimiento;
+            if(esPropietario()){
+                listaEstablecimiento = modeloEstablecimiento.buscarEstablecimientosDuenio(usuario);
+            }else{
+                listaEstablecimiento = modeloEstablecimiento.getEstablecimiento();
+            }
+            for (Establecimiento p : listaEstablecimiento) {
+                Object[] fila = {p.getRuc(), p.getNombreEst(), p.getDireccion(), p.getTelefono(), p.getCorreo(), p.getCIRepresentante(), p.getTipoEstablecimiento()};
+                modeloTablaEst.addRow(fila);
+            }
+            vista.tablaEstablecimientos.setModel(modeloTablaEst);
+            vista.btnMostrarEst.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No existen establecimientos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+            modeloTablaEst.setRowCount(0);
+            vista.btnMostrarEst.setEnabled(false);
+        }
+    }
+
+    public void cargarEst() {
+        String textoID = vista.txtBuscarEst.getText();
+
+        if (!textoID.isEmpty()) {
+            try {
+                int indice = modeloEstablecimiento.buscarEst(textoID);
+
+                if (indice != -1) {
+                    // Limpiar el modelo de la tabla antes de agregar columnas y filas
+                    modeloTablaEst.setRowCount(0);
+
+                    // Verificar si las columnas ya han sido agregadas al modelo de la tabla
+                    if (modeloTablaEst.getColumnCount() == 0) {
+                        modeloTablaEst.addColumn("RUC");
+                        modeloTablaEst.addColumn("NOMBRE");
+                        modeloTablaEst.addColumn("DIRECCION");
+                        modeloTablaEst.addColumn("TELEFONO");
+                        modeloTablaEst.addColumn("CORREO");
+                        modeloTablaEst.addColumn("PROPIETARIO");
+                        modeloTablaEst.addColumn("TIPO");
+                    }
+
+                    Object[] fila = {
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getRuc(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getNombreEst(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getDireccion(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getTelefono(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getCorreo(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getCIRepresentante(),
+                            modeloEstablecimiento.mostrarEstablecimientos().get(indice).getTipoEstablecimiento(),
+                    };
+
+                    modeloTablaEst.addRow(fila);
+                    vista.tablaEstablecimientos.setModel(modeloTablaEst);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró el establecimiento", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingrese un RUC válido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese un RUC o NOMBRE para buscar establecimiento", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+    public void modificarEstablecimiento() {
+        String RUC = vista.txtRUC.getText();
+        String nombreEstablecimiento = vista.txtNombre.getText();
+        String tel = vista.txtTelefono.getText();
+        String direccion = vista.txtDireccion.getText();
+        String correo = vista.txtCorreo.getText();
+        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+        String tipoEstablecimiento = String.valueOf(vista.cboTipoEst.getSelectedIndex());
+
+        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
+            if (validarCorreo(correo)) {
+                // Obtener el índice del usuario a modificar
+                int indice = GestorEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
+                // Verificar si el índice es válido
+                if (indice != -1) {
+                    // Llama al método modificarUsuario en el modelo
+                    modeloEstablecimiento.modificarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento, indice);
+                    modeloEstablecimiento.guardarEstablecimientos();
+                    JOptionPane.showMessageDialog(null, "Establecimiento modificado con éxito.");
+                    limpiarEst();
+                    mostrarEstablecimiento();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public boolean validarRUC(String ruc) {
+        if (ruc.length() != 13) {
+            return false;
+        }
+
+        int[] coeficientes = {4, 3, 2, 7, 6, 5, 4, 3, 2};
+        int suma = 0;
+
+        if (ruc.charAt(1) != '9') {
+            return false;
+        }
+
+        for (int i = 0; i < 9; i++) {
+            suma += Character.getNumericValue(ruc.charAt(i)) * coeficientes[i];
+        }
+
+        int residuo = suma % 11;
+        int digitoVerificador = (residuo == 0) ? 0 : 11 - residuo;
+
+        System.out.println(digitoVerificador == Character.getNumericValue(ruc.charAt(9)));
+
+        return digitoVerificador == Character.getNumericValue(ruc.charAt(9));
+    }
 
 
     public String getUsuario() {
@@ -839,6 +1070,33 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             vista.btnBuscar.setForeground(fg3);
             vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
+
+        if (e.getSource() == vista.btnAgregarEst) {
+            vista.btnAgregarEst.setBackground(bg3);
+            vista.btnAgregarEst.setForeground(fg3);
+            vista.btnAgregarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista.btnModificarEst) {
+            vista.btnModificarEst.setBackground(bg3);
+            vista.btnModificarEst.setForeground(fg3);
+            vista.btnModificarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnMostrarEst){
+            vista.btnMostrarEst.setBackground(bg3);
+            vista.btnMostrarEst.setForeground(fg3);
+            vista.btnMostrarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnEliminarEst){
+            vista.btnEliminarEst.setBackground(bg3);
+            vista.btnEliminarEst.setForeground(fg3);
+            vista.btnEliminarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnBuscarEst){
+            vista.btnBuscarEst.setBackground(bg3);
+            vista.btnBuscarEst.setForeground(fg3);
+            vista.btnBuscarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+
         if(e.getSource()==vista.btnRegresar){
             vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
@@ -937,6 +1195,12 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         if(e.getSource()==vista.btnEliminar) eliminarTablaUsuarios();
         if(e.getSource()==vista.btnBuscar)cargarUsuario();
         if(e.getSource()==vista.btnModificar) modificarUsuario();
+
+        if(e.getSource()==vista.btnAgregarEst) agregarEst();
+        if(e.getSource()==vista.btnMostrarEst) mostrarEstablecimiento();
+        if(e.getSource()==vista.btnEliminarEst)eliminarTablaEst();
+        if(e.getSource()==vista.btnBuscarEst)cargarEst();
+        if(e.getSource()==vista.btnModificarEst) modificarEstablecimiento();
     }
 
 
@@ -1028,6 +1292,32 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             vista.btnBuscar.setForeground(fg);
             vista.btnBuscar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
+        if (e.getSource() == vista.btnAgregarEst) {
+            vista.btnAgregarEst.setBackground(bg);
+            vista.btnAgregarEst.setForeground(fg);
+            vista.btnAgregarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista.btnModificarEst) {
+            vista.btnModificarEst.setBackground(bg);
+            vista.btnModificarEst.setForeground(fg);
+            vista.btnModificarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnMostrarEst){
+            vista.btnMostrarEst.setBackground(bg);
+            vista.btnMostrarEst.setForeground(fg);
+            vista.btnMostrarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnEliminarEst){
+            vista.btnEliminarEst.setBackground(bg);
+            vista.btnEliminarEst.setForeground(fg);
+            vista.btnEliminarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource() == vista.btnBuscarEst){
+            vista.btnBuscarEst.setBackground(bg);
+            vista.btnBuscarEst.setForeground(fg);
+            vista.btnBuscarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+
         if(e.getSource() == vista.btnRegresar || e.getSource() == vista.btnRegresar2 ||e.getSource() == vista.btnRegresar3 ||e.getSource() == vista.btnRegresar4){
             vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
             vista.btnRegresar2.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -1080,6 +1370,25 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 Toolkit.getDefaultToolkit().beep();
             }
         }
+        if(e.getSource()==vista.txtRUC){
+            if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();}
+        }
+        if(e.getSource()== vista.txtTelefono){
+            if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();}
+        }
+        if(e.getSource()==vista.txtNombre || e.getSource()==vista.txtDireccion){
+            if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
+                e.setKeyChar(Character.toUpperCase(c));
+
+            }else{
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }
 
     @Override
@@ -1098,10 +1407,13 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     public void focusGained(FocusEvent e) {
         vista.txtBuscarMascota.setText("");
         vista.txtBuscarMascota.setForeground(Color.BLACK);
-        vista.txtBuscarMascota.setEnabled(true);
+        vista.btnBuscarMascota.setEnabled(true);
         vista.txtBuscar.setText("");
         vista.txtBuscar.setForeground(Color.BLACK);
         vista.btnBuscar.setEnabled(true);
+        vista.txtBuscarEst.setText("");
+        vista.txtBuscarEst.setForeground(Color.BLACK);
+        vista.btnBuscarEst.setEnabled(true);
     }
 
     @Override
@@ -1112,6 +1424,9 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.txtBuscar.setForeground(Color.GRAY);
         vista.txtBuscar.setText("Ingrese el ID del Usuario");
         vista.btnBuscar.setEnabled(false);
+        vista.txtBuscarEst.setForeground(Color.GRAY);
+        vista.txtBuscarEst.setText("Ingrese el RUC del establecimiento");
+        vista.btnBuscarEst.setEnabled(false);
 
     }
 

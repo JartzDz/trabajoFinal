@@ -44,7 +44,17 @@ public class GestorEstablecimiento {
         }
         return -1;
     }
-
+    public int buscarEst(String criterio) {
+        for (Establecimiento establecimiento : establecimientos) {
+            if (establecimiento.getRuc().equals(criterio) || establecimiento.getNombreEst().equalsIgnoreCase(criterio)) {
+                return establecimientos.indexOf(establecimiento);
+            }
+        }
+        return -1;
+    }
+    public ArrayList<Establecimiento> mostrarEstablecimientos(){
+        return establecimientos;
+    }
 
 
     public void eliminarEstablecimiento(int indice){

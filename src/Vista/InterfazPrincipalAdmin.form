@@ -165,7 +165,7 @@
                   <card name="Usuarios"/>
                 </constraints>
                 <properties>
-                  <visible value="false"/>
+                  <visible value="true"/>
                 </properties>
                 <border type="none"/>
                 <children>

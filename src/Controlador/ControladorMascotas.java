@@ -26,6 +26,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     private ControladorUsuarios controladorUsuarios;
     private File dirImagen;
     private String rutaDestino;
+
     public ControladorMascotas(GestorMascotas modeloMascota, InterfazMascotas vistaMascota) {
         this.modeloMascota = modeloMascota;
         this.vistaMascota = vistaMascota;
@@ -455,6 +456,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
 
+
     public void mouseEntered(MouseEvent e){
         Color bg = new Color(4, 148, 156);
         Color fg = new Color(255,255,255);
@@ -603,6 +605,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vistaMascota.txtBuscarMascota.setText("");
             vistaMascota.txtBuscarMascota.setForeground(Color.BLACK);
             vistaMascota.btnBuscarMascota.setEnabled(true);
+
     }
 
     @Override
@@ -610,6 +613,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             vistaMascota.txtBuscarMascota.setForeground(Color.GRAY);
             vistaMascota.txtBuscarMascota.setText("Ingrese el ID,NOMBRE de la mascota o CEDULA del PROPIETARIO");
             vistaMascota.btnBuscarMascota.setEnabled(false);
+
 
     }
 
