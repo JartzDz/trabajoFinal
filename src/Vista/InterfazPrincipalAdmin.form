@@ -31,7 +31,7 @@
                 <constraints border-constraint="Center"/>
                 <properties>
                   <background color="-16477028"/>
-                  <icon value="Vista/imagenes/logoPequeño.png"/>
+                  <icon value="Vista/imagenes/logoPequenio.png"/>
                   <preferredSize width="0" height="300"/>
                   <text value=""/>
                 </properties>
