@@ -19,7 +19,7 @@ public class Main {
         InterfazRegistro interfazRegistro = new InterfazRegistro();
 
         // Controladores
-        ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas);
+        ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas,gestorUsuario);
 
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos, gestorUsuario);

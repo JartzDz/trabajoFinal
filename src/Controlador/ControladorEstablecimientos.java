@@ -154,15 +154,6 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     }
 
 
-    public void buscarEstablecimiento(){
-        String RUC = vistaEstablecimiento.txtBuscar.getText();
-        int indice= modeloEstablecimiento.buscarEst(RUC);
-        if(indice!=-1){
-            JOptionPane.showMessageDialog(null, "Establecimiento Encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Establecimiento No Encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     public void eliminarTablaEst() {
         try {

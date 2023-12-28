@@ -40,15 +40,18 @@ public class GestorMascotas {
         }
         return -1;
     }
-    public ArrayList<Mascota> buscarMascotaArray(int ID){
-        ArrayList<Mascota> resultados=new ArrayList<>();
-        for(Mascota i: ListaMascotas){
-            if(i.getID().equals(ID)){
-                resultados.add(i);
+
+    public ArrayList<Mascota> buscarMascotasDuenio(String cedula) {
+        ArrayList<Mascota> mascotasDuenio = new ArrayList<>();
+        for (Mascota mascota : ListaMascotas) {
+            if (mascota.getDuenio().equals(cedula)) {
+                mascotasDuenio.add(mascota);
             }
         }
-        return resultados;
+        return mascotasDuenio;
     }
+
+
     public void eliminarMascota(int indice){
         ListaMascotas.remove(indice);
 

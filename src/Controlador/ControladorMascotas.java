@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -22,16 +23,19 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     private InterfazMascotas vistaMascota;
     private GestorMascotas modeloMascota;
     private HashSet<String> idSet;
+    private GestorUsuario modeloDuenios;
     private DefaultTableModel modeloTabla;
-    private ControladorUsuarios controladorUsuarios;
     private File dirImagen;
+    private String usuario="";
     private String rutaDestino;
 
-    public ControladorMascotas(GestorMascotas modeloMascota, InterfazMascotas vistaMascota) {
+    public ControladorMascotas(GestorMascotas modeloMascota, InterfazMascotas vistaMascota,GestorUsuario modeloDuenios) {
         this.modeloMascota = modeloMascota;
         this.vistaMascota = vistaMascota;
+        this.modeloDuenios = modeloDuenios;
         idSet = new HashSet<>();
         modeloMascota.recuperarMascotas();
+        modeloDuenios.recuperarUsuarios();
         vistaMascota.btnAgregarMascota.addActionListener(this);
         vistaMascota.btnEliminarMascota.addActionListener(this);
         vistaMascota.btnModificarMascota.addActionListener(this);
@@ -65,6 +69,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void mostrarInterfazMascotas() {
+        cargarCedula();
         generarYMostrarID();
         vistaMascota.setUndecorated(true);
         vistaMascota.setTitle("USUARIOS");
@@ -168,6 +173,28 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
 
         return digitos.toString();
+    }
+
+
+    public boolean esDuenio() {
+        int indice = modeloDuenios.buscarUsuario(usuario);
+        if(modeloDuenios.getUsuarios().get(indice) instanceof Administrador){
+            return false;
+        }
+        return true;
+    }
+
+
+    public void cargarCedula() {
+            if (esDuenio()) {
+                vistaMascota.txtDuenio.setText(usuario);
+            } else {
+                for (Persona p : modeloDuenios.getUsuarios()) {
+                    if (p instanceof DuenioMascota) {
+                        vistaMascota.txtDuenio.setText(p.getCedula());
+                    }
+                }
+            }
     }
 
 
@@ -418,11 +445,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
     public void mostrarMascotas() {
-        // Limpia el modelo de la tabla antes de agregar columnas y filas
-        modeloTabla.setRowCount(0);
-
-        if (!modeloMascota.mostrarMascotas().isEmpty()) {
-            // Verifica si las columnas ya han sido agregadas al modelo de la tabla
+        if (!modeloMascota.getListaMascotas().isEmpty()) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("ID");
                 modeloTabla.addColumn("NOMBRE");
@@ -434,28 +457,34 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("FOTO CARNET");
             }
 
-            for (Mascota mascota : modeloMascota.mostrarMascotas()) {
-
-                Object[] fila = {
-                        mascota.getID(),
-                        mascota.getNombreMascota(),
-                        mascota.getRaza(),
-                        mascota.getDuenio(),
-                        mascota.getEdad(),
-                        mascota.getColor(),
-                        mascota.getSexo(),
-                };
+            modeloTabla.setRowCount(0);
+            ArrayList<Mascota> listaMascotas;
+            if(esDuenio()){
+                listaMascotas = modeloMascota.buscarMascotasDuenio(usuario);
+            }else{
+                listaMascotas = modeloMascota.getListaMascotas();
+            }
+            for (Mascota p : listaMascotas) {
+                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getEdad(), p.getDuenio(), p.getSexo(), p.getColor()};
                 modeloTabla.addRow(fila);
             }
-
             vistaMascota.tablaMascotas.setModel(modeloTabla);
-
-
+            vistaMascota.btnMostrarMascotas.setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(null, "No existen mascotas ingresadas", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No existen mascotas", "Error", JOptionPane.ERROR_MESSAGE);
+            modeloTabla.setRowCount(0);
+            vistaMascota.btnMostrarMascotas.setEnabled(false);
         }
     }
 
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 
     public void mouseEntered(MouseEvent e){
         Color bg = new Color(4, 148, 156);
