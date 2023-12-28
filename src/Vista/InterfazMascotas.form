@@ -142,7 +142,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="9a39c" class="javax.swing.JTextField" binding="txtBuscar">
+                      <component id="9a39c" class="javax.swing.JTextField" binding="txtBuscarMascota">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -178,7 +178,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="26a98" class="javax.swing.JButton" binding="btnBuscar">
+                      <component id="26a98" class="javax.swing.JButton" binding="btnBuscarMascota">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -225,7 +225,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="c51ee" class="javax.swing.JTextField" binding="txtID">
+                      <component id="c51ee" class="javax.swing.JTextField" binding="txtIDMascota">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -236,7 +236,7 @@
                           <text value=""/>
                         </properties>
                       </component>
-                      <component id="5973e" class="javax.swing.JTextField" binding="txtNombre">
+                      <component id="5973e" class="javax.swing.JTextField" binding="txtNombreMascota">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -532,7 +532,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="47de8" class="javax.swing.JButton" binding="btnAgregar">
+                          <component id="47de8" class="javax.swing.JButton" binding="btnAgregarMascota">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
@@ -557,7 +557,7 @@
                               <text value="MOSTRAR MASCOTAS"/>
                             </properties>
                           </component>
-                          <component id="cff12" class="javax.swing.JButton" binding="btnEliminar">
+                          <component id="cff12" class="javax.swing.JButton" binding="btnEliminarMascota">
                             <constraints>
                               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
@@ -568,7 +568,7 @@
                               <text value="ELIMINAR"/>
                             </properties>
                           </component>
-                          <component id="8fdd" class="javax.swing.JButton" binding="btnModificar">
+                          <component id="8fdd" class="javax.swing.JButton" binding="btnModificarMascota">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>

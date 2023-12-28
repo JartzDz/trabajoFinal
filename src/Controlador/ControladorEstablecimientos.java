@@ -154,23 +154,30 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     }
 
 
-    /*public void buscarEstablecimiento(){
-        String RUC = vistaEstablecimiento.txtBuscar.getText();
-        int indice= modeloEstablecimiento.buscarEstablecimiento(RUC);
-        if(indice!=-1){
-            JOptionPane.showMessageDialog(null, "Establecimiento Encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Establecimiento No Encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }*/
 
-    public void eliminarTabla(){
-        int fila=vistaEstablecimiento.tablaEstablecimientos.getSelectedRow();
-        String valor= (String) vistaEstablecimiento.tablaEstablecimientos.getValueAt(fila,0);
-        modeloEstablecimiento.eliminarEstablecimiento(fila);
-        modeloEstablecimiento.guardarEstablecimientos();
-        mostrarEstablecimiento();
+    public void eliminarTablaEst() {
+        try {
+            int fila = vistaEstablecimiento.tablaEstablecimientos.getSelectedRow();
+
+            if (fila == -1) {
+                // No hay fila seleccionada, muestra un mensaje de error
+                throw new Exception("Seleccione la fila que desea eliminar.");
+            }
+
+            String valor = (String) vistaEstablecimiento.tablaEstablecimientos.getValueAt(fila, 0);
+            modeloEstablecimiento.eliminarEstablecimiento(fila);
+            modeloEstablecimiento.guardarEstablecimientos();
+            mostrarEstablecimiento();
+
+
+            JOptionPane.showMessageDialog(vistaEstablecimiento, "Registro eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            // Capturar la excepción y mostrar mensaje de error
+            JOptionPane.showMessageDialog(vistaEstablecimiento, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
+
 
     public void mostrarEstablecimiento() {
         if (!modeloEstablecimiento.getEstablecimiento().isEmpty()) {
@@ -325,7 +332,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vistaEstablecimiento.btnAgregar) agregar();
         if(e.getSource()==vistaEstablecimiento.btnMostrar) mostrarEstablecimiento();
-        if(e.getSource()==vistaEstablecimiento.btnEliminar)eliminarTabla();
+        if(e.getSource()==vistaEstablecimiento.btnEliminar)eliminarTablaEst();
         if(e.getSource()==vistaEstablecimiento.btnBuscar)cargarEstablecimiento();
         if(e.getSource()==vistaEstablecimiento.btnModificar) modificarEstablecimiento();
     }

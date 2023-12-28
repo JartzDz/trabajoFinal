@@ -73,6 +73,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
                 }
                 if(modelo.getUsuarios().get(indice) instanceof DuenioMascota){
                     limpiar();
+                    controladorMascotas.setUsuario(modelo.getUsuarios().get(indice).getCedula());
                     controladorMascotas.mostrarInterfazMascotas();
 
                 }

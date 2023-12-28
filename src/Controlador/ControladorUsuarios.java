@@ -69,7 +69,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         vistaUsuario.setVisible(true);
     }
 
-    public void limpiar(){
+    public void limpiarUsuarios(){
         vistaUsuario.txtID.setText("");
         vistaUsuario.txtNombre.setText("");
         vistaUsuario.txtTelefono.setText("");
@@ -78,7 +78,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
         vistaUsuario.txtClave.setText("");
     }
 
-    public void agregar() {
+    public void agregarUsuarios() {
         String ID = vistaUsuario.txtID.getText();
         String nombreUsuario = vistaUsuario.txtNombre.getText();
         String tel = vistaUsuario.txtTelefono.getText();
@@ -98,7 +98,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                                     modeloUsuario.guardarUsuarios();
                                     enviarCorreo(correo, ID, clave, nombreUsuario);
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                                    limpiar();
+                                    limpiarUsuarios();
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -129,13 +129,29 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     }
 
 
-    public void eliminarTabla(){
-        int fila=vistaUsuario.tablaUsuarios.getSelectedRow();
-        String valor= (String) vistaUsuario.tablaUsuarios.getValueAt(fila,0);
-        modeloUsuario.eliminarUsuario(fila);
-        modeloUsuario.guardarUsuarios();
-        mostrarUsuarios();
+    public void eliminarTablaUsuarios() {
+        try {
+            int fila = vistaUsuario.tablaUsuarios.getSelectedRow();
+
+            if (fila == -1) {
+                // Mostrar mensaje de error si no se selecciona ninguna fila
+                JOptionPane.showMessageDialog(null, "Por favor, selecciona una fila para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Salir del método si no hay fila seleccionada
+            }
+
+            String valor = (String) vistaUsuario.tablaUsuarios.getValueAt(fila, 0);
+            modeloUsuario.eliminarUsuario(fila);
+            modeloUsuario.guardarUsuarios();
+            mostrarUsuarios();
+
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(null, "Usuario eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            // Mostrar mensaje de error en caso de excepción
+            JOptionPane.showMessageDialog(null, "Error al eliminar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
     private void enviarCorreo(String destino, String ID, String clave,String Nombre) {
         final String remitente = "designjartz@gmail.com";
         final String password = "qpwwrokprrzpgofd";
@@ -210,7 +226,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                         modeloUsuario.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
                         modeloUsuario.guardarUsuarios();
                         JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
-                        limpiar();
+                        limpiarUsuarios();
                         mostrarUsuarios();
                     } else {
                         JOptionPane.showMessageDialog(null, "No se encontró el usuario con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
@@ -292,7 +308,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource()==vistaUsuario.btnRegresar) {
-            limpiar();
+            limpiarUsuarios();
             vistaUsuario.dispose();
         }
     }
@@ -367,9 +383,9 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vistaUsuario.btnAgregar) agregar();
+        if(e.getSource()==vistaUsuario.btnAgregar) agregarUsuarios();
         if(e.getSource()==vistaUsuario.btnMostrarUsuarios) mostrarUsuarios();
-        if(e.getSource()==vistaUsuario.btnEliminar)eliminarTabla();
+        if(e.getSource()==vistaUsuario.btnEliminar) eliminarTablaUsuarios();
         if(e.getSource()==vistaUsuario.btnBuscar)cargarUsuario();
         if(e.getSource()==vistaUsuario.btnModificar) modificarUsuario();
     }
