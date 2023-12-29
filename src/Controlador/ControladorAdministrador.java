@@ -146,16 +146,20 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.btnBuscarEst.setFocusable(false);
         vista.cboCIProp.addActionListener(this);
         vista.txtRUC.addKeyListener(this);
-        vista.txtTelefono.addKeyListener(this);
-        vista.txtBuscar.addKeyListener(this);
-        vista.txtDireccion.addKeyListener(this);
-        vista.txtNombre.addKeyListener(this);
-        vista.txtCorreo.addKeyListener(this);
+        vista.txtTelfEst.addKeyListener(this);
+        vista.txtBuscarEst.addKeyListener(this);
+        vista.txtDireccionEst.addKeyListener(this);
+        vista.txtNombreEst.addKeyListener(this);
+        vista.txtCorreoEst.addKeyListener(this);
         vista.txtBuscarEst.addFocusListener(this);
+        vista.cboTipoEst.addActionListener(this);
+        vista.cboSubTipoEst.addActionListener(this);
+        vista.cboSubTipoEst.setEnabled(false);
         modeloUsuarios.recuperarUsuarios();
         String[] columnasEst = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
         modeloTablaEst = new DefaultTableModel(null, columnasEst);
         activarBotonesEst();
+        actualizarSubtipo();
 
 
     }
@@ -744,6 +748,40 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
 
     //Establecimientos
+
+    private void actualizarSubtipo() {
+        // Limpiar el modelo del JComboBox secundario
+        DefaultComboBoxModel<String> modeloSubTipo = new DefaultComboBoxModel<>();
+        vista.cboSubTipoEst.setModel(modeloSubTipo);
+
+        // Obtener la selección del JComboBox principal (Tipo)
+        String seleccionTipo = vista.cboTipoEst.getSelectedItem().toString();
+
+        // Agregar elementos al JComboBox secundario (Subtipo) según la selección en el JComboBox principal
+        if ("CENTRO DE ATENCIÓN MÉDICO VETERINARIA".equals(seleccionTipo)) {
+            modeloSubTipo.addElement("MEDICINA VETERINARIA A DOMICILIO");
+            modeloSubTipo.addElement("CONSULTORIOS VETERINARIOS");
+            modeloSubTipo.addElement("CLINICAS VETERINARIAS");
+            modeloSubTipo.addElement("HOSPITALES VETERINARIOS");
+            modeloSubTipo.addElement("U. VETERINARIAS MOVILES");
+            modeloSubTipo.addElement("SERVICIOS DE REHABILITACION");
+            modeloSubTipo.addElement("CAMPAÑAS DE ESTERILIZACION");
+            modeloSubTipo.addElement("CENTROS DE ESTERILIZACION");
+        } else if ("CENTRO DE MANEJO".equals(seleccionTipo)) {
+            modeloSubTipo.addElement("CENTRO DE CRIANZA");
+            modeloSubTipo.addElement("TIENDAS DE MASCOTAS");
+            modeloSubTipo.addElement("CENTROS DE ESTETICA ANIMAL");
+            modeloSubTipo.addElement("HOTELES Y ALOJAMIENTO");
+            modeloSubTipo.addElement("ALBERGUES");
+            modeloSubTipo.addElement("CENTROS DE ADIESTRAMIENTO");
+            modeloSubTipo.addElement("ESTABLECIMIENTOS PARA ESPECTACULOS");
+            modeloSubTipo.addElement("CENTROS DE INVESTIGACION");
+            modeloSubTipo.addElement("CENTROS DE CUARENTENA");
+            modeloSubTipo.addElement("OTROS");
+        }
+        vista.cboSubTipoEst.setEnabled(true);
+    }
+
     public boolean esPropietario(){
         int indice = modeloUsuarios.buscarUsuario(usuario);
         if(modeloUsuarios.getUsuarios().get(indice) instanceof Administrador){
@@ -790,10 +828,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
     public void limpiarEst(){
         vista.txtRUC.setText("");
-        vista.txtNombre.setText("");
-        vista.txtTelefono.setText("");
-        vista.txtDireccion.setText("");
-        vista.txtCorreo.setText("");
+        vista.txtNombreEst.setText("");
+        vista.txtTelfEst.setText("");
+        vista.txtDireccionEst.setText("");
+        vista.txtCorreoEst.setText("");
     }
     public void activarBotonesEst(){
         if(modeloEstablecimiento.getEstablecimiento().isEmpty()){
@@ -809,30 +847,30 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     public void agregarEst() {
         String RUC = vista.txtRUC.getText();
-        String nombreEstablecimiento = vista.txtNombre.getText();
-        String tel = vista.txtTelefono.getText();
-        String direccion = vista.txtDireccion.getText();
-        String correo = vista.txtCorreo.getText();
+        String nombreEstablecimiento = vista.txtNombreEst.getText();
+        String tel = vista.txtTelfEst.getText();
+        String direccion = vista.txtDireccionEst.getText();
+        String correo = vista.txtCorreoEst.getText();
         String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vista.cboTipoEst.getSelectedIndex());
+        String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
 
-        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
-            int buscarPropietario = modeloUsuarios.buscarUsuario(CIPropietario);
-
+        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
             // Validar RUC antes de agregar el establecimiento
+            System.out.println("Valor del RUC: " + RUC);
             if (validarRUC(RUC)) {
                 if (validarCorreo(correo)) {
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                    ((DuenioEstablecimiento) modeloUsuarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
                     modeloEstablecimiento.guardarEstablecimientos();
                     // enviarCorreo(correo, ID, clave, nombreUsuario);
                     JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
                     limpiarEst();
                 } else {
                     JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtCorreoEst.setText("");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                vista.txtRUC.setText("");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -974,28 +1012,45 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         }
     }
 
-    public boolean validarRUC(String ruc) {
-        if (ruc.length() != 13) {
+    private static final int NUMERO_PROVINCIAS = 24;
+    private static final int[] COEFICIENTES = {4, 3, 2, 7, 6, 5, 4, 3, 2};
+    private static final int CONSTANTE = 11;
+
+    public static boolean validarRUC(String ruc) {
+        // Verifica que los dos primeros dígitos correspondan a un valor entre 1 y NUMERO_PROVINCIAS
+        int prov = Integer.parseInt(ruc.substring(0, 2));
+
+        if (!(prov > 0 && prov <= NUMERO_PROVINCIAS)) {
+            System.out.println("Error: RUC ingresado incorrecto");
             return false;
         }
 
-        int[] coeficientes = {4, 3, 2, 7, 6, 5, 4, 3, 2};
+        // Verifica que el último dígito del RUC sea válido
+        int[] digitos = new int[10];
         int suma = 0;
 
-        if (ruc.charAt(1) != '9') {
+        // Asignamos el string a un array
+        for (int i = 0; i < digitos.length; i++) {
+            digitos[i] = Integer.parseInt(String.valueOf(ruc.charAt(i)));
+        }
+
+        for (int i = 0; i < digitos.length - 1; i++) {
+            digitos[i] = digitos[i] * COEFICIENTES[i];
+            suma += digitos[i];
+        }
+
+
+        int aux = suma % CONSTANTE;
+        int resp = CONSTANTE - aux;
+
+        resp = (resp == 10) ? 0 : resp;
+
+        if (resp == digitos[9]) {
+            return true;
+        } else {
+            System.out.println("Error: RUC ingresado incorrecto");
             return false;
         }
-
-        for (int i = 0; i < 9; i++) {
-            suma += Character.getNumericValue(ruc.charAt(i)) * coeficientes[i];
-        }
-
-        int residuo = suma % 11;
-        int digitoVerificador = (residuo == 0) ? 0 : 11 - residuo;
-
-        System.out.println(digitoVerificador == Character.getNumericValue(ruc.charAt(9)));
-
-        return digitoVerificador == Character.getNumericValue(ruc.charAt(9));
     }
 
 
@@ -1201,6 +1256,9 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         if(e.getSource()==vista.btnEliminarEst)eliminarTablaEst();
         if(e.getSource()==vista.btnBuscarEst)cargarEst();
         if(e.getSource()==vista.btnModificarEst) modificarEstablecimiento();
+        if (e.getSource() == vista.cboTipoEst) {
+            actualizarSubtipo();
+        }
     }
 
 
@@ -1375,12 +1433,12 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()== vista.txtTelefono){
+        if(e.getSource()== vista.txtTelfEst){
             if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vista.txtNombre || e.getSource()==vista.txtDireccion){
+        if(e.getSource()==vista.txtNombreEst || e.getSource()==vista.txtDireccionEst){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 

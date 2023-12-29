@@ -15,13 +15,8 @@ public class GestorEstablecimiento {
     public void setEstablecimientos(ArrayList<Persona> usuarios) {
         this.establecimientos = (usuarios != null) ? new ArrayList<>(establecimientos) : new ArrayList<>();
     }
-    public void agregarEstablecimiento(String RUC,String nombre,String direccion,String telefono,String correo,String CIDuenio,int tipoEst){
-        if(tipoEst == 0){
-            establecimientos.add(new Establecimiento(RUC,nombre,telefono,direccion,correo,CIDuenio, "CENTRO DE ATENCIÓN MÉDICO VETERINARIA"));
-        }
-        if(tipoEst == 1){
-            establecimientos.add(new Establecimiento(RUC,nombre,telefono,direccion,correo,CIDuenio, "CENTRO DE MANEJO"));
-        }
+    public void agregarEstablecimiento(String RUC, String nombre, String direccion, String telefono, String correo, String CIDuenio, String tipoEst) {
+        establecimientos.add(new Establecimiento(RUC, nombre, telefono, direccion, correo, CIDuenio, tipoEst));
     }
 
     public ArrayList<Establecimiento>  buscarEstablecimientosDuenio(String cedula){

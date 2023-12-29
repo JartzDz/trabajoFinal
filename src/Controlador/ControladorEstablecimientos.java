@@ -136,7 +136,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
             // Validar RUC antes de agregar el establecimiento
             if (validarRUC(RUC)) {
                 if (validarCorreo(correo)) {
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
+                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario,tipoEstablecimiento);
                     ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
                     modeloEstablecimiento.guardarEstablecimientos();
                     // enviarCorreo(correo, ID, clave, nombreUsuario);

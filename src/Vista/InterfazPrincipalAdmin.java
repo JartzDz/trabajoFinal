@@ -72,6 +72,7 @@ public class InterfazPrincipalAdmin  extends JFrame{
     public JLabel btnRegresar2;
     public JLabel btnRegresar3;
     public JLabel btnRegresar4;
+    public JComboBox cboSubTipoEst;
 
 
     public InterfazPrincipalAdmin() {
