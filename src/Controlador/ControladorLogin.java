@@ -1,9 +1,6 @@
 package Controlador;
 
-import Modelo.Administrador;
-import Modelo.DuenioEstablecimiento;
-import Modelo.DuenioMascota;
-import Modelo.GestorUsuario;
+import Modelo.*;
 import Vista.InterfazLogin;
 
 import javax.swing.*;
@@ -17,9 +14,10 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
     ControladorMascotas controladorMascotas;
     ControladorUsuarios controladorUsuarios;
     ControladorRegistro controladorRegistro;
+    ControladorCGA controladorCGA;
     ControladorEstablecimientos controladorEstablecimientos;
     ControladorAdministrador controladorAdministrador;
-    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios,ControladorEstablecimientos controladorEstablecimientos,ControladorAdministrador controladorAdministrador,ControladorRegistro controladorRegistro) {
+    public ControladorLogin(InterfazLogin vista, GestorUsuario modelo, ControladorMascotas controladorMascotas, ControladorUsuarios controladorUsuarios,ControladorEstablecimientos controladorEstablecimientos,ControladorAdministrador controladorAdministrador,ControladorRegistro controladorRegistro,ControladorCGA controladorCGA) {
         this.vista = vista;
         this.modelo = modelo;
         this.controladorMascotas = controladorMascotas;
@@ -27,6 +25,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         this.controladorEstablecimientos = controladorEstablecimientos;
         this.controladorAdministrador = controladorAdministrador;
         this.controladorRegistro=controladorRegistro;
+        this.controladorCGA=controladorCGA;
         mostrarInterfaz();
         vista.txtContra.setHorizontalAlignment(SwingConstants.LEFT);
         vista.btnIngresar.setBorder(new RoundedBorder(10));
@@ -81,6 +80,11 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
                     limpiar();
                     controladorEstablecimientos.setUsuario(modelo.getUsuarios().get(indice).getCedula());
                     controladorEstablecimientos.mostrarInterfazEstablecimiento();
+                }
+                if(modelo.getUsuarios().get(indice) instanceof PersonalCGA){
+                    limpiar();
+                    controladorCGA.setUsuario(modelo.getUsuarios().get(indice).getCedula());
+                    controladorCGA.mostrarInterfaz();
                 }
             }else{
                 JOptionPane.showMessageDialog(vista.contenedor, "CREDENCIALES INCORRECTAS");

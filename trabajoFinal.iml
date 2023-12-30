@@ -10,5 +10,7 @@
     <orderEntry type="library" name="javax.mail (2)" level="project" />
     <orderEntry type="library" name="javax-inject" level="project" />
     <orderEntry type="library" name="flatlaf-3.2.5" level="project" />
+    <orderEntry type="library" name="javax.activation-1.2.0" level="project" />
+    <orderEntry type="library" name="javax.activation-1.2.0 (2)" level="project" />
   </component>
 </module>

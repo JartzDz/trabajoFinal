@@ -137,7 +137,6 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
         //Establecimientos
         modeloEstablecimiento.recuperarEstablecimientos();
-        //cargarCombo();
         vista.btnBuscarEst.addActionListener(this);
         vista.btnAgregarEst.addActionListener(this);
         vista.btnEliminarEst.addActionListener(this);
@@ -156,6 +155,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.cboSubTipoEst.addActionListener(this);
         vista.cboSubTipoEst.setEnabled(false);
         modeloUsuarios.recuperarUsuarios();
+        vista.btnAgregarEst.addMouseListener(this);
+        vista.btnEliminarEst.addMouseListener(this);
+        vista.btnMostrarEst.addMouseListener(this);
+        vista.btnModificarEst.addMouseListener(this);
         String[] columnasEst = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
         modeloTablaEst = new DefaultTableModel(null, columnasEst);
         activarBotonesEst();
@@ -291,6 +294,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             throw new RuntimeException(e);
         }
     }
+
     public void cargarUsuario() {
         String cedulaBuscada = vista.txtBuscar.getText();
         int indice = modeloUsuarios.buscarUsuario(cedulaBuscada);
@@ -981,12 +985,12 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     public void modificarEstablecimiento() {
         String RUC = vista.txtRUC.getText();
-        String nombreEstablecimiento = vista.txtNombre.getText();
-        String tel = vista.txtTelefono.getText();
-        String direccion = vista.txtDireccion.getText();
-        String correo = vista.txtCorreo.getText();
+        String nombreEstablecimiento = vista.txtNombreEst.getText();
+        String tel = vista.txtTelfEst.getText();
+        String direccion = vista.txtDireccionEst.getText();
+        String correo = vista.txtCorreoEst.getText();
         String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vista.cboTipoEst.getSelectedIndex());
+        String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedIndex());
 
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
             if (validarCorreo(correo)) {

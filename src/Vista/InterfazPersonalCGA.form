@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Vista.InterfazPersonalCGA">
+  <grid id="27dc6" binding="contenedor" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="84" width="1074" height="617"/>
+    </constraints>
+    <properties>
+      <background color="-16477028"/>
+      <minimumSize width="200" height="500"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="22f8f" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-35"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="8f84a" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-35"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <grid id="cff59" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <background color="-35"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="d9811" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-35"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <grid id="1e1b9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="8eab2" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font name="Bahnschrift" size="22" style="1"/>
+                              <text value="CGA - GESTION DE ESTABLECIMIENTOS"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="a4568" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="98359" class="javax.swing.JLabel" binding="btnRegresar">
+                            <constraints/>
+                            <properties>
+                              <background color="-35"/>
+                              <icon value="Vista/imagenes/volver.png"/>
+                              <text value=""/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="da531" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-35"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <tabbedpane id="be4ac" binding="tabbedPane1" default-binding="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="200" height="200"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font size="18"/>
+                </properties>
+                <border type="empty"/>
+                <children>
+                  <grid id="b6e37" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="ESTABLECIMIENTOS"/>
+                    </constraints>
+                    <properties>
+                      <background color="-35"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <grid id="6a74" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <grid id="5202f" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-35"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <grid id="69204" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                </properties>
+                                <border type="none"/>
+                                <children>
+                                  <component id="e4d3f" class="javax.swing.JTextField" binding="txtRUC">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                      <text value=""/>
+                                    </properties>
+                                  </component>
+                                  <component id="d99e7" class="javax.swing.JTextField" binding="txtNombreEst">
+                                    <constraints>
+                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                    </properties>
+                                  </component>
+                                  <component id="f8e55" class="javax.swing.JTextField" binding="txtDireccionEst">
+                                    <constraints>
+                                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                    </properties>
+                                  </component>
+                                  <component id="738a2" class="javax.swing.JTextField" binding="txtTelfEst">
+                                    <constraints>
+                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                    </properties>
+                                  </component>
+                                  <component id="70a83" class="javax.swing.JTextField" binding="txtCorreoEst">
+                                    <constraints>
+                                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                    </properties>
+                                  </component>
+                                  <component id="a143a" class="javax.swing.JComboBox" binding="cboTipoEst">
+                                    <constraints>
+                                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                      <model>
+                                        <item value="CENTRO DE ATENCIÓN MÉDICO VETERINARIA"/>
+                                        <item value="CENTRO DE MANEJO"/>
+                                      </model>
+                                    </properties>
+                                  </component>
+                                  <component id="cdac8" class="javax.swing.JComboBox" binding="cboCIProp">
+                                    <constraints>
+                                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                              <grid id="b2f8d" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                </properties>
+                                <border type="none"/>
+                                <children>
+                                  <component id="bdb18" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-15395563"/>
+                                      <icon value="Vista/imagenes/tarjeta-de-identificacion.png"/>
+                                      <text value="RUC"/>
+                                    </properties>
+                                  </component>
+                                  <component id="c9e40" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-15395563"/>
+                                      <icon value="Vista/imagenes/usuario.png"/>
+                                      <text value="NOMBRE"/>
+                                    </properties>
+                                  </component>
+                                  <component id="f0d10" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-15395563"/>
+                                      <icon value="Vista/imagenes/mapas-y-banderas.png"/>
+                                      <text value="DIRECCION"/>
+                                    </properties>
+                                  </component>
+                                  <component id="27d20" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-15395563"/>
+                                      <icon value="Vista/imagenes/telefono.png"/>
+                                      <text value="TELEFONO"/>
+                                    </properties>
+                                  </component>
+                                  <component id="f69b2" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-16777216"/>
+                                      <icon value="Vista/imagenes/correo.png"/>
+                                      <text value="CORREO ELECTRONICO"/>
+                                    </properties>
+                                  </component>
+                                  <component id="92c39" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-16777216"/>
+                                      <icon value="Vista/imagenes/agencia.png"/>
+                                      <text value="TIPO DE ESTABLECIMIENTO"/>
+                                    </properties>
+                                  </component>
+                                  <component id="5a61" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <foreground color="-16777216"/>
+                                      <icon value="Vista/imagenes/tarjeta-de-identificacion.png"/>
+                                      <text value="C.I PROPIETARIO"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                              <component id="bf76d" class="javax.swing.JComboBox" binding="cboSubTipoEst">
+                                <constraints>
+                                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font size="18"/>
+                                  <model/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="bb669" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-2298694"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <grid id="47e04" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                </properties>
+                                <border type="none"/>
+                                <children>
+                                  <component id="375e9" class="javax.swing.JButton" binding="btnAgregarEst">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <background color="-2298694"/>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <icon value="Vista/imagenes/boton-agregar.png"/>
+                                      <text value="AGREGAR"/>
+                                    </properties>
+                                  </component>
+                                  <component id="c45c0" class="javax.swing.JButton" binding="btnMostrarEst">
+                                    <constraints>
+                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <background color="-2298694"/>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <icon value="Vista/imagenes/lista-de-verificacion.png"/>
+                                      <text value="MOSTRAR ESTABLECIMIENTOS"/>
+                                    </properties>
+                                  </component>
+                                  <component id="bf068" class="javax.swing.JButton" binding="btnEliminarEst">
+                                    <constraints>
+                                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <background color="-2298694"/>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <icon value="Vista/imagenes/eliminar.png"/>
+                                      <text value="ELIMINAR"/>
+                                    </properties>
+                                  </component>
+                                  <component id="23e42" class="javax.swing.JButton" binding="btnModificarEst">
+                                    <constraints>
+                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <background color="-2298694"/>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <icon value="Vista/imagenes/editar.png"/>
+                                      <text value="MODIFICAR"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                      <grid id="596b" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <grid id="51215" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-35"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <grid id="96376" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                </properties>
+                                <border type="none"/>
+                                <children>
+                                  <component id="cbf69" class="javax.swing.JTextField" binding="txtBuscarEst">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                    </constraints>
+                                    <properties>
+                                      <font size="18"/>
+                                      <foreground color="-6117446"/>
+                                      <text value="Ingrese el RUC para buscar"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                            </children>
+                          </grid>
+                          <grid id="ee63c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-35"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <grid id="e17a1" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                </properties>
+                                <border type="none"/>
+                                <children>
+                                  <component id="ebb78" class="javax.swing.JButton" binding="btnBuscarEst">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <background color="-2298694"/>
+                                      <font name="Bahnschrift" size="18"/>
+                                      <icon value="Vista/imagenes/lupa.png"/>
+                                      <text value="BUSCAR"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                      <grid id="e8b0d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <scrollpane id="1516a">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="88ef6" class="javax.swing.JTable" binding="tablaEstablecimientos">
+                                <constraints/>
+                                <properties/>
+                              </component>
+                            </children>
+                          </scrollpane>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="c00f6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="REQUISITOS"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="86e4b" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-35"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="65c76" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font name="Bahnschrift" size="20"/>
+                              <text value="REQUISITOS PARA VERIFICACIÓN PARA OTORGAR PERMISO"/>
+                            </properties>
+                          </component>
+                          <grid id="1bd79" layout-manager="GridLayoutManager" row-count="10" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-35"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <component id="60b1b" class="javax.swing.JCheckBox" binding="APROBACIÓNDEUSODECheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="APROBACIÓN DE USO DE SUELO POR CONTROL MUNICIPAL"/>
+                                </properties>
+                              </component>
+                              <vspacer id="af26b">
+                                <constraints>
+                                  <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </vspacer>
+                              <component id="4d72e" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="SOLICITUD DE REGISTRO, REALIZADA AL DIRECTOR DE LA COMISIÓN DE GESTIÓN AMBIENTAL."/>
+                                </properties>
+                              </component>
+                              <component id="f4bab" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="PAGO DEL VALOR ESTABLECIDO EN EL TARIFARIO VIGENTE POR CONCEPTO DE INSPECCIÓN SEGÚN EL TIPO DE ESTABLECIMIENTO."/>
+                                </properties>
+                              </component>
+                              <component id="ce1fa" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="INSPECCIÓN APROBADA POR LOS TÉCNICOS DE LA UGA."/>
+                                </properties>
+                              </component>
+                              <component id="23c50" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="CROQUIS EN EL CUAL SE PLASME LA DIMENSIÓN Y DISTRIBUCIÓN DE CADA UNA DE LAS ÁREAS DEL ESTABLECIMIENTO. "/>
+                                </properties>
+                              </component>
+                              <component id="cc170" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="DESIGNACIÓN/NOMBRAMIENTO DE RESPONSABLE TÉCNICO."/>
+                                </properties>
+                              </component>
+                              <component id="3eca" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="CERTIFICADO DE HABILITACIÓN EMITIDO POR LA COMISIÓN ECUATORIANA DE ENERGÍA ATÓMICA."/>
+                                </properties>
+                              </component>
+                              <component id="d3fd" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="LISTADO DE MÉDICOS VETERINARIOS, PERSONAL AUXILIAR Y ACTIVIDAD A DESARROLLAR. "/>
+                                </properties>
+                              </component>
+                              <component id="b846f" class="javax.swing.JCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <background color="-35"/>
+                                  <font name="Bahnschrift" size="18"/>
+                                  <text value="RUC."/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </tabbedpane>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="bb3d7" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-16477028"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="a4969" class="javax.swing.JLabel">
+            <constraints border-constraint="West"/>
+            <properties>
+              <background color="-16477028"/>
+              <icon value="Vista/imagenes/fondoLateral.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

@@ -444,7 +444,7 @@
             <border type="none"/>
             <children>
               <component id="5ae65" class="javax.swing.JLabel">
-                <constraints border-constraint="Center"/>
+                <constraints border-constraint="West"/>
                 <properties>
                   <background color="-16477028"/>
                   <icon value="Vista/imagenes/fondoLateral.png"/>
