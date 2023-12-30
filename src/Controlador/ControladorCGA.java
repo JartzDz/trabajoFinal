@@ -6,7 +6,11 @@ import Vista.InterfazPersonalCGA;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,37 +130,62 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
     }
 
     public void agregarEst() {
-        String RUC = vista.txtRUC.getText();
-        String nombreEstablecimiento = vista.txtNombreEst.getText();
-        String tel = vista.txtTelfEst.getText();
-        String direccion = vista.txtDireccionEst.getText();
-        String correo = vista.txtCorreoEst.getText();
-        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
+        try {
+            String RUC = vista.txtRUC.getText();
+            String nombreEstablecimiento = vista.txtNombreEst.getText();
+            String tel = vista.txtTelfEst.getText();
+            String direccion = vista.txtDireccionEst.getText();
+            String correo = vista.txtCorreoEst.getText();
+            String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+            String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
 
-        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
-            // Validar RUC antes de agregar el establecimiento
-            System.out.println("Valor del RUC: " + RUC);
-            if (validarRUC(RUC)) {
-                if (validarCorreo(correo)) {
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
-                    modeloEstablecimiento.guardarEstablecimientos();
-                    // enviarCorreo(correo, ID, clave, nombreUsuario);
-                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                    limpiarEst();
+            if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
+
+                System.out.println("Valor del RUC: " + RUC);
+                if (validarRUC(RUC)) {
+                    if (validarCorreo(correo)) {
+                        if (!modeloEstablecimiento.existeEstablecimiento(RUC)) {
+                            // Agregar el establecimiento
+                            modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
+                            modeloEstablecimiento.guardarEstablecimientos();
+                            JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                            limpiarEst();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El establecimiento no cuenta con los permisos necesarios.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtCorreoEst.setText("");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
-                    vista.txtCorreoEst.setText("");
+                    JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtRUC.setText("");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
-                vista.txtRUC.setText("");
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            System.err.println("Error al agregar el establecimiento.");
+            e.printStackTrace();
         }
     }
+    private boolean validarCheckBoxes() {
+            return vista.chckUsoSuelo.isSelected() && vista.chckCroquis.isSelected() && vista.chckCertificado.isSelected() &&
+                    vista.chckInspeccion.isSelected() && vista.chckMedicos.isSelected() && vista.chckPago.isSelected() &&
+                    vista.chckRegistro.isSelected() && vista.chckResponsable.isSelected() && vista.chckRuc.isSelected();
+    }
+    private void desmarcarCheckBoxes() {
+        vista.chckUsoSuelo.setSelected(false);
+        vista.chckCroquis.setSelected(false);
+        vista.chckCertificado.setSelected(false);
+        vista.chckInspeccion.setSelected(false);
+        vista.chckMedicos.setSelected(false);
+        vista.chckPago.setSelected(false);
+        vista.chckRegistro.setSelected(false);
+        vista.chckResponsable.setSelected(false);
+        vista.chckRuc.setSelected(false);
 
+    }
     public void eliminarTablaEst() {
         try {
             int fila = vista.tablaEstablecimientos.getSelectedRow();
@@ -517,16 +546,126 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         vista.btnBuscarEst.setEnabled(true);
     }
 
-        public void focusLost(FocusEvent e) {
+    public void focusLost(FocusEvent e) {
         vista.txtBuscarEst.setForeground(Color.GRAY);
         vista.txtBuscarEst.setText("Ingrese el RUC del establecimiento");
         vista.btnBuscarEst.setEnabled(false);
 
     }
+    public void generarDocumento() {
+        try {
+            boolean establecimientoAgregado = false;
+
+            if (validarCheckBoxes()) {
+                String ruc = vista.txtRUC.getText();
+
+                if (!modeloEstablecimiento.existeEstablecimiento(ruc)) {
+                    JOptionPane.showMessageDialog(null, "ESTABLECIMIENTO VÁLIDO, SE PROCEDERÁ A CREAR EL DOCUMENTO DE ACEPTACIÓN");
+                    String nombreDocumento = "DocAprobado" + vista.cboCIProp.getSelectedItem().toString();
+                    establecimientoAgregado = true;
+
+                    String contenido = generarContenido(
+                            vista.txtRUC.getText(),
+                            vista.cboCIProp.getSelectedItem().toString(),
+                            vista.txtDireccionEst.getText(),
+                            vista.txtTelfEst.getText(),
+                            vista.txtCorreoEst.getText(),
+                            String.valueOf(vista.cboSubTipoEst.getSelectedItem())
+                    );
+
+                    guardarEnArchivo(nombreDocumento, contenido);
+
+                    // Llamada a agregarEst solo si el establecimiento es válido
+                    agregarEst();
+                } else {
+                    limpiarEst();
+                    JOptionPane.showMessageDialog(null, "EL ESTABLECIMIENTO YA EXISTE, NO SE PUEDE CREAR EL DOCUMENTO");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "EL ESTABLECIMIENTO NO CUENTA CON LOS PERMISOS NECESARIOS, POR LO TANTO NO ES VÁLIDO Y SE PROCEDERÁ A REALIZAR EL DOCUMENTO DE NEGACIÓN");
+                String nombreDocumento = "DocRechazado" + vista.cboCIProp.getSelectedItem().toString();
+                String contenido = generarContenidoNegacionServicios(vista.txtNombreEst.getText());
+                guardarEnArchivo(nombreDocumento, contenido);
+                limpiarEst();
+            }
+
+            desmarcarCheckBoxes();
+        } catch (Exception e) {
+            System.err.println("Error al generar el documento.");
+            e.printStackTrace();
+        }
+    }
+
+    public String generarContenido(String rucEstablecimiento, String nombreRepresentanteLegal,
+                                   String direccionEstablecimiento, String numerosTelefono, String correoElectronico,
+                                   String tipoEstablecimiento) {
+        StringBuilder contenido = new StringBuilder();
+
+        contenido.append("RUC del Establecimiento: ").append(rucEstablecimiento).append("\n");
+        contenido.append("Nombre del Representante Legal: ").append(nombreRepresentanteLegal).append("\n");
+        contenido.append("Dirección del Establecimiento: ").append(direccionEstablecimiento).append("\n");
+        contenido.append("Números de Teléfono: ").append(numerosTelefono).append("\n");
+        contenido.append("Correo Electrónico: ").append(correoElectronico).append("\n");
+
+        contenido.append("Tipo de Establecimiento: ").append(tipoEstablecimiento).append("\n\n");
+
+        contenido.append("Estimado/a ").append(nombreRepresentanteLegal).append(",\n\n");
+        contenido.append("Por la presente, autorizamos formalmente al establecimiento con RUC ")
+                .append(rucEstablecimiento).append(", ubicado en ").append(direccionEstablecimiento)
+                .append(", para brindar servicios en nuestro nombre.\n\n");
+        contenido.append("\nEl propósito de esta autorización es permitir al establecimiento operar como un punto de prestación de servicios, manteniendo los estándares de calidad y servicio establecidos por nuestra organización.\n\n");
+        contenido.append("Esta autorización tiene una vigencia a partir de la fecha indicada y permanecerá en efecto hasta que sea revocada por escrito. Durante este período, el establecimiento autorizado está sujeto a revisiones periódicas para garantizar el cumplimiento continuo de nuestros estándares de calidad.\n\n");
+        contenido.append("Agradecemos su compromiso y cooperación para mantener la reputación y la calidad de los servicios proporcionados bajo el nombre de nuestra organización.\n\n");
+        contenido.append("Por favor, no dude en ponerse en contacto con nosotros si tiene alguna pregunta o inquietud con respecto a esta autorización.\n\n");
+        contenido.append("Atentamente, la empresa\n\n");
+
+        return contenido.toString();
+    }
+    public String generarContenidoNegacionServicios(String nombreEstablecimiento) {
+        StringBuilder contenido = new StringBuilder();
+
+        contenido.append("Estimado/a ").append(nombreEstablecimiento).append(",\n\n");
+        contenido.append("Lamentamos informarle que, después de una cuidadosa revisión, hemos decidido no aceptar su solicitud para brindar servicios. El motivo de esta decisión es el siguiente:\n\n");
+        contenido.append("Falta de permisos").append("\n\n");
+        contenido.append("Entendemos que esto puede causar inconvenientes y estamos dispuestos a discutir cualquier inquietud que pueda tener al respecto.\n\n");
+        contenido.append("Lamentamos lo que esto pueda causar y apreciamos su comprensión.\n\n");
+        contenido.append("Atentamente,\n\n");
+        contenido.append("La Empresa");
+
+
+        return contenido.toString();
+    }
+    public void guardarEnArchivo(String nombreArchivo, String contenido) {
+        try {
+            // Obtener la ruta del directorio actual del usuario
+            String directorioActual = System.getProperty("user.dir");
+
+            // Combinar la ruta del directorio actual con el nombre del archivo
+            String rutaCompleta = directorioActual + File.separator + nombreArchivo;
+
+            // Crear el directorio si no existe
+            File directorioDocumento = new File(rutaCompleta).getParentFile();
+            directorioDocumento.mkdirs();
+
+            // Escribir en el archivo
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaCompleta))) {
+                writer.write(contenido);
+                System.out.println("Documento guardado correctamente en: " + rutaCompleta);
+            }
+        } catch (IOException e) {
+            System.err.println("Error al guardar el documento.");
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vista.btnAgregarEst) agregarEst();
+
+        if(e.getSource()==vista.btnAgregarEst){
+            generarDocumento();
+        }
         if(e.getSource()==vista.btnMostrarEst) mostrarEstablecimiento();
         if(e.getSource()==vista.btnEliminarEst)eliminarTablaEst();
         if(e.getSource()==vista.btnBuscarEst)cargarEst();
@@ -535,5 +674,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             actualizarSubtipo();
         }
     }
+
+
 
 }

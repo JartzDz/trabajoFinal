@@ -19,6 +19,17 @@ public class GestorEstablecimiento {
         establecimientos.add(new Establecimiento(RUC, nombre, telefono, direccion, correo, CIDuenio, tipoEst));
     }
 
+    public boolean existeEstablecimiento(String ruc) {
+
+        for (Establecimiento establecimiento : establecimientos) {
+            if (establecimiento.getRuc().equals(ruc)) {
+                return true;
+            }
+        }
+
+        return false; // No existe un establecimiento con el mismo RUC
+    }
+
     public ArrayList<Establecimiento>  buscarEstablecimientosDuenio(String cedula){
         ArrayList<Establecimiento> establecimientosDuenio = new ArrayList<>();
         for (Establecimiento establecimiento : establecimientos) {

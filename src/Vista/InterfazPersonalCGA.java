@@ -22,8 +22,16 @@ public class InterfazPersonalCGA extends JFrame{
     public JButton btnModificarEst;
     public JTextField txtBuscarEst;
     public JButton btnBuscarEst;
-    public JCheckBox APROBACIÓNDEUSODECheckBox;
+    public JCheckBox chckUsoSuelo;
     public JTable tablaEstablecimientos;
+    public JCheckBox chckRegistro;
+    public JCheckBox chckPago;
+    public JCheckBox chckInspeccion;
+    public JCheckBox chckCroquis;
+    public JCheckBox chckResponsable;
+    public JCheckBox chckCertificado;
+    public JCheckBox chckMedicos;
+    public JCheckBox chckRuc;
 
     public InterfazPersonalCGA(){
         setContentPane(contenedor);

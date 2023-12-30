@@ -540,7 +540,7 @@
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="60b1b" class="javax.swing.JCheckBox" binding="APROBACIÓNDEUSODECheckBox" default-binding="true">
+                              <component id="60b1b" class="javax.swing.JCheckBox" binding="chckUsoSuelo">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -555,7 +555,7 @@
                                   <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                                 </constraints>
                               </vspacer>
-                              <component id="4d72e" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="4d72e" class="javax.swing.JCheckBox" binding="chckRegistro">
                                 <constraints>
                                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -565,7 +565,7 @@
                                   <text value="SOLICITUD DE REGISTRO, REALIZADA AL DIRECTOR DE LA COMISIÓN DE GESTIÓN AMBIENTAL."/>
                                 </properties>
                               </component>
-                              <component id="f4bab" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="f4bab" class="javax.swing.JCheckBox" binding="chckPago">
                                 <constraints>
                                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -575,7 +575,7 @@
                                   <text value="PAGO DEL VALOR ESTABLECIDO EN EL TARIFARIO VIGENTE POR CONCEPTO DE INSPECCIÓN SEGÚN EL TIPO DE ESTABLECIMIENTO."/>
                                 </properties>
                               </component>
-                              <component id="ce1fa" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="ce1fa" class="javax.swing.JCheckBox" binding="chckInspeccion">
                                 <constraints>
                                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -585,7 +585,7 @@
                                   <text value="INSPECCIÓN APROBADA POR LOS TÉCNICOS DE LA UGA."/>
                                 </properties>
                               </component>
-                              <component id="23c50" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="23c50" class="javax.swing.JCheckBox" binding="chckCroquis">
                                 <constraints>
                                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -595,7 +595,7 @@
                                   <text value="CROQUIS EN EL CUAL SE PLASME LA DIMENSIÓN Y DISTRIBUCIÓN DE CADA UNA DE LAS ÁREAS DEL ESTABLECIMIENTO. "/>
                                 </properties>
                               </component>
-                              <component id="cc170" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="cc170" class="javax.swing.JCheckBox" binding="chckResponsable">
                                 <constraints>
                                   <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -605,7 +605,7 @@
                                   <text value="DESIGNACIÓN/NOMBRAMIENTO DE RESPONSABLE TÉCNICO."/>
                                 </properties>
                               </component>
-                              <component id="3eca" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="3eca" class="javax.swing.JCheckBox" binding="chckCertificado">
                                 <constraints>
                                   <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -615,7 +615,7 @@
                                   <text value="CERTIFICADO DE HABILITACIÓN EMITIDO POR LA COMISIÓN ECUATORIANA DE ENERGÍA ATÓMICA."/>
                                 </properties>
                               </component>
-                              <component id="d3fd" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="d3fd" class="javax.swing.JCheckBox" binding="chckMedicos">
                                 <constraints>
                                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
@@ -625,7 +625,7 @@
                                   <text value="LISTADO DE MÉDICOS VETERINARIOS, PERSONAL AUXILIAR Y ACTIVIDAD A DESARROLLAR. "/>
                                 </properties>
                               </component>
-                              <component id="b846f" class="javax.swing.JCheckBox" default-binding="true">
+                              <component id="b846f" class="javax.swing.JCheckBox" binding="chckRuc">
                                 <constraints>
                                   <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
