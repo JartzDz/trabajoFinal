@@ -2,15 +2,16 @@ package Controlador;
 
 import Modelo.*;
 import Vista.InterfazPersonalCGA;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -573,7 +574,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                             String.valueOf(vista.cboSubTipoEst.getSelectedItem())
                     );
 
-                    guardarEnArchivo(nombreDocumento, contenido);
+                    guardarEnArchivoPDF(nombreDocumento, contenido);
 
                     // Llamada a agregarEst solo si el establecimiento es válido
                     agregarEst();
@@ -585,7 +586,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                 JOptionPane.showMessageDialog(null, "EL ESTABLECIMIENTO NO CUENTA CON LOS PERMISOS NECESARIOS, POR LO TANTO NO ES VÁLIDO Y SE PROCEDERÁ A REALIZAR EL DOCUMENTO DE NEGACIÓN");
                 String nombreDocumento = "DocRechazado" + vista.cboCIProp.getSelectedItem().toString();
                 String contenido = generarContenidoNegacionServicios(vista.txtNombreEst.getText());
-                guardarEnArchivo(nombreDocumento, contenido);
+                guardarEnArchivoPDF(nombreDocumento, contenido);
                 limpiarEst();
             }
 
@@ -635,29 +636,27 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
         return contenido.toString();
     }
-    public void guardarEnArchivo(String nombreArchivo, String contenido) {
+    public void guardarEnArchivoPDF(String nombreArchivo, String contenido) {
         try {
-            // Obtener la ruta del directorio actual del usuario
+
             String directorioActual = System.getProperty("user.dir");
 
-            // Combinar la ruta del directorio actual con el nombre del archivo
-            String rutaCompleta = directorioActual + File.separator + nombreArchivo;
+            String rutaCompletaPDF = directorioActual + File.separator + nombreArchivo + ".pdf";
 
-            // Crear el directorio si no existe
-            File directorioDocumento = new File(rutaCompleta).getParentFile();
-            directorioDocumento.mkdirs();
+            Document document = new Document();
+            // Crear el archivo PDF
+            PdfWriter.getInstance(document, new FileOutputStream(rutaCompletaPDF));
 
-            // Escribir en el archivo
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaCompleta))) {
-                writer.write(contenido);
-                System.out.println("Documento guardado correctamente en: " + rutaCompleta);
-            }
-        } catch (IOException e) {
-            System.err.println("Error al guardar el documento.");
+            document.open();
+            document.add(new Paragraph(contenido));
+            document.close();
+
+            System.out.println("Documento PDF guardado correctamente en: " + rutaCompletaPDF);
+        } catch (Exception e) {
+            System.err.println("Error al guardar el documento PDF.");
             e.printStackTrace();
         }
     }
-
 
 
     @Override

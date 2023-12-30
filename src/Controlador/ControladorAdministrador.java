@@ -116,7 +116,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.btnBuscarMascota.setFocusable(false);
         vista.txtBuscarMascota.setEnabled(false);
 
-        String[] columnasMascotas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO"};
+        String[] columnasMascotas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO","VACUNAS","DESPARASITACIONES","ESTERILIZACION","OTRAS CIRUGIAS"};
         modeloTablaMascotas = new DefaultTableModel(null, columnasMascotas);
         vista.btnMostrarMascotas.setEnabled(false);
         vista.btnBuscarMascota.setEnabled(false);
@@ -164,9 +164,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         activarBotonesEst();
         actualizarSubtipo();
 
-
     }
-
     public void mostrarInterfaz(){
         cargarCombo();
         vista.setTitle("ADMINISTRADOR");
@@ -583,30 +581,41 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                         modeloTablaMascotas.addColumn("ID");
                         modeloTablaMascotas.addColumn("NOMBRE");
                         modeloTablaMascotas.addColumn("RAZA");
-                        modeloTablaMascotas.addColumn("EDAD");
                         modeloTablaMascotas.addColumn("DUEÑO");
-                        modeloTablaMascotas.addColumn("SEXO");
+                        modeloTablaMascotas.addColumn("EDAD");
                         modeloTablaMascotas.addColumn("COLOR");
-                        modeloTablaMascotas.addColumn("FOTO CARNET");
+                        modeloTablaMascotas.addColumn("SEXO");
+                        modeloTablaMascotas.addColumn("VACUNAS");
+                        modeloTablaMascotas.addColumn("DESPARASITACIONES");
+                        modeloTablaMascotas.addColumn("ESTERILIZACION");
+                        modeloTablaMascotas.addColumn("OTRAS CIRUGIAS");
                     }
 
+                    Mascota mascota = modeloMascota.mostrarMascotas().get(indice);
+
                     Object[] fila = {
-                            modeloMascota.mostrarMascotas().get(indice).getID(),
-                            modeloMascota.mostrarMascotas().get(indice).getNombreMascota(),
-                            modeloMascota.mostrarMascotas().get(indice).getRaza(),
-                            modeloMascota.mostrarMascotas().get(indice).getEdad(),
-                            modeloMascota.mostrarMascotas().get(indice).getDuenio(),
-                            modeloMascota.mostrarMascotas().get(indice).getSexo(),
-                            modeloMascota.mostrarMascotas().get(indice).getColor(),
-                            modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet()
+                            mascota.getID(),
+                            mascota.getNombreMascota(),
+                            mascota.getRaza(),
+                            mascota.getDuenio(),
+                            mascota.getEdad(),
+                            mascota.getColor(),
+                            mascota.getSexo(),
+                            mascota.isVacunas(),
+                            mascota.isDesparasitaciones(),
+                            mascota.isEsterilizacion(),
+                            mascota.isOtrasCirugias()
                     };
 
+                    // Agregar la fila al modelo de tabla
                     modeloTablaMascotas.addRow(fila);
+
+                    // Establecer el modelo de la tabla con el nuevo contenido
                     vista.tablaMascotas.setModel(modeloTablaMascotas);
 
                     // Cargar la imagen de la mascota en lblImagenMascota
-                    String rutaImagen = modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet();
-                    System.out.println("Ruta de la imagen: " + rutaImagen); // Añade este mensaje para verificar la ruta en la consola
+                    String rutaImagen = mascota.getRutaFotoCarnet();
+                    System.out.println("Ruta de la imagen: " + rutaImagen);
                     cargarImagenMascota(rutaImagen);
                 } else {
                     JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
@@ -618,6 +627,8 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             JOptionPane.showMessageDialog(null, "Ingrese un ID para buscar mascota", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+
     public void cargarImagen() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
@@ -726,7 +737,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 modeloTablaMascotas.addColumn("DUEÑO");
                 modeloTablaMascotas.addColumn("SEXO");
                 modeloTablaMascotas.addColumn("COLOR");
-                modeloTablaMascotas.addColumn("FOTO CARNET");
+                modeloTablaMascotas.addColumn("VACUNAS");
+                modeloTablaMascotas.addColumn("DESPARASITACIONES");
+                modeloTablaMascotas.addColumn("ESTERILIZACION");
+                modeloTablaMascotas.addColumn("OTRAS CIRUGIAS");
             }
 
             for (Mascota mascota : modeloMascota.mostrarMascotas()) {
@@ -739,6 +753,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                         mascota.getEdad(),
                         mascota.getColor(),
                         mascota.getSexo(),
+                        mascota.isVacunas(),
+                        mascota.isDesparasitaciones(),
+                        mascota.isEsterilizacion(),
+                        mascota.isOtrasCirugias()
                 };
                 modeloTablaMascotas.addRow(fila);
             }

@@ -1,6 +1,5 @@
 package Modelo;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -77,7 +76,7 @@ public class GestorMascotas {
         String nuevaRutaFotoCarnet = "./src/vista/imagenes/" + nuevaFotoCarnet.getName();
         mascotaExistente.setRutaFotoCarnet(nuevaRutaFotoCarnet);
         mascotaExistente.setVacunas(vacunas);
-        mascotaExistente.setDesparacitaciones(desparacitaciones);
+        mascotaExistente.setDesparasitaciones(desparacitaciones);
         mascotaExistente.setEsterilizacion(esterilizacion);
         mascotaExistente.setOtrasCirugias(otrasCirugias);
 

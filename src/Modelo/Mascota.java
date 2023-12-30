@@ -1,18 +1,16 @@
 package Modelo;
 
-import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Mascota implements Serializable {
     private static final long serialVersionUID = 1L;
     private int edad;
     private String nombreMascota, sexo, raza, color, duenio,ID;
     private String rutaFotoCarnet;
-    private boolean vacunas, desparacitaciones, esterilizacion, otrasCirugias;
+    private boolean vacunas, desparasitaciones, esterilizacion, otrasCirugias;
 
     public Mascota(String ID, int edad, String nombreMascota, String sexo, String raza, String color, String duenio,
-                   String rutaFotoCarnet, boolean vacunas, boolean desparacitaciones, boolean esterilizacion,
+                   String rutaFotoCarnet, boolean vacunas, boolean desparasitaciones, boolean esterilizacion,
                    boolean otrasCirugias) {
         this.ID = ID;
         this.edad = edad;
@@ -23,7 +21,7 @@ public class Mascota implements Serializable {
         this.duenio = duenio;
         this.rutaFotoCarnet= rutaFotoCarnet;
         this.vacunas = vacunas;
-        this.desparacitaciones = desparacitaciones;
+        this.desparasitaciones = desparasitaciones;
         this.esterilizacion = esterilizacion;
         this.otrasCirugias = otrasCirugias;
     }
@@ -68,12 +66,12 @@ public class Mascota implements Serializable {
         this.vacunas = vacunas;
     }
 
-    public boolean isDesparacitaciones() {
-        return desparacitaciones;
+    public boolean isDesparasitaciones() {
+        return desparasitaciones;
     }
 
-    public void setDesparacitaciones(boolean desparacitaciones) {
-        this.desparacitaciones = desparacitaciones;
+    public void setDesparasitaciones(boolean desparacitaciones) {
+        this.desparasitaciones = desparacitaciones;
     }
 
     public boolean isEsterilizacion() {

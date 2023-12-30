@@ -1,6 +1,5 @@
 package Modelo;
 
-import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class DuenioMascota extends Persona implements Serializable {
         String nuevaRutaFotoCarnet = "./src/vista/imagenes/" + nuevaFotoCarnet.getName();
         mascotaExistente.setRutaFotoCarnet(nuevaRutaFotoCarnet);
         mascotaExistente.setVacunas(vacunas);
-        mascotaExistente.setDesparacitaciones(desparacitaciones);
+        mascotaExistente.setDesparasitaciones(desparacitaciones);
         mascotaExistente.setEsterilizacion(esterilizacion);
         mascotaExistente.setOtrasCirugias(otrasCirugias);
 
