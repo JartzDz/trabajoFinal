@@ -51,7 +51,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vistaMascota.btnBuscarMascota.setFocusable(false);
         vistaMascota.txtBuscarMascota.setEnabled(false);
 
-        String[] columnas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO"};
+        String[] columnas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO","VACUNAS","DESPARASITACIONES","ESTERILIZACION","OTRAS CIRUGIAS"};
         modeloTabla = new DefaultTableModel(null, columnas);
         vistaMascota.btnMostrarMascotas.setEnabled(false);
         vistaMascota.btnBuscarMascota.setEnabled(false);
@@ -343,24 +343,31 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                         modeloTabla.addColumn("ID");
                         modeloTabla.addColumn("NOMBRE");
                         modeloTabla.addColumn("RAZA");
-                        modeloTabla.addColumn("EDAD");
                         modeloTabla.addColumn("DUEÑO");
-                        modeloTabla.addColumn("SEXO");
+                        modeloTabla.addColumn("EDAD");
                         modeloTabla.addColumn("COLOR");
-                        modeloTabla.addColumn("FOTO CARNET");
+                        modeloTabla.addColumn("SEXO");
+                        modeloTabla.addColumn("VACUNAS");
+                        modeloTabla.addColumn("DESPARASITACIONES");
+                        modeloTabla.addColumn("ESTERILIZACION");
+                        modeloTabla.addColumn("OTRAS CIRUGIAS");
                     }
 
-                    Object[] fila = {
-                            modeloMascota.mostrarMascotas().get(indice).getID(),
-                            modeloMascota.mostrarMascotas().get(indice).getNombreMascota(),
-                            modeloMascota.mostrarMascotas().get(indice).getRaza(),
-                            modeloMascota.mostrarMascotas().get(indice).getEdad(),
-                            modeloMascota.mostrarMascotas().get(indice).getDuenio(),
-                            modeloMascota.mostrarMascotas().get(indice).getSexo(),
-                            modeloMascota.mostrarMascotas().get(indice).getColor(),
-                            modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet()
-                    };
+                    Mascota mascota = modeloMascota.mostrarMascotas().get(indice);
 
+                    Object[] fila = {
+                            mascota.getID(),
+                            mascota.getNombreMascota(),
+                            mascota.getRaza(),
+                            mascota.getDuenio(),
+                            mascota.getEdad(),
+                            mascota.getColor(),
+                            mascota.getSexo(),
+                            mascota.isVacunas(),
+                            mascota.isDesparasitaciones(),
+                            mascota.isEsterilizacion(),
+                            mascota.isOtrasCirugias()
+                    };
                     modeloTabla.addRow(fila);
                     vistaMascota.tablaMascotas.setModel(modeloTabla);
 
@@ -454,7 +461,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 modeloTabla.addColumn("DUEÑO");
                 modeloTabla.addColumn("SEXO");
                 modeloTabla.addColumn("COLOR");
-                modeloTabla.addColumn("FOTO CARNET");
+                modeloTabla.addColumn("VACUNAS");
+                modeloTabla.addColumn("DESPARASITACIONES");
+                modeloTabla.addColumn("ESTERILIZACION");
+                modeloTabla.addColumn("OTRAS CIRUGIAS");
             }
 
             modeloTabla.setRowCount(0);
@@ -465,7 +475,19 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                 listaMascotas = modeloMascota.getListaMascotas();
             }
             for (Mascota p : listaMascotas) {
-                Object[] fila = {p.getID(), p.getNombreMascota(), p.getRaza(), p.getEdad(), p.getDuenio(), p.getSexo(), p.getColor()};
+                Object[] fila = {
+                        p.getID(),
+                        p.getNombreMascota(),
+                        p.getRaza(),
+                        p.getDuenio(),
+                        p.getEdad(),
+                        p.getColor(),
+                        p.getSexo(),
+                        p.isVacunas(),
+                        p.isDesparasitaciones(),
+                        p.isEsterilizacion(),
+                        p.isOtrasCirugias()
+                };
                 modeloTabla.addRow(fila);
             }
             vistaMascota.tablaMascotas.setModel(modeloTabla);

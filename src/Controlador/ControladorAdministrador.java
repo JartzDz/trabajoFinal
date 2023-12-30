@@ -607,10 +607,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                             mascota.isOtrasCirugias()
                     };
 
-                    // Agregar la fila al modelo de tabla
                     modeloTablaMascotas.addRow(fila);
-
-                    // Establecer el modelo de la tabla con el nuevo contenido
                     vista.tablaMascotas.setModel(modeloTablaMascotas);
 
                     // Cargar la imagen de la mascota en lblImagenMascota

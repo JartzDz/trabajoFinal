@@ -62,6 +62,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
     public void mostrarInterfaz(){
         cargarCombo();
+        vista.setUndecorated(true);
         vista.setTitle("CGA");
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vista.setLocationRelativeTo(null);
@@ -111,6 +112,40 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
         return cedulas;
     }
+
+    public String getCedulaSeleccionada() {
+
+        int selectedIndex = vista.cboCIProp.getSelectedIndex();
+
+
+        if (selectedIndex != -1) {
+
+            Object selectedItem = vista.cboCIProp.getSelectedItem();
+
+
+            if (selectedItem != null) {
+                String combo = selectedItem.toString().trim();
+
+
+                int separatorIndex = combo.indexOf("-");
+
+
+                if (separatorIndex != -1) {
+
+                    return combo.substring(0, separatorIndex).trim();
+                } else {
+
+                    return combo;
+                }
+            } else {
+                System.out.println("Error: El item seleccionado es nulo.");
+            }
+        } else {
+            System.out.println("Error: No hay item seleccionado en el JComboBox.");
+        }
+
+        return null;
+    }
     public void limpiarEst(){
         vista.txtRUC.setText("");
         vista.txtNombreEst.setText("");
@@ -137,7 +172,8 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             String tel = vista.txtTelfEst.getText();
             String direccion = vista.txtDireccionEst.getText();
             String correo = vista.txtCorreoEst.getText();
-            String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+            //String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+            String CIPropietario=getCedulaSeleccionada();
             String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
 
             if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {

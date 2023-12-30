@@ -33,6 +33,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.btnRegresar.addMouseListener(this);
         vista.cboCIProp.addActionListener(this);
         vista.txtRUC.addKeyListener(this);
+        vista.btnAgregar.setVisible(false);
         vista.txtTelefono.addKeyListener(this);
         vista.txtBuscar.addKeyListener(this);
         vista.txtDireccion.addKeyListener(this);
@@ -45,12 +46,9 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         activarBotones();
     }
 
-    public boolean esPropietario(){
+    public boolean esPropietario() {
         int indice = modeloPropietarios.buscarUsuario(usuario);
-        if(modeloPropietarios.getUsuarios().get(indice) instanceof Administrador){
-            return false;
-        }
-        return true;
+        return modeloPropietarios.getUsuarios().get(indice) instanceof DuenioEstablecimiento;
     }
 
     public void cargarCombo() {
@@ -180,6 +178,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
 
 
     public void mostrarEstablecimiento() {
+
         if (!modeloEstablecimiento.getEstablecimiento().isEmpty()) {
             if (modeloTabla.getColumnCount() == 0) {
                 modeloTabla.addColumn("RUC");

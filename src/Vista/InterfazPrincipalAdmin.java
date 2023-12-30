@@ -73,6 +73,30 @@ public class InterfazPrincipalAdmin  extends JFrame{
     public JLabel btnRegresar3;
     public JLabel btnRegresar4;
     public JComboBox cboSubTipoEst;
+    private JTabbedPane tabbedPane1;
+    private JCheckBox chckUsoSuelo;
+    private JCheckBox chckRegistro;
+    private JCheckBox chckPago;
+    private JCheckBox chckInspeccion;
+    private JCheckBox chckCroquis;
+    private JCheckBox chckResponsable;
+    private JCheckBox chckCertificado;
+    private JCheckBox chckMedicos;
+    private JCheckBox chckRuc;
+    private JTextField txtRUCCGA;
+    private JTextField txtNombreEstCGA;
+    private JTextField txtDireccionCGA;
+    private JTextField txtTelefonoCGA;
+    private JTextField txtCorreoCGA;
+    private JComboBox cboPropCGA;
+    private JComboBox cboTipoEstCGA;
+    private JComboBox cboSubTipoCGA;
+    private JButton btnAgregarCGA;
+    private JButton btnModifcarCGA;
+    private JButton btnEliminarCGA;
+    private JButton btnMostrarEstablecimientosCGA;
+    private JButton btnBuscarEstCGA;
+    private JScrollPane tablaEstCGA;
 
 
     public InterfazPrincipalAdmin() {
