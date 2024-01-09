@@ -882,7 +882,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         contenido.append("Correo Electrónico: ").append(correoElectronico).append("\n");
         contenido.append("Tipo de Establecimiento: ").append(tipoEstablecimiento).append("\n\n");
 
-        contenido.append("Estimada ").append(nombreRepresentanteLegal).append(",\n\n");
+        contenido.append("Estimado/a ").append(nombreRepresentanteLegal).append(",\n\n");
 
         if (establecimientoAprobado) {
             contenido.append("Le comunicamos que su establecimiento ha sido aprobado.\n\n");
