@@ -64,7 +64,8 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
                                     int tipoUsuario = 1;
                                     modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, tipoUsuario);
                                     modeloUsuario.guardarUsuarios();
-                                    enviarCorreo(correo, ID, clave, nombreUsuario);
+                                    EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
+                                    worker.execute();
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
                                     limpiar();
                                 } else JOptionPane.showMessageDialog(null, "Las contraseñas deben ser iguales", "Error", JOptionPane.ERROR_MESSAGE);
@@ -150,6 +151,55 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public class EnviarCorreoWorker extends SwingWorker<Void, Void> {
+        private String destino;
+        private String ID;
+        private String clave;
+        private String nombre;
+
+        public EnviarCorreoWorker(String destino, String ID, String clave, String nombre) {
+            this.destino = destino;
+            this.ID = ID;
+            this.clave = clave;
+            this.nombre = nombre;
+        }
+
+        @Override
+        protected Void doInBackground() {
+            final String remitente = "designjartz@gmail.com";
+            final String password = "qpwwrokprrzpgofd";
+
+            Properties propiedades = new Properties();
+            propiedades.put("mail.smtp.auth", "true");
+            propiedades.put("mail.smtp.starttls.enable", "true");
+            propiedades.put("mail.smtp.host", "smtp.gmail.com");
+            propiedades.put("mail.smtp.port", "587");
+
+            Session sesion = Session.getInstance(propiedades,
+                    new javax.mail.Authenticator() {
+                        protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(remitente, password);
+                        }
+                    });
+
+            try {
+                Message mensaje = new MimeMessage(sesion);
+                mensaje.setFrom(new InternetAddress(remitente));
+                mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destino));
+                mensaje.setSubject("Bienvenido");
+                mensaje.setText("¡Hola " + nombre + "!\n\nTu cuenta ha sido creada en la aplicación.\n\nUsuario: " + ID + "\nContraseña: " + clave);
+
+                Transport.send(mensaje);
+
+                System.out.println("Correo enviado con éxito");
+            } catch (MessagingException e) {
+                e.printStackTrace();  // Manejar de manera adecuada el error, por ejemplo, puedes llamar a setException en el SwingWorker.
+            }
+
+            return null;
         }
     }
     //validaciones

@@ -882,8 +882,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         }
     }
 
-
-
     public String generarContenidoPDF(String rucEstablecimiento, String nombreRepresentanteLegal,
                                       String direccionEstablecimiento, String numerosTelefono, String correoElectronico,
                                       String tipoEstablecimiento, boolean establecimientoAprobado) {
