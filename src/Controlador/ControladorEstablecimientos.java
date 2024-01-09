@@ -137,8 +137,8 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                     modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario,tipoEstablecimiento);
                     ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
                     modeloEstablecimiento.guardarEstablecimientos();
-                    // enviarCorreo(correo, ID, clave, nombreUsuario);
                     JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                    mostrarEstablecimiento();
                     limpiar();
                 } else {
                     JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);

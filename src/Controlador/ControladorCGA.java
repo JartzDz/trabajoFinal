@@ -217,9 +217,8 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                     // Agregar el establecimiento
                     modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
                     modeloEstablecimiento.guardarEstablecimientos();
-
-
                     JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                    mostrarEstablecimiento();
                     limpiarEst();
                 } else {
                     JOptionPane.showMessageDialog(null, "El establecimiento ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -307,11 +306,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         }
     }
 
-
-
-
-
-
     public void mostrarEstablecimiento() {
         if (!modeloEstablecimiento.getEstablecimiento().isEmpty()) {
             if (modeloTablaEst.getColumnCount() == 0) {
@@ -325,9 +319,9 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             }
             modeloTablaEst.setRowCount(0);
             ArrayList<Establecimiento> listaEstablecimiento;
-            if(esPropietario()){
+            if (esPropietario()) {
                 listaEstablecimiento = modeloEstablecimiento.buscarEstablecimientosDuenio(usuario);
-            }else{
+            } else {
                 listaEstablecimiento = modeloEstablecimiento.getEstablecimiento();
             }
             for (Establecimiento p : listaEstablecimiento) {
@@ -781,7 +775,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                             establecimientoAprobado
                     );
 
-                    // Crear instancia de GenerarDocumentoWorker y ejecutarla en un hilo separado
                     GenerarDocumentoWorker worker = new GenerarDocumentoWorker(correoEstablecimiento, nombreDocumento, contenidoCorreo, rutaCompletaPDF);
                     worker.execute();
 
@@ -818,17 +811,14 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             }
         });
 
-        // Crear el mensaje de correo
         Message mensaje = new MimeMessage(sesion);
         mensaje.setFrom(new InternetAddress("designjartz@gmail.com"));
         mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
         mensaje.setSubject(asunto);
 
-        // Crear parte del cuerpo del mensaje
         BodyPart cuerpoMensaje = new MimeBodyPart();
         cuerpoMensaje.setText(cuerpo);
 
-        // Crear parte del archivo adjunto
         File archivoGenerado = new File(rutaDocumento);
         String nombreArchivo = archivoGenerado.getName();
 
@@ -837,12 +827,10 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         archivoAdjunto.setDataHandler(new DataHandler(fuente));
         archivoAdjunto.setFileName(nombreArchivo);
 
-        // Combinar las partes del mensaje
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(cuerpoMensaje);
         multipart.addBodyPart(archivoAdjunto);
 
-        // Establecer el contenido del mensaje
         mensaje.setContent(multipart);
 
         // Enviar el mensaje
@@ -898,6 +886,8 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
         if (establecimientoAprobado) {
             contenido.append("Le comunicamos que su establecimiento ha sido aprobado.\n\n");
+            contenido.append("Gracias por realizar el registro de su establecimiento.\n\n");
+
         } else {
             contenido.append("Lamentamos informarle que su establecimiento no ha sido aprobado.\n\n");
             contenido.append("El motivo de esta decisión es el siguiente:\n");
@@ -936,8 +926,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
     }
     public void guardarEnArchivoPDF(String nombreArchivo, String contenido) {
         try {
-
-
             String directorioActual = System.getProperty("user.dir");
 
 
@@ -966,7 +954,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
 
         if(e.getSource()==vista.btnAgregarEst){
             generarDocumento();

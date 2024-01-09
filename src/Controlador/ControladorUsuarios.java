@@ -98,6 +98,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                                     modeloUsuario.guardarUsuarios();
                                     enviarCorreo(correo, ID, clave, nombreUsuario);
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                    mostrarUsuarios();
                                     limpiarUsuarios();
                                 }
                             } else {

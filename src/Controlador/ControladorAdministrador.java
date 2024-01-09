@@ -217,6 +217,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                                     EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
                                     worker.execute();
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                    mostrarUsuarios();
                                     limpiarUsuarios();
                                 }
                             } else {
@@ -522,6 +523,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                     guardarImagen(dirImagen);
                     modeloMascota.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                     modeloMascota.guardarMascotas();
+                    mostrarMascotas();
                     limpiar();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -932,6 +934,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                     modeloEstablecimiento.guardarEstablecimientos();
                     // enviarCorreo(correo, ID, clave, nombreUsuario);
                     JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                    mostrarEstablecimiento();
                     limpiarEst();
                 } else {
                     JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);

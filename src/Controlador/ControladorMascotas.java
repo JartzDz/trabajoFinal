@@ -135,6 +135,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                     guardarImagen(dirImagen);
                     modeloMascota.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                     modeloMascota.guardarMascotas();
+                    mostrarMascotas();
                     limpiar();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
