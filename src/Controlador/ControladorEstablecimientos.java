@@ -363,11 +363,21 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vistaEstablecimiento.txtNombre || e.getSource()==vistaEstablecimiento.txtDireccion){
+        if(e.getSource()==vistaEstablecimiento.txtNombre){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 
             }else{
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if (e.getSource() == vistaEstablecimiento.txtDireccion) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();
             }

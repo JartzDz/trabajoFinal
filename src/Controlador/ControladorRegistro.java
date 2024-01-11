@@ -224,11 +224,21 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vista.txtNombres  || e.getSource()==vista.txtDireccion){
+        if(e.getSource()==vista.txtNombres){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 
             }else{
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if (e.getSource() == vista.txtDireccion) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();
             }

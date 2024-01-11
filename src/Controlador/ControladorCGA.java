@@ -653,12 +653,22 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();}
         }
-        if(e.getSource()==vista.txtNombreEst || e.getSource()==vista.txtDireccionEst){
+        if(e.getSource()==vista.txtNombreEst ){
             if(Character.isLetter(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE) ) {
                 e.setKeyChar(Character.toUpperCase(c));
 
 
             }else{
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if (e.getSource() == vista.txtDireccionEst) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
                 e.consume();
                 Toolkit.getDefaultToolkit().beep();
             }
