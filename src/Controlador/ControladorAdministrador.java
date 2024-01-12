@@ -107,7 +107,6 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.btnMostrarMascotas.addActionListener(this);
         vista.btnBuscarMascota.addActionListener(this);
         vista.txtIDMascota.addKeyListener(this);
-        vista.txtDuenio.addKeyListener(this);
         vista.txtBuscarMascota.addKeyListener(this);
         vista.txtRaza.addKeyListener(this);
         vista.txtNombreMascota.addKeyListener(this);
@@ -167,6 +166,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
     public void mostrarInterfaz(){
         cargarCombo();
+        cargarComboCI();
         vista.setTitle("ADMINISTRADOR");
         vista.setExtendedState(JFrame.MAXIMIZED_BOTH);
         vista.setLocationRelativeTo(null);
@@ -206,48 +206,59 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         String tipoUsuario = String.valueOf(vista.cbTipoUsuario.getSelectedIndex());
 
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-            if(validarCedula(ID)) {
-                if(validarCorreo(correo)) {
-                    if(modeloUsuarios.validarCedulaUnica(ID)) {
-                        if (modeloUsuarios.validarCorreoUnico(correo)) {
-                            if (modeloUsuarios.validarTelefonoUnico(tel)) {
-                                if (modeloUsuarios.validarCedulaUnica(ID) && modeloUsuarios.validarTelefonoUnico(tel) && modeloUsuarios.validarCorreoUnico(correo)) {
-                                    modeloUsuarios.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
-                                    modeloUsuarios.guardarUsuarios();
-                                    EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
-                                    worker.execute();
-                                    JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                                    mostrarUsuarios();
-                                    limpiarUsuarios();
+            if (esTelefonoValido(tel)) {
+                if (validarCedula(ID)) {
+                    if (validarCorreo(correo)) {
+                        if (modeloUsuarios.validarCedulaUnica(ID)) {
+                            if (modeloUsuarios.validarCorreoUnico(correo)) {
+                                if (modeloUsuarios.validarTelefonoUnico(tel)) {
+                                    if (modeloUsuarios.validarCedulaUnica(ID) && modeloUsuarios.validarTelefonoUnico(tel) && modeloUsuarios.validarCorreoUnico(correo)) {
+                                        modeloUsuarios.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, Integer.parseInt(tipoUsuario));
+                                        modeloUsuarios.guardarUsuarios();
+                                        EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
+                                        worker.execute();
+                                        JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                        mostrarUsuarios();
+                                        limpiarUsuarios();
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                    vista.txtTelefono.setText("");
+                                    vista.txtTelefono.requestFocus();
                                 }
                             } else {
-                                JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
-                                vista.txtTelefono.setText("");
-                                vista.txtTelefono.requestFocus();
+                                JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                vista.txtCorreo.setText("");
+                                vista.txtCorreo.requestFocus();
                             }
-                        }else {
-                            JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
-                            vista.txtCorreo.setText("");vista.txtCorreo.requestFocus();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+                            vista.txtID.setText("");
+                            vista.txtID.requestFocus();
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
-                        vista.txtID.setText("");vista.txtID.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtCorreo.setText("");
+                        vista.txtCorreo.requestFocus();
                     }
-                }else {
-                    JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
-                    vista.txtCorreo.setText("");
-                    vista.txtCorreo.requestFocus();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cédula INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtID.setText("");
+                    vista.txtID.requestFocus();
                 }
-            }else {
-                JOptionPane.showMessageDialog(null, "Cédula INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
-                vista.txtID.setText("");
-                vista.txtID.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                vista.txtTelefono.setText("");
+                vista.txtTelefono.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    private boolean esTelefonoValido(String telefono) {
+        telefono = telefono.replaceAll("\\s", "");
+        return telefono.length() >= 7 && telefono.length() <= 10 && telefono.matches("\\d+");
+    }
     public void eliminarTablaUsuarios() {
         int fila = vista.tablaUsuarios.getSelectedRow();
 
@@ -345,10 +356,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
     }
 
     public void cargarUsuario() {
-        String cedulaBuscada = vista.txtBuscar.getText();
-        int indice = modeloUsuarios.buscarUsuario(cedulaBuscada);
+        String criterioBuscado = vista.txtBuscar.getText().trim();
 
-        System.out.println(cedulaBuscada);
+        int indice = modeloUsuarios.buscarUsuario(criterioBuscado);
+
         if (indice != -1) {
             if (modeloTablaUsuarios.getColumnCount() == 0) {
                 modeloTablaUsuarios.addColumn("CEDULA");
@@ -358,15 +369,17 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 modeloTablaUsuarios.addColumn("CORREO");
                 modeloTablaUsuarios.addColumn("CONTRASEÑA");
             }
+
             modeloTablaUsuarios.setRowCount(0);
             Object[] fila = {modeloUsuarios.getUsuarios().get(indice).getCedula(), modeloUsuarios.getUsuarios().get(indice).getNombre(), modeloUsuarios.getUsuarios().get(indice).getDireccion(), modeloUsuarios.getUsuarios().get(indice).getTelefono(), modeloUsuarios.getUsuarios().get(indice).getCorreo(), modeloUsuarios.getUsuarios().get(indice).getContrasenia()};
             modeloTablaUsuarios.addRow(fila);
             vista.tablaUsuarios.setModel(modeloTablaUsuarios);
         } else {
-            JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontró la persona con esa Cédula o Nombre", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void modificarUsuario() {
+
+        public void modificarUsuario() {
         String ID = vista.txtID.getText();
         String nombreUsuario = vista.txtNombre.getText();
         String tel = vista.txtTelefono.getText();
@@ -376,26 +389,31 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         String tipoUsuario = String.valueOf(vista.cbTipoUsuario.getSelectedIndex());
 
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-            if (validarCedula(ID)) {
-                if (validarCorreo(correo)) {
-                    // Obtener el índice del usuario a modificar
-                    int indice = modeloUsuarios.buscarUsuario(ID);
-                    // Verificar si el índice es válido
-                    if (indice != -1) {
-                        // Llama al método modificarUsuario en el modelo
-                        modeloUsuarios.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
-                        modeloUsuarios.guardarUsuarios();
-                        JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
-                        limpiarUsuarios();
-                        mostrarUsuarios();
+            if (esTelefonoValido(tel)) {
+                if (validarCedula(ID)) {
+                    if (validarCorreo(correo)) {
+                        // Obtener el índice del usuario a modificar
+                        int indice = modeloUsuarios.buscarUsuario(ID);
+                        // Verificar si el índice es válido
+                        if (indice != -1) {
+                            modeloUsuarios.modificarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, indice);
+                            modeloUsuarios.guardarUsuarios();
+                            JOptionPane.showMessageDialog(null, "Usuario modificado con éxito.");
+                            limpiarUsuarios();
+                            mostrarUsuarios();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se encontró el usuario con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró el usuario con esa Cédula", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese cédula válida.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese cédula válida.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                vista.txtTelefono.setText("");
+                vista.txtTelefono.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -483,8 +501,6 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.txtIDMascota.setText("");
         vista.txtNombreMascota.setText("");
         vista.txtRaza.setText("");
-        vista.txtDuenio.setText("");
-        vista.txtBuscarMascota.setText("");
         vista.txtColor.setText("");
         vista.spnEdad.setValue(0);
         vista.lblImagen.setIcon(null);
@@ -502,7 +518,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             String idMascota = vista.txtIDMascota.getText();
             String nombreMascota = vista.txtNombreMascota.getText();
             String raza = vista.txtRaza.getText();
-            String duenio = vista.txtDuenio.getText();
+            String duenio = getCedulaSeleccionada(vista.cboCIDuenio);
             int edad = (int) vista.spnEdad.getValue();
             String sexo = vista.cboSexo.getSelectedItem().toString();
             System.out.println(sexo);
@@ -567,9 +583,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     public void eliminarTabla() {
         // Verifica si hay una fila seleccionada
-        int fila = vista.tablaEstablecimientos.getSelectedRow();
+        // Verifica si hay una fila seleccionada
+        int fila = vista.tablaMascotas.getSelectedRow();
         if (fila != -1) {
-            String idMascota = (String) vista.tablaEstablecimientos.getValueAt(fila, 0);
+            String idMascota = (String) vista.tablaMascotas.getValueAt(fila, 0);
             try {
                 int pos = modeloMascota.buscarMascota(idMascota);
                 modeloMascota.eliminarMascota(pos);
@@ -586,21 +603,6 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             JOptionPane.showMessageDialog(null, "Selecciona una fila antes de eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
-
-
-    public void buscarMascota(){
-        String valor = vista.txtBuscarMascota.getText();
-        int indice= modeloMascota.buscarMascota(valor);
-        if(indice!=-1){
-            JOptionPane.showMessageDialog(null, "Mascota Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Mascota No Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-
 
     public void guardarImagen(File archivo) {
         try {
@@ -734,7 +736,7 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         String textoID = vista.txtIDMascota.getText();
         String nombreMascota = vista.txtNombreMascota.getText();
         String raza = vista.txtRaza.getText();
-        String duenio = vista.txtDuenio.getText();
+        String duenio = getCedulaSeleccionada(vista.cboCIDuenio);
         int edad = (int) vista.spnEdad.getValue();
         String sexo = vista.cboSexo.getSelectedItem().toString();
         String color = vista.txtColor.getText();
@@ -876,6 +878,25 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         }
 
     }
+    public boolean esDuenio() {
+        int indice = modeloUsuarios.buscarUsuario(usuario);
+        return modeloUsuarios.getUsuarios().get(indice) instanceof DuenioMascota;
+    }
+    public void cargarComboCI() {
+        if (!esDuenio()) {
+            for (Persona p : modeloUsuarios.getUsuarios()) {
+                if (p instanceof DuenioMascota) {
+                    vista.cboCIDuenio.addItem(p.getCedula() + "-" + p.getNombre());
+                }
+            }
+
+            ArrayList<String> cedulas = separarCedula();
+            for (String cedula : cedulas) {
+                System.out.println(cedula);
+            }
+        }
+
+    }
 
     public ArrayList<String> separarCedula() {
         ArrayList<String> cedulas = new ArrayList<>();
@@ -922,31 +943,59 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         String tel = vista.txtTelfEst.getText();
         String direccion = vista.txtDireccionEst.getText();
         String correo = vista.txtCorreoEst.getText();
-        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+        String CIPropietario = getCedulaSeleccionada(vista.cboCIProp);
         String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
 
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
             // Validar RUC antes de agregar el establecimiento
-            System.out.println("Valor del RUC: " + RUC);
             if (validarRUC(RUC)) {
                 if (validarCorreo(correo)) {
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
-                    modeloEstablecimiento.guardarEstablecimientos();
-                    // enviarCorreo(correo, ID, clave, nombreUsuario);
-                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                    mostrarEstablecimiento();
-                    limpiarEst();
+                    if (esTelefonoValido(tel)) {
+                        modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
+                        modeloEstablecimiento.guardarEstablecimientos();
+                        // enviarCorreo(correo, ID, clave, nombreUsuario);
+                        JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                        mostrarEstablecimiento();
+                        limpiarEst();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtTelfEst.setText("");
+                        vista.txtTelfEst.requestFocus();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
                     vista.txtCorreoEst.setText("");
+                    vista.txtCorreoEst.requestFocus();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
                 vista.txtRUC.setText("");
+                vista.txtRUC.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public String getCedulaSeleccionada(JComboBox<String> comboBox) {
+        int selectedIndex = comboBox.getSelectedIndex();
+        if (selectedIndex != -1) {
+            Object selectedItem = comboBox.getSelectedItem();
+            if (selectedItem != null) {
+                String combo = selectedItem.toString().trim();
+                int separatorIndex = combo.indexOf("-");
+                if (separatorIndex != -1) {
+                    return combo.substring(0, separatorIndex).trim();
+                } else {
+                    return combo;
+                }
+            } else {
+                System.out.println("Error: El item seleccionado es nulo.");
+            }
+        } else {
+            System.out.println("Error: No hay item seleccionado en el JComboBox.");
+        }
+        return null;
     }
 
     public void eliminarTablaEst() {
@@ -1057,32 +1106,40 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         String tel = vista.txtTelfEst.getText();
         String direccion = vista.txtDireccionEst.getText();
         String correo = vista.txtCorreoEst.getText();
-        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedIndex());
+        String CIPropietario = getCedulaSeleccionada(vista.cboCIProp);
+        String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
 
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
             if (validarCorreo(correo)) {
-                // Obtener el índice del usuario a modificar
-                int indice = GestorEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
-                // Verificar si el índice es válido
-                if (indice != -1) {
-                    // Llama al método modificarUsuario en el modelo
-                    modeloEstablecimiento.modificarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento, indice);
-                    modeloEstablecimiento.guardarEstablecimientos();
-                    JOptionPane.showMessageDialog(null, "Establecimiento modificado con éxito.");
-                    limpiarEst();
-                    mostrarEstablecimiento();
+                if (esTelefonoValido(tel)) {
+                    // Obtener el índice del establecimiento a modificar
+                    int indice = modeloEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
+                    // Verificar si el índice es válido
+                    if (indice != -1) {
+                        // Llama al método modificarEstablecimiento en el modelo
+                        modeloEstablecimiento.modificarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento, indice);
+                        modeloEstablecimiento.guardarEstablecimientos();
+                        JOptionPane.showMessageDialog(null, "Establecimiento modificado con éxito.");
+                        limpiarEst();
+                        mostrarEstablecimiento();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtTelfEst.setText("");
+                    vista.txtTelfEst.requestFocus();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                vista.txtCorreoEst.setText("");
+                vista.txtCorreoEst.requestFocus();
             }
-
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private static final int NUMERO_PROVINCIAS = 24;
     private static final int[] COEFICIENTES = {4, 3, 2, 7, 6, 5, 4, 3, 2};
@@ -1266,9 +1323,14 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == vista.btnGestionCGA || e.getSource() == vista.btnGestionUsuarios) {
+        if (e.getSource() == vista.btnGestionUsuarios) {
             limpiarUsuarios();
             cardLayout.show(vista.panelPrincipal, "Usuarios");
+            interfazLogin.setVisible(false);
+        }
+        if (e.getSource() == vista.btnGestionCGA) {
+            limpiarUsuarios();
+            cardLayout.show(vista.panelPrincipal, "CGA");
             interfazLogin.setVisible(false);
         }
         if (e.getSource() == vista.btnGestionMascotas) {
@@ -1303,18 +1365,23 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             generarYMostrarID();
         }
         if(e.getSource()==vista.btnMostrarMascotas) {
+            vista.lblImagen.setIcon(null);
             mostrarMascotas();
         }
         if(e.getSource()==vista.btnEliminarMascota){
+            vista.lblImagen.setIcon(null);
             eliminarTabla();
         }
         if(e.getSource()==vista.btnBuscarMascota) {
+            vista.lblImagen.setIcon(null);
             cargarMascota();
         }
         if(e.getSource()==vista.btnModificarMascota){
+            vista.lblImagen.setIcon(null);
             modificarMascota();
         }
         if(e.getSource()==vista.btnSubirFotoCarnet) {
+            vista.lblImagen.setIcon(null);
             cargarImagen();
         }
         if(e.getSource()==vista.btnAgregar) agregarUsuarios();
@@ -1475,9 +1542,14 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 Toolkit.getDefaultToolkit().beep();
             }
         }
-        if(e.getSource()==vista.txtBuscarMascota){
-            if (Character.isLetter(c) || Character.isDigit(c)|| (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)){
-                e.setKeyChar(Character.toUpperCase(c));
+        if (e.getSource() == vista.txtBuscarMascota) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
             }
         }
         if(e.getSource()==vista.txtID){
@@ -1510,6 +1582,16 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
                 Toolkit.getDefaultToolkit().beep();
             }
         }
+        if (e.getSource() == vista.txtBuscar) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
         if(e.getSource()==vista.txtRUC){
             if(!Character.isDigit(c) && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_ENTER){
                 e.consume();
@@ -1530,6 +1612,16 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             }
         }
         if (e.getSource() == vista.txtDireccionEst) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if (e.getSource() == vista.txtBuscarEst) {
             if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
                 if (Character.isLowerCase(c)) {
                     e.setKeyChar(Character.toUpperCase(c));
@@ -1572,10 +1664,10 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
         vista.txtBuscarMascota.setText("Ingrese el ID,NOMBRE de la mascota o CEDULA del PROPIETARIO");
         vista.btnBuscarMascota.setEnabled(false);
         vista.txtBuscar.setForeground(Color.GRAY);
-        vista.txtBuscar.setText("Ingrese el ID del Usuario");
+        vista.txtBuscar.setText("Ingrese la CÉDULA o NOMBRE del Usuario");
         vista.btnBuscar.setEnabled(false);
         vista.txtBuscarEst.setForeground(Color.GRAY);
-        vista.txtBuscarEst.setText("Ingrese el RUC del establecimiento");
+        vista.txtBuscarEst.setText("Ingrese el RUC o NOMBRE del establecimiento");
         vista.btnBuscarEst.setEnabled(false);
 
     }

@@ -32,6 +32,9 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vista.btnBuscar.setFocusable(false);
         vista.btnRegresar.addMouseListener(this);
         vista.cboCIProp.addActionListener(this);
+        vista.cboTipoEst.addActionListener(this);
+        vista.cboSubTipoEst.addActionListener(this);
+        vista.cboSubTipoEst.setEnabled(false);
         vista.txtRUC.addKeyListener(this);
         vista.btnAgregar.setVisible(false);
         vista.txtTelefono.addKeyListener(this);
@@ -44,6 +47,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         String[] columnas = {"RUC", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "PROPIETARIO", "TIPO"};
         modeloTabla = new DefaultTableModel(null, columnas);
         activarBotones();
+        actualizarSubtipo();
     }
 
     public boolean esPropietario() {
@@ -106,6 +110,8 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         vistaEstablecimiento.txtTelefono.setText("");
         vistaEstablecimiento.txtDireccion.setText("");
         vistaEstablecimiento.txtCorreo.setText("");
+        DefaultTableModel modelo = (DefaultTableModel)  vistaEstablecimiento.tablaEstablecimientos.getModel();
+        modeloTabla.setRowCount(0);
     }
     public void activarBotones(){
         if(modeloEstablecimiento.getEstablecimiento().isEmpty()){
@@ -125,33 +131,67 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         String tel = vistaEstablecimiento.txtTelefono.getText();
         String direccion = vistaEstablecimiento.txtDireccion.getText();
         String correo = vistaEstablecimiento.txtCorreo.getText();
-        String CIPropietario = vistaEstablecimiento.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboTipoEst.getSelectedIndex());
+        String CIPropietario = getCedulaSeleccionada();
 
-        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
-            int buscarPropietario = modeloPropietarios.buscarUsuario(CIPropietario);
+        String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboSubTipoEst.getSelectedItem());
 
+        if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
             // Validar RUC antes de agregar el establecimiento
             if (validarRUC(RUC)) {
                 if (validarCorreo(correo)) {
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario,tipoEstablecimiento);
-                    ((DuenioEstablecimiento) modeloPropietarios.getUsuarios().get(buscarPropietario)).agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, Integer.parseInt(tipoEstablecimiento));
-                    modeloEstablecimiento.guardarEstablecimientos();
-                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                    mostrarEstablecimiento();
-                    limpiar();
+                    if (esTelefonoValido(tel)) {
+                        modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
+                        modeloEstablecimiento.guardarEstablecimientos();
+                        // enviarCorreo(correo, ID, clave, nombreUsuario);
+                        JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                        mostrarEstablecimiento();
+                        limpiar();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vistaEstablecimiento.txtTelefono.setText("");
+                        vistaEstablecimiento.txtTelefono.requestFocus();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                    vistaEstablecimiento.txtCorreo.setText("");
+                    vistaEstablecimiento.txtCorreo.requestFocus();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                vistaEstablecimiento.txtRUC.setText("");
+                vistaEstablecimiento.txtRUC.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public String getCedulaSeleccionada() {
+        int selectedIndex = vistaEstablecimiento.cboCIProp.getSelectedIndex();
+        if (selectedIndex != -1) {
 
+            Object selectedItem = vistaEstablecimiento.cboCIProp.getSelectedItem();
 
+            if (selectedItem != null) {
+                String combo = selectedItem.toString().trim();
+
+                int separatorIndex = combo.indexOf("-");
+
+                if (separatorIndex != -1) {
+
+                    return combo.substring(0, separatorIndex).trim();
+                } else {
+
+                    return combo;
+                }
+            } else {
+                System.out.println("Error: El item seleccionado es nulo.");
+            }
+        } else {
+            System.out.println("Error: No hay item seleccionado en el JComboBox.");
+        }
+
+        return null;
+    }
 
     public void eliminarTablaEst() {
         try {
@@ -210,12 +250,12 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     }
 
     public void cargarEstablecimiento() {
-        String cedulaBuscada = vistaEstablecimiento.txtBuscar.getText();
+        String busqueda = vistaEstablecimiento.txtBuscar.getText();
         int indice = 0;
-        if(esPropietario()){
-            indice = GestorEstablecimiento.buscarEstablecimiento(cedulaBuscada,modeloEstablecimiento.buscarEstablecimientosDuenio(usuario));
-        }else{
-            indice = GestorEstablecimiento.buscarEstablecimiento(cedulaBuscada, modeloEstablecimiento.getEstablecimiento());
+        if (esPropietario()) {
+            indice = modeloEstablecimiento.buscarEstablecimiento(busqueda, modeloEstablecimiento.buscarEstablecimientosDuenio(usuario));
+        } else {
+            indice = modeloEstablecimiento.buscarEstablecimiento(busqueda, modeloEstablecimiento.getEstablecimiento());
         }
         if (indice != -1) {
             if (modeloTabla.getColumnCount() == 0) {
@@ -228,9 +268,15 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                 modeloTabla.addColumn("TIPO");
             }
             modeloTabla.setRowCount(0);
-            Object[] fila = {modeloEstablecimiento.getEstablecimiento().get(indice).getRuc(), modeloEstablecimiento.getEstablecimiento().get(indice).getNombreEst(),
-                    modeloEstablecimiento.getEstablecimiento().get(indice).getDireccion(), modeloEstablecimiento.getEstablecimiento().get(indice).getTelefono(), modeloEstablecimiento.getEstablecimiento().get(indice).getCorreo(),
-                    modeloEstablecimiento.getEstablecimiento().get(indice).getCIRepresentante(), modeloEstablecimiento.getEstablecimiento().get(indice).getTipoEstablecimiento()};
+            Object[] fila = {
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getRuc(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getNombreEst(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getDireccion(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getTelefono(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getCorreo(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getCIRepresentante(),
+                    modeloEstablecimiento.buscarEstablecimientosDuenio(usuario).get(indice).getTipoEstablecimiento()
+            };
             modeloTabla.addRow(fila);
             vistaEstablecimiento.tablaEstablecimientos.setModel(modeloTabla);
         } else {
@@ -238,22 +284,59 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         }
     }
 
+    private void actualizarSubtipo() {
+        // Limpiar el modelo del JComboBox secundario
+        DefaultComboBoxModel<String> modeloSubTipo = new DefaultComboBoxModel<>();
+        vistaEstablecimiento.cboSubTipoEst.setModel(modeloSubTipo);
+
+
+        // Obtener la selección del JComboBox principal (Tipo)
+        String seleccionTipo = vistaEstablecimiento.cboTipoEst.getSelectedItem().toString();
+
+
+        // Agregar elementos al JComboBox secundario (Subtipo) según la selección en el JComboBox principal
+        if ("CENTRO DE ATENCIÓN MÉDICO VETERINARIA".equals(seleccionTipo)) {
+            modeloSubTipo.addElement("MEDICINA VETERINARIA A DOMICILIO");
+            modeloSubTipo.addElement("CONSULTORIOS VETERINARIOS");
+            modeloSubTipo.addElement("CLINICAS VETERINARIAS");
+            modeloSubTipo.addElement("HOSPITALES VETERINARIOS");
+            modeloSubTipo.addElement("U. VETERINARIAS MOVILES");
+            modeloSubTipo.addElement("SERVICIOS DE REHABILITACION");
+            modeloSubTipo.addElement("CAMPAÑAS DE ESTERILIZACION");
+            modeloSubTipo.addElement("CENTROS DE ESTERILIZACION");
+        } else if ("CENTRO DE MANEJO".equals(seleccionTipo)) {
+            modeloSubTipo.addElement("CENTRO DE CRIANZA");
+            modeloSubTipo.addElement("TIENDAS DE MASCOTAS");
+            modeloSubTipo.addElement("CENTROS DE ESTETICA ANIMAL");
+            modeloSubTipo.addElement("HOTELES Y ALOJAMIENTO");
+            modeloSubTipo.addElement("ALBERGUES");
+            modeloSubTipo.addElement("CENTROS DE ADIESTRAMIENTO");
+            modeloSubTipo.addElement("ESTABLECIMIENTOS PARA ESPECTACULOS");
+            modeloSubTipo.addElement("CENTROS DE INVESTIGACION");
+            modeloSubTipo.addElement("CENTROS DE CUARENTENA");
+            modeloSubTipo.addElement("OTROS");
+        }
+        vistaEstablecimiento.cboSubTipoEst.setEnabled(true);
+    }
+
+
     public void modificarEstablecimiento() {
         String RUC = vistaEstablecimiento.txtRUC.getText();
         String nombreEstablecimiento = vistaEstablecimiento.txtNombre.getText();
         String tel = vistaEstablecimiento.txtTelefono.getText();
         String direccion = vistaEstablecimiento.txtDireccion.getText();
         String correo = vistaEstablecimiento.txtCorreo.getText();
-        String CIPropietario = vistaEstablecimiento.cboCIProp.getSelectedItem().toString();
-        String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboTipoEst.getSelectedIndex());
+        String CIPropietario = getCedulaSeleccionada();
+        String tipoEstablecimiento = String.valueOf(vistaEstablecimiento.cboSubTipoEst.getSelectedItem());
 
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
-                if (validarCorreo(correo)) {
-                    // Obtener el índice del usuario a modificar
-                    int indice = GestorEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
+            if (validarCorreo(correo)) {
+                if (esTelefonoValido(tel)) {
+                    // Obtener el índice del establecimiento a modificar
+                    int indice = modeloEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
                     // Verificar si el índice es válido
                     if (indice != -1) {
-                        // Llama al método modificarUsuario en el modelo
+                        // Llama al método modificarEstablecimiento en el modelo
                         modeloEstablecimiento.modificarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento, indice);
                         modeloEstablecimiento.guardarEstablecimientos();
                         JOptionPane.showMessageDialog(null, "Establecimiento modificado con éxito.");
@@ -263,9 +346,15 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                         JOptionPane.showMessageDialog(null, "No se encontró el establecimiento con ese RUC", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vistaEstablecimiento.txtTelefono.setText("");
+                    vistaEstablecimiento.txtTelefono.requestFocus();
                 }
-
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese correo válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                vistaEstablecimiento.txtCorreo.setText("");
+                vistaEstablecimiento.txtCorreo.requestFocus();
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -278,6 +367,10 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
 
 
         return matcher.matches();
+    }
+    private boolean esTelefonoValido(String telefono) {
+        telefono = telefono.replaceAll("\\s", "");
+        return telefono.length() >= 7 && telefono.length() <= 10 && telefono.matches("\\d+");
     }
 
     public boolean validarRUC(String ruc) {
@@ -308,6 +401,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     public void mouseClicked(MouseEvent e) {
         if(e.getSource()==vistaEstablecimiento.btnRegresar) {
             limpiar();
+
             vistaEstablecimiento.dispose();
         }
     }
@@ -334,6 +428,9 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
         if(e.getSource()==vistaEstablecimiento.btnEliminar)eliminarTablaEst();
         if(e.getSource()==vistaEstablecimiento.btnBuscar)cargarEstablecimiento();
         if(e.getSource()==vistaEstablecimiento.btnModificar) modificarEstablecimiento();
+        if (e.getSource() == vistaEstablecimiento.cboTipoEst) {
+            actualizarSubtipo();
+        }
     }
 
     @Override
@@ -346,7 +443,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
     @Override
     public void focusLost(FocusEvent e) {
         vistaEstablecimiento.txtBuscar.setForeground(Color.GRAY);
-        vistaEstablecimiento.txtBuscar.setText("Ingrese el ID del Usuario");
+        vistaEstablecimiento.txtBuscar.setText("Ingrese el RUC o NOMBRE del establecimiento");
         vistaEstablecimiento.btnBuscar.setEnabled(false);
     }
 
@@ -373,6 +470,16 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
             }
         }
         if (e.getSource() == vistaEstablecimiento.txtDireccion) {
+            if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+                if (Character.isLowerCase(c)) {
+                    e.setKeyChar(Character.toUpperCase(c));
+                }
+            } else {
+                e.consume();
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+        if (e.getSource() == vistaEstablecimiento.txtBuscar) {
             if (Character.isLetterOrDigit(c) || (e.getKeyChar()==KeyEvent.VK_SPACE) ||  (e.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
                 if (Character.isLowerCase(c)) {
                     e.setKeyChar(Character.toUpperCase(c));

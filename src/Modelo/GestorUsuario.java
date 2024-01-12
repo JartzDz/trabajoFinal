@@ -32,16 +32,18 @@ public class GestorUsuario {
         }
     }
 
-    public int buscarUsuario(String cedula){
-        int contador=0;
+    public int buscarUsuario(String criterio) {
+        int contador = 0;
         for (Persona persona : usuarios) {
-            if (persona.getCedula().equals(cedula)) {
+            if (persona.getCedula().equals(criterio) || persona.getNombre().equalsIgnoreCase(criterio)) {
                 return contador;
             }
             contador++;
         }
         return -1;
     }
+
+
 
 
 

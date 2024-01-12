@@ -97,6 +97,7 @@ public class InterfazPrincipalAdmin  extends JFrame{
     private JButton btnMostrarEstablecimientosCGA;
     private JButton btnBuscarEstCGA;
     private JScrollPane tablaEstCGA;
+    public JComboBox cboCIDuenio;
 
 
     public InterfazPrincipalAdmin() {

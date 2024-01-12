@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class GestorMascotas {
-
-    private ArrayList<Mascota> ListaMascotas;
+    private static ArrayList<Mascota> ListaMascotas;
     public GestorMascotas() {
         ListaMascotas = new ArrayList<>();
     }
@@ -40,7 +39,7 @@ public class GestorMascotas {
         return -1;
     }
 
-    public ArrayList<Mascota> buscarMascotasDuenio(String cedula) {
+    public ArrayList<Mascota>  buscarMascotasDuenio(String cedula){
         ArrayList<Mascota> mascotasDuenio = new ArrayList<>();
         for (Mascota mascota : ListaMascotas) {
             if (mascota.getDuenio().equals(cedula)) {
@@ -48,6 +47,18 @@ public class GestorMascotas {
             }
         }
         return mascotasDuenio;
+    }
+
+    public int buscarMascotas(String criterio, String dueño, ArrayList<Mascota> mascotas){
+        int contador = 0;
+        for (Mascota mascota : mascotas) {
+
+            if ((mascota.getID().equals(criterio) || mascota.getNombreMascota().equals(criterio)) && mascota.getDuenio().equals(dueño)) {
+                return contador;
+            }
+            contador++;
+        }
+        return -1;
     }
 
 
@@ -83,19 +94,6 @@ public class GestorMascotas {
         // Devuelve la nueva ruta de la foto del carnet
         return nuevaRutaFotoCarnet;
     }
-
-    public ArrayList<Mascota> obtenerMascotasPorDuenio(String idDuenio) {
-        ArrayList<Mascota> mascotasPorDuenio = new ArrayList<>();
-
-        for (Mascota mascota : ListaMascotas) {
-            if (mascota.getDuenio().equals(idDuenio)) {
-                mascotasPorDuenio.add(mascota);
-            }
-        }
-
-        return mascotasPorDuenio;
-    }
-
 
 
     public ArrayList<Mascota> mostrarMascotas(){

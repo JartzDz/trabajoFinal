@@ -105,9 +105,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             }
         }
 
-
     }
-
 
     public ArrayList<String> separarCedula() {
         ArrayList<String> cedulas = new ArrayList<>();
@@ -137,37 +135,22 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
     public String getCedulaSeleccionada() {
 
-
         int selectedIndex = vista.cboCIProp.getSelectedIndex();
-
-
 
 
         if (selectedIndex != -1) {
 
-
             Object selectedItem = vista.cboCIProp.getSelectedItem();
-
-
-
 
             if (selectedItem != null) {
                 String combo = selectedItem.toString().trim();
 
-
-
-
                 int separatorIndex = combo.indexOf("-");
-
-
-
 
                 if (separatorIndex != -1) {
 
-
                     return combo.substring(0, separatorIndex).trim();
                 } else {
-
 
                     return combo;
                 }
@@ -177,7 +160,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         } else {
             System.out.println("Error: No hay item seleccionado en el JComboBox.");
         }
-
 
         return null;
     }
@@ -399,14 +381,14 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         String tel = vista.txtTelfEst.getText();
         String direccion = vista.txtDireccionEst.getText();
         String correo = vista.txtCorreoEst.getText();
-        String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+        String CIPropietario = getCedulaSeleccionada();
         String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedIndex());
 
 
         if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !CIPropietario.isEmpty() && !RUC.isEmpty()) {
             if (validarCorreo(correo)) {
                 // Obtener el índice del usuario a modificar
-                int indice = GestorEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
+                int indice = modeloEstablecimiento.buscarEstablecimiento(RUC, modeloEstablecimiento.getEstablecimiento());
                 // Verificar si el índice es válido
                 if (indice != -1) {
                     // Llama al método modificarUsuario en el modelo

@@ -40,10 +40,10 @@ public class GestorEstablecimiento {
         return establecimientosDuenio;
     }
 
-    public static int buscarEstablecimiento(String RUC, ArrayList<Establecimiento> establecimientos){
+    public int buscarEstablecimiento(String criterio, ArrayList<Establecimiento> establecimientos){
         int contador=0;
         for (Establecimiento establecimiento : establecimientos) {
-            if (establecimiento.getRuc().equals(RUC)) {
+            if (establecimiento.getRuc().equals(criterio) || establecimiento.getNombreEst().equals(criterio)) {
                 return contador;
             }
             contador++;
@@ -77,7 +77,7 @@ public class GestorEstablecimiento {
         }
     }
 
-    public void modificarEstablecimiento(String RUC,String nombre,String direccion,String telefono,String correo,String CIDuenio,String tipoEst,int indice){
+    public void modificarEstablecimiento(String RUC,String nombre,String direccion,String telefono,String correo,String CIDuenio,String subTipoEst,int indice){
         // Verificar si el índice es válido
         if (indice >= 0 && indice < establecimientos.size()) {
             establecimientos.get(indice).setRuc(RUC);
@@ -86,7 +86,7 @@ public class GestorEstablecimiento {
             establecimientos.get(indice).setTelefono(telefono);
             establecimientos.get(indice).setCorreo(correo);
             establecimientos.get(indice).setCIRepresentante(CIDuenio);
-            establecimientos.get(indice).setTipoEstablecimiento(tipoEst);
+            establecimientos.get(indice).setTipoEstablecimiento(subTipoEst);
             System.out.println("Establecimiento modificado correctamente.");
         } else {
             System.out.println("Índice no válido. No se puede modificar el establecimiento.");

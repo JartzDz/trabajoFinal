@@ -401,7 +401,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
     @Override
     public void focusLost(FocusEvent e) {
         vistaUsuario.txtBuscar.setForeground(Color.GRAY);
-        vistaUsuario.txtBuscar.setText("Ingrese el ID del Usuario");
+        vistaUsuario.txtBuscar.setText("Ingrese la CÉDULA o NOMBRE del Usuario");
         vistaUsuario.btnBuscar.setEnabled(false);
     }
 

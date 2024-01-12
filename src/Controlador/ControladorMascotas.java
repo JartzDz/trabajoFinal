@@ -49,7 +49,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vistaMascota.txtColor.addKeyListener(this);
         vistaMascota.txtBuscarMascota.addFocusListener(this);
         vistaMascota.btnBuscarMascota.setFocusable(false);
-        vistaMascota.txtBuscarMascota.setEnabled(false);
 
         String[] columnas = {"ID", "NOMBRE", "RAZA", "DUEÑO","EDAD","COLOR","SEXO","VACUNAS","DESPARASITACIONES","ESTERILIZACION","OTRAS CIRUGIAS"};
         modeloTabla = new DefaultTableModel(null, columnas);
@@ -95,8 +94,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         vistaMascota.txtIDMascota.setText("");
         vistaMascota.txtNombreMascota.setText("");
         vistaMascota.txtRaza.setText("");
-        vistaMascota.txtDuenio.setText("");
-        vistaMascota.txtBuscarMascota.setText("");
         vistaMascota.txtColor.setText("");
         vistaMascota.spnEdad.setValue(0);
         vistaMascota.lblImagen.setIcon(null);
@@ -135,8 +132,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                     guardarImagen(dirImagen);
                     modeloMascota.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                     modeloMascota.guardarMascotas();
-                    mostrarMascotas();
                     limpiar();
+                    mostrarMascotas();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
                     vistaMascota.txtDuenio.setText("");
@@ -176,15 +173,10 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         return digitos.toString();
     }
 
-
     public boolean esDuenio() {
         int indice = modeloDuenios.buscarUsuario(usuario);
-        if(modeloDuenios.getUsuarios().get(indice) instanceof Administrador){
-            return false;
-        }
-        return true;
+        return modeloDuenios.getUsuarios().get(indice) instanceof DuenioMascota;
     }
-
 
     public void cargarCedula() {
             if (esDuenio()) {
@@ -329,63 +321,53 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         }
     }
     public void cargarMascota() {
-        String textoID = vistaMascota.txtBuscarMascota.getText();
-
-        if (!textoID.isEmpty()) {
-            try {
-                int indice = modeloMascota.buscarMascota(textoID);
-
-                if (indice != -1) {
-                    // Limpiar el modelo de la tabla antes de agregar columnas y filas
-                    modeloTabla.setRowCount(0);
-
-                    // Verificar si las columnas ya han sido agregadas al modelo de la tabla
-                    if (modeloTabla.getColumnCount() == 0) {
-                        modeloTabla.addColumn("ID");
-                        modeloTabla.addColumn("NOMBRE");
-                        modeloTabla.addColumn("RAZA");
-                        modeloTabla.addColumn("DUEÑO");
-                        modeloTabla.addColumn("EDAD");
-                        modeloTabla.addColumn("COLOR");
-                        modeloTabla.addColumn("SEXO");
-                        modeloTabla.addColumn("VACUNAS");
-                        modeloTabla.addColumn("DESPARASITACIONES");
-                        modeloTabla.addColumn("ESTERILIZACION");
-                        modeloTabla.addColumn("OTRAS CIRUGIAS");
-                    }
-
-                    Mascota mascota = modeloMascota.mostrarMascotas().get(indice);
-
-                    Object[] fila = {
-                            mascota.getID(),
-                            mascota.getNombreMascota(),
-                            mascota.getRaza(),
-                            mascota.getDuenio(),
-                            mascota.getEdad(),
-                            mascota.getColor(),
-                            mascota.getSexo(),
-                            mascota.isVacunas(),
-                            mascota.isDesparasitaciones(),
-                            mascota.isEsterilizacion(),
-                            mascota.isOtrasCirugias()
-                    };
-                    modeloTabla.addRow(fila);
-                    vistaMascota.tablaMascotas.setModel(modeloTabla);
-
-                    // Cargar la imagen de la mascota en lblImagenMascota
-                    String rutaImagen = modeloMascota.mostrarMascotas().get(indice).getRutaFotoCarnet();
-                    System.out.println("Ruta de la imagen: " + rutaImagen); // Añade este mensaje para verificar la ruta en la consola
-                    cargarImagenMascota(rutaImagen);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se encontró la mascota con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Ingrese un ID válido", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        String busqueda = vistaMascota.txtBuscarMascota.getText();
+        int indice = 0;
+        if (esDuenio()) {
+            indice = modeloMascota.buscarMascotas(busqueda, usuario, modeloMascota.buscarMascotasDuenio(usuario));
         } else {
-            JOptionPane.showMessageDialog(null, "Ingrese un ID para buscar mascota", "Error", JOptionPane.ERROR_MESSAGE);
+            indice = modeloMascota.buscarMascotas(busqueda, usuario, modeloMascota.getListaMascotas());
+        }
+        if (indice != -1) {
+            modeloTabla.setRowCount(0);
+            // Verificar si las columnas ya han sido agregadas al modelo de la tabla
+            if (modeloTabla.getColumnCount() == 0) {
+                modeloTabla.addColumn("ID");
+                modeloTabla.addColumn("NOMBRE");
+                modeloTabla.addColumn("RAZA");
+                modeloTabla.addColumn("DUEÑO");
+                modeloTabla.addColumn("EDAD");
+                modeloTabla.addColumn("COLOR");
+                modeloTabla.addColumn("SEXO");
+                modeloTabla.addColumn("VACUNAS");
+                modeloTabla.addColumn("DESPARASITACIONES");
+                modeloTabla.addColumn("ESTERILIZACION");
+                modeloTabla.addColumn("OTRAS CIRUGIAS");
+            }
+            modeloTabla.setRowCount(0);
+            Object[] fila = {
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getID(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getNombreMascota(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getRaza(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getDuenio(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getEdad(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getColor(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).getSexo(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).isVacunas(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).isDesparasitaciones(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).isEsterilizacion(),
+                    modeloMascota.buscarMascotasDuenio(usuario).get(indice).isOtrasCirugias()
+            };
+            modeloTabla.addRow(fila);
+            vistaMascota.tablaMascotas.setModel(modeloTabla);
+            String rutaImagen = modeloMascota.getListaMascotas().get(indice).getRutaFotoCarnet();
+            System.out.println("Ruta de la imagen: " + rutaImagen);
+            cargarImagenMascota(rutaImagen);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró la mascota", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     // Método para cargar la imagen de la mascota en lblImagen
     private void cargarImagenMascota(String rutaImagen) {
@@ -418,7 +400,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
         int edad = (int) vistaMascota.spnEdad.getValue();
         String sexo = vistaMascota.cboSexo.getSelectedItem().toString();
         String color = vistaMascota.txtColor.getText();
-
         boolean vacunas = vistaMascota.chkVacunas.isSelected();
         boolean esterilizacion = vistaMascota.chkEsterilizacion.isSelected();
         boolean desparacitaciones = vistaMascota.chkDesparacitaciones.isSelected();
@@ -426,7 +407,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
 
         if (!textoID.isEmpty() && !nombreMascota.isEmpty() && !raza.isEmpty() && !duenio.isEmpty() && !color.isEmpty()) {
             try {
-                int indice = modeloMascota.buscarMascota(textoID);
+                int indice = modeloMascota.buscarMascotas(textoID,usuario,modeloMascota.getListaMascotas());
 
                 if (indice != -1) {
                     guardarImagen(dirImagen);
@@ -627,27 +608,31 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()== vistaMascota.btnAgregarMascota)  {
-
             agregar();
             generarYMostrarID();
         }
         if(e.getSource()== vistaMascota.btnMostrarMascotas) {
-
+            vistaMascota.lblImagen.setIcon(null);
             mostrarMascotas();
+
         }
         if(e.getSource()== vistaMascota.btnEliminarMascota){
-
+            vistaMascota.lblImagen.setIcon(null);
             eliminarTabla();
+
         }
         if(e.getSource()== vistaMascota.btnBuscarMascota) {
-
+            vistaMascota.lblImagen.setIcon(null);
             cargarMascota();
+
         }
         if(e.getSource()== vistaMascota.btnModificarMascota){
-
+            vistaMascota.lblImagen.setIcon(null);
             modificarMascota();
+
         }
         if(e.getSource()== vistaMascota.btnSubirFotoCarnet) {
+            vistaMascota.lblImagen.setIcon(null);
             cargarImagen();
         }
     }
