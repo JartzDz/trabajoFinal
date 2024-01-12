@@ -55,44 +55,57 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
         String claveRep = vista.txtContraRep.getText();
 
         if (!nombreUsuario.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !clave.isEmpty() && !ID.isEmpty()) {
-            if(validarCedula(ID)) {
-                if (validarCorreo(correo)) {
-                    if (modeloUsuario.validarCedulaUnica(ID)) {
-                        if (modeloUsuario.validarTelefonoUnico(tel)) {
-                            if (modeloUsuario.validarCorreoUnico(correo)) {
-                                if (validarContrasenias()) {
-                                    int tipoUsuario = 1;
-                                    modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, tipoUsuario);
-                                    modeloUsuario.guardarUsuarios();
-                                    EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
-                                    worker.execute();
-                                    JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
-                                    limpiar();
-                                } else JOptionPane.showMessageDialog(null, "Las contraseñas deben ser iguales", "Error", JOptionPane.ERROR_MESSAGE);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
-                                vista.txtCorreo.setText("");vista.txtCorreo.requestFocus();
+            if (validarCedula(ID)) {
+                if (esTelefonoValido(tel)) {
+                    if (validarCorreo(correo)) {
+                        if (modeloUsuario.validarCedulaUnica(ID)) {
+                            if (modeloUsuario.validarTelefonoUnico(tel)) {
+                                if (modeloUsuario.validarCorreoUnico(correo)) {
+                                    if (validarContrasenias()) {
+                                        int tipoUsuario = 1;
+                                        modeloUsuario.agregarUsuario(ID, nombreUsuario, direccion, tel, correo, clave, tipoUsuario);
+                                        modeloUsuario.guardarUsuarios();
+                                        EnviarCorreoWorker worker = new EnviarCorreoWorker(correo, ID, clave, nombreUsuario);
+                                        worker.execute();
+                                        JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
+                                        limpiar();
+                                    } else
+                                        JOptionPane.showMessageDialog(null, "Las contraseñas deben ser iguales", "Error", JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "El correo ya está registrado. Ingrese un correo único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                    vista.txtCorreo.setText("");
+                                    vista.txtCorreo.requestFocus();
                                 }
                             } else {
-                            JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
-                            vista.txtTelefono.setText("");vista.txtTelefono.requestFocus();
+                                JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
+                                vista.txtTelefono.setText("");
+                                vista.txtTelefono.requestFocus();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
+                            vista.txtCedula.setText("");
+                            vista.txtCedula.requestFocus();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "La cédula ya está registrada. Ingrese una cédula única.", "Error", JOptionPane.ERROR_MESSAGE);
-                        vista.txtCedula.setText("");vista.txtCedula.requestFocus();
+                        JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtCorreo.setText("");
+                        vista.txtCorreo.requestFocus();
+
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Correo INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
-                    vista.txtCorreo.setText("");vista.txtCorreo.requestFocus();
-
+                    JOptionPane.showMessageDialog(null, "Teléfono INCORRECTO.", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtTelefono.setText("");
+                    vista.txtTelefono.requestFocus();
                 }
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Cédula INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
-                vista.txtCedula.setText("");vista.txtCedula.requestFocus();
+                vista.txtCedula.setText("");
+                vista.txtCedula.requestFocus();
             }
-        }else  JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }else
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
 
-    }
+        }
 
 
     public void limpiar(){
@@ -244,7 +257,10 @@ public class ControladorRegistro extends MouseAdapter implements ActionListener,
             }
         }
     }
-
+    private boolean esTelefonoValido(String telefono) {
+        telefono = telefono.replaceAll("\\s", "");
+        return telefono.length() >= 7 && telefono.length() <= 10 && telefono.matches("\\d+");
+    }
     @Override
     public void keyPressed(KeyEvent e) {
 
