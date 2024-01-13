@@ -132,8 +132,8 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                     guardarImagen(dirImagen);
                     modeloMascota.agregarMascota(idMascota, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias);
                     modeloMascota.guardarMascotas();
-                    limpiar();
                     mostrarMascotas();
+                    limpiar();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
                     vistaMascota.txtDuenio.setText("");
@@ -146,7 +146,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             JOptionPane.showMessageDialog(null, "El ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     void generarYMostrarID() {
         String idMascota = generarID();
         vistaMascota.txtIDMascota.setText(idMascota);
@@ -214,17 +213,6 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
     }
 
 
-
-
-    public void buscarMascota(){
-        String valor = vistaMascota.txtBuscarMascota.getText();
-        int indice= modeloMascota.buscarMascota(valor);
-        if(indice!=-1){
-            JOptionPane.showMessageDialog(null, "Mascota Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(null, "Mascota No Encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     public void cargarImagen() {
         JFileChooser fileChooser = new JFileChooser();
@@ -360,7 +348,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             };
             modeloTabla.addRow(fila);
             vistaMascota.tablaMascotas.setModel(modeloTabla);
-            String rutaImagen = modeloMascota.getListaMascotas().get(indice).getRutaFotoCarnet();
+            String rutaImagen = modeloMascota.buscarMascotasDuenio(usuario).get(indice).getRutaFotoCarnet();
             System.out.println("Ruta de la imagen: " + rutaImagen);
             cargarImagenMascota(rutaImagen);
         } else {
@@ -413,10 +401,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                     guardarImagen(dirImagen);
                     String nuevaRutaFotoCarnet = modeloMascota.modificarMascota(textoID, edad, nombreMascota, sexo, raza, color, duenio, dirImagen, vacunas, desparacitaciones, esterilizacion, otrasCirugias, indice);
 
-                    // Guardas las mascotas actualizadas en el modelo
                     modeloMascota.guardarMascotas();
-
-                    // Cargas la nueva imagen en la vista
                     cargarImagenMascota(nuevaRutaFotoCarnet);
 
                     JOptionPane.showMessageDialog(null, "Mascota modificada con éxito.");
@@ -612,27 +597,23 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
             generarYMostrarID();
         }
         if(e.getSource()== vistaMascota.btnMostrarMascotas) {
-            vistaMascota.lblImagen.setIcon(null);
             mostrarMascotas();
 
         }
         if(e.getSource()== vistaMascota.btnEliminarMascota){
-            vistaMascota.lblImagen.setIcon(null);
             eliminarTabla();
 
         }
         if(e.getSource()== vistaMascota.btnBuscarMascota) {
-            vistaMascota.lblImagen.setIcon(null);
             cargarMascota();
 
         }
         if(e.getSource()== vistaMascota.btnModificarMascota){
-            vistaMascota.lblImagen.setIcon(null);
             modificarMascota();
+            generarYMostrarID();
 
         }
         if(e.getSource()== vistaMascota.btnSubirFotoCarnet) {
-            vistaMascota.lblImagen.setIcon(null);
             cargarImagen();
         }
     }

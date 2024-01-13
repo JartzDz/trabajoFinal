@@ -1365,23 +1365,19 @@ public class ControladorAdministrador extends MouseAdapter implements ActionList
             generarYMostrarID();
         }
         if(e.getSource()==vista.btnMostrarMascotas) {
-            vista.lblImagen.setIcon(null);
             mostrarMascotas();
         }
         if(e.getSource()==vista.btnEliminarMascota){
-            vista.lblImagen.setIcon(null);
             eliminarTabla();
         }
         if(e.getSource()==vista.btnBuscarMascota) {
-            vista.lblImagen.setIcon(null);
             cargarMascota();
         }
         if(e.getSource()==vista.btnModificarMascota){
-            vista.lblImagen.setIcon(null);
             modificarMascota();
+            generarYMostrarID();
         }
         if(e.getSource()==vista.btnSubirFotoCarnet) {
-            vista.lblImagen.setIcon(null);
             cargarImagen();
         }
         if(e.getSource()==vista.btnAgregar) agregarUsuarios();
