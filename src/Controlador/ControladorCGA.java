@@ -898,7 +898,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                                          boolean establecimientoAprobado) {
         StringBuilder contenido = new StringBuilder();
 
-        contenido.append("Estimada ").append(nombreRepresentanteLegal).append(",\n\n");
+        contenido.append("Estimado/a ").append(nombreRepresentanteLegal).append(",\n\n");
 
         if (establecimientoAprobado) {
             contenido.append("Le comunicamos que su establecimiento, ").append(nombreEstablecimiento).append(", ha sido aprobado. Adjunto encontrará el documento de aceptación.\\n\\n\");\n\n\n");
