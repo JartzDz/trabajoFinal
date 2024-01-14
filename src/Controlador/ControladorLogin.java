@@ -45,6 +45,7 @@ public class ControladorLogin extends MouseAdapter implements ActionListener, Ke
         vista.setSize(700,520);
         vista.setLocationRelativeTo(null);
         vista.setVisible(true);
+        vista.pack();
     }
     
     public void limpiar(){

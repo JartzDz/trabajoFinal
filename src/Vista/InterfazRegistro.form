@@ -66,7 +66,7 @@
                             </constraints>
                             <properties>
                               <font name="Bahnschrift" size="22" style="1"/>
-                              <text value="REGISTRO MASCOTAS"/>
+                              <text value="REGISTRO USUARIOS"/>
                             </properties>
                           </component>
                         </children>
