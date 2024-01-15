@@ -100,6 +100,7 @@ public class ControladorUsuarios extends MouseAdapter implements ActionListener,
                                     JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Las credenciales fueron enviadas al usuario");
                                     mostrarUsuarios();
                                     limpiarUsuarios();
+                                    activarBotones();
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(null, "El teléfono ya está registrado. Ingrese un teléfono único.", "Error", JOptionPane.ERROR_MESSAGE);
