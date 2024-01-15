@@ -146,6 +146,7 @@ public class ControladorEstablecimientos extends MouseAdapter implements ActionL
                         JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
                         mostrarEstablecimiento();
                         limpiar();
+                        activarBotones();
                     } else {
                         JOptionPane.showMessageDialog(null, "Número de teléfono debe tener entre 7 y 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
                         vistaEstablecimiento.txtTelefono.setText("");
