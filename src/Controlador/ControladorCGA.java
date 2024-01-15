@@ -202,6 +202,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
                     JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
                     mostrarEstablecimiento();
                     limpiarEst();
+                    activarBotonesEst();
                 } else {
                     JOptionPane.showMessageDialog(null, "El establecimiento ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
