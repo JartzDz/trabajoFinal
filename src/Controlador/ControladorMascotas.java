@@ -134,6 +134,7 @@ public class ControladorMascotas extends MouseAdapter implements ActionListener,
                     modeloMascota.guardarMascotas();
                     mostrarMascotas();
                     limpiar();
+                    activarBotones();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cédula del propietario INCORRECTA.", "Error", JOptionPane.ERROR_MESSAGE);
                     vistaMascota.txtDuenio.setText("");
