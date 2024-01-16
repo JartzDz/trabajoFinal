@@ -902,7 +902,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         contenido.append("Estimado/a ").append(nombreRepresentanteLegal).append(",\n\n");
 
         if (establecimientoAprobado) {
-            contenido.append("Le comunicamos que su establecimiento, ").append(nombreEstablecimiento).append(", ha sido aprobado. Adjunto encontrará el documento de aceptación.\\n\\n\");\n\n\n");
+            contenido.append("Le comunicamos que su establecimiento, ").append(nombreEstablecimiento).append(", ha sido aprobado. Adjunto encontrará el documento de aceptación.\n\n");
         } else {
             contenido.append("Lamentamos informarle que su establecimiento, ").append(nombreEstablecimiento).append(", no ha sido aprobado.Adjunto encontrará el documento de negación.\n\n");
 
