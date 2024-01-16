@@ -2,11 +2,15 @@ package Controlador;
 
 
 import Modelo.*;
+import Vista.InterfazAuditoriaAmbiental;
+import Vista.InterfazInformeAmbiental;
+import Vista.InterfazMonitoreo;
 import Vista.InterfazPersonalCGA;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.toedter.calendar.JDateChooser;
 
 
 import javax.activation.DataHandler;
@@ -33,10 +37,22 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
     GestorUsuario modeloUsuarios;
     String usuario="";
     DefaultTableModel modeloTablaEst;
-    public ControladorCGA(InterfazPersonalCGA vista, GestorEstablecimiento modeloEstablecimiento, GestorUsuario modeloUsuarios) {
+    GestorAlertas modeloAlertas;
+    InterfazAuditoriaAmbiental vista2;
+    InterfazMonitoreo vista3;
+    InterfazInformeAmbiental vista4;
+    ControladorAlertas controladorAlertas;
+    CalculoAlertaAmbiental calculoAlertaAmbiental;
+    ArrayList<Alertas> alertas;
+    ArrayList<Establecimiento> establecimientos;
+    CalculoAlertaInformeAmbiental calculoAlertaInformeAmbiental;
+    public ControladorCGA(InterfazPersonalCGA vista, GestorEstablecimiento modeloEstablecimiento, GestorUsuario modeloUsuarios, InterfazAuditoriaAmbiental vista2, InterfazMonitoreo vista3, InterfazInformeAmbiental vista4, GestorAlertas modeloAlertas, ControladorAlertas controladorAlertas) {
         this.vista = vista;
         this.modeloEstablecimiento = modeloEstablecimiento;
         this.modeloUsuarios = modeloUsuarios;
+        this.vista4=vista4;
+        this.vista2=vista2;
+        this.vista3=vista3;
         modeloUsuarios.recuperarUsuarios();
         modeloEstablecimiento.recuperarEstablecimientos();
         vista.btnBuscarEst.addActionListener(this);
@@ -45,13 +61,17 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         vista.btnMostrarEst.addActionListener(this);
         vista.btnModificarEst.addActionListener(this);
         vista.btnBuscarEst.setFocusable(false);
+        vista4.CREARALERTAButton.addMouseListener(this);
+        vista4.CREARALERTAButton.addActionListener(this);
+        vista2.btnAgregar.addMouseListener(this);
+        vista2.btnAgregar.addActionListener(this);
+        vista3.generarAlertaButton.addMouseListener(this);
+        vista3.generarAlertaButton.addActionListener(this);
         vista.btnBuscarEst.addActionListener(this);
         vista.btnAgregarEst.addMouseListener(this);
         vista.btnEliminarEst.addMouseListener(this);
         vista.btnMostrarEst.addMouseListener(this);
         vista.btnModificarEst.addMouseListener(this);
-
-
         vista.cboCIProp.addActionListener(this);
         vista.txtRUC.addKeyListener(this);
         vista.txtTelfEst.addKeyListener(this);
@@ -72,7 +92,18 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
 
 
     }
+    public void CalcularAlertasInicio(){
+        if(!establecimientos.isEmpty()){
+            for(Establecimiento establecimiento:establecimientos){
+                for(Alertas alerta:alertas) {
+                    calculoAlertaInformeAmbiental.calcularAlertasInformeAmbiental(establecimiento.getCorreo(),alerta.getFechaAprobacion(),alerta.getPeriodoEvaluado());
+                    calculoAlertaAmbiental.calcularAlertaAA(establecimiento.getCorreo());
+                }
+            }
+        }
 
+
+    }
 
     public void mostrarInterfaz(){
         cargarCombo();
@@ -190,32 +221,57 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             String tel = vista.txtTelfEst.getText();
             String direccion = vista.txtDireccionEst.getText();
             String correo = vista.txtCorreoEst.getText();
-            String CIPropietario = getCedulaSeleccionada();
+            //String CIPropietario = vista.cboCIProp.getSelectedItem().toString();
+            String CIPropietario=getCedulaSeleccionada();
             String tipoEstablecimiento = String.valueOf(vista.cboSubTipoEst.getSelectedItem());
+            String tipoEvaluacion=String.valueOf(vista.cboTipoEvaluacion.getSelectedItem());
 
+            if (!nombreEstablecimiento.isEmpty() && !tel.isEmpty() && !direccion.isEmpty() && !correo.isEmpty() && !RUC.isEmpty()) {
 
-            if (validarCampos(RUC, nombreEstablecimiento, tel, direccion, correo, CIPropietario, tipoEstablecimiento)) {
-                if (!modeloEstablecimiento.existeEstablecimiento(RUC)) {
-                    // Agregar el establecimiento
-                    modeloEstablecimiento.agregarEstablecimiento(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento);
-                    modeloEstablecimiento.guardarEstablecimientos();
-                    JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
-                    mostrarEstablecimiento();
-                    limpiarEst();
-                    activarBotonesEst();
+                System.out.println("Valor del RUC: " + RUC);
+                if (validarRUC(RUC)) {
+                    if (validarCorreo(correo)) {
+                        if (!modeloEstablecimiento.existeEstablecimiento(RUC)) {
+                            // Agregar el establecimiento
+                            modeloEstablecimiento.agregarEstablecimientoCGA(RUC, nombreEstablecimiento, direccion, tel, correo, CIPropietario, tipoEstablecimiento,tipoEvaluacion);
+                            modeloEstablecimiento.guardarEstablecimientos();
+                            activarBotonesEst();
+                            JOptionPane.showMessageDialog(null, "Establecimiento creado con éxito. Las credenciales fueron enviadas al Propietario");
+                            if(tipoEvaluacion.equals("AUDITORIA AMBIENTAL")){
+                                vista2.txtCorreo.setText(correo);
+                                mostrarInterfazAuditoriaAmbiental();
+                                vista.setVisible(false);
+                            } else if (tipoEvaluacion.equals("INFORME AMBIENTAL")) {
+                                vista2.txtCorreo.setText(correo);
+                                mostrarInterfazInformeAmbiental();
+                                vista.setVisible(false);
+                            } else if (tipoEvaluacion.equals("MONITOREO")) {
+                                vista2.txtCorreo.setText(correo);
+                                mostrarInterfazMonitoreo();
+                                vista.setVisible(false);
+                            }else{
+                                System.out.println(tipoEvaluacion);
+                            }
+                            limpiarEst();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El establecimiento no cuenta con los permisos necesarios.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Correo Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                        vista.txtCorreoEst.setText("");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "El establecimiento ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "RUC Inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                    vista.txtRUC.setText("");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos correctamente.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            // Captura excepciones específicas en lugar de Exception genérica
             System.err.println("Error al agregar el establecimiento.");
             e.printStackTrace();
         }
     }
-
 
     private boolean validarCampos(String RUC, String nombreEstablecimiento, String tel, String direccion, String correo, String CIPropietario, String tipoEstablecimiento) {
         // Verifica que los campos obligatorios estén completos
@@ -564,24 +620,48 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         if (e.getSource() == vista.btnRegresar) {
             vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
+        }
+        if (e.getSource() == vista4.CREARALERTAButton) {
+            vista4.CREARALERTAButton.setBackground(bg3);
+            vista4.CREARALERTAButton.setForeground(fg3);
+            vista4.CREARALERTAButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista3.generarAlertaButton) {
+            vista3.generarAlertaButton.setBackground(bg3);
+            vista3.generarAlertaButton.setForeground(fg3);
+            vista3.generarAlertaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista2.btnAgregar) {
+            vista2.btnAgregar.setBackground(bg3);
+            vista2.btnAgregar.setForeground(fg3);
+            vista2.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if(e.getSource()==vista4.btnRegresarInforme){
+            vista4.btnRegresarInforme.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
 
+        if (e.getSource() == vista.btnRegresar) {
+            vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+        if (e.getSource() == vista.btnRegresar) {
+            vista.btnRegresar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
     @Override
     public void mouseClicked(MouseEvent e) {
 
-
         if(e.getSource()==vista.btnRegresar){
             limpiarEst();
             System.exit(0);
         }
+
     }
     @Override
-    public void mouseEntered(MouseEvent e){
+    public void mouseEntered(MouseEvent e) {
         Color bg = new Color(4, 148, 156);
-        Color fg = new Color(255,255,255);
+        Color fg = new Color(255, 255, 255);
         Color bg4 = new Color(162, 197, 121);
-        Color fg5 = new Color(0,0,0);
+        Color fg5 = new Color(0, 0, 0);
 
 
         if (e.getSource() == vista.btnAgregarEst) {
@@ -594,32 +674,48 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
             vista.btnModificarEst.setForeground(fg);
             vista.btnModificarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-        if(e.getSource() == vista.btnMostrarEst){
+        if (e.getSource() == vista.btnMostrarEst) {
             vista.btnMostrarEst.setBackground(bg);
             vista.btnMostrarEst.setForeground(fg);
             vista.btnMostrarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-        if(e.getSource() == vista.btnEliminarEst){
+        if (e.getSource() == vista.btnEliminarEst) {
             vista.btnEliminarEst.setBackground(bg);
             vista.btnEliminarEst.setForeground(fg);
             vista.btnEliminarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-        if(e.getSource() == vista.btnBuscarEst){
+        if (e.getSource() == vista.btnBuscarEst) {
             vista.btnBuscarEst.setBackground(bg);
             vista.btnBuscarEst.setForeground(fg);
             vista.btnBuscarEst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
 
-        if(e.getSource() == vista.btnRegresar){
+        if (e.getSource() == vista.btnRegresar) {
             vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-
+        }
+        if (e.getSource() == vista.btnRegresar) {
+            vista.btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista4.CREARALERTAButton) {
+            vista4.CREARALERTAButton.setBackground(bg);
+            vista4.CREARALERTAButton.setForeground(fg);
+            vista4.CREARALERTAButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista3.generarAlertaButton) {
+            vista3.generarAlertaButton.setBackground(bg);
+            vista3.generarAlertaButton.setForeground(fg);
+            vista3.generarAlertaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista2.btnAgregar) {
+            vista2.btnAgregar.setBackground(bg);
+            vista2.btnAgregar.setForeground(fg);
+            vista2.btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        if (e.getSource() == vista4.btnRegresarInforme) {
+            vista4.btnRegresarInforme.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         }
-
-
     }
 
 
@@ -689,7 +785,6 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         vista.txtBuscarEst.setForeground(Color.GRAY);
         vista.txtBuscarEst.setText("Ingrese el RUC del establecimiento");
         vista.btnBuscarEst.setEnabled(false);
-
 
     }
     public void generarDocumento() {
@@ -942,7 +1037,33 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         }
     }
 
+    public void mostrarInterfazInformeAmbiental(){
+        vista4.setUndecorated(true);
+        vista4.setTitle("Informe Ambiental");
+        vista4.setResizable(true);
+        vista4.pack();
+        vista4.setLocationRelativeTo(null);
+        vista4.setVisible(true);
+    }
+    public void mostrarInterfazAuditoriaAmbiental(){
+        vista2.setUndecorated(true);
+        vista2.setTitle("Auditoria Ambiental");
+        vista2.setResizable(true);
+        vista2.pack();
+        vista2.setLocationRelativeTo(null);
+        vista2.setVisible(true);
 
+
+    }
+    public void mostrarInterfazMonitoreo(){
+        vista3.setUndecorated(true);
+        vista3.setTitle("Monitoreo");
+        vista3.setResizable(true);
+        vista3.pack();
+        vista3.setLocationRelativeTo(null);
+        vista3.setVisible(true);
+
+    }
 
 
     @Override
@@ -958,6 +1079,7 @@ public class ControladorCGA extends MouseAdapter implements ActionListener, KeyL
         if (e.getSource() == vista.cboTipoEst) {
             actualizarSubtipo();
         }
+
     }
 
 }

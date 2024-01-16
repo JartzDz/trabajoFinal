@@ -32,6 +32,7 @@ public class InterfazPersonalCGA extends JFrame{
     public JCheckBox chckCertificado;
     public JCheckBox chckMedicos;
     public JCheckBox chckRuc;
+    public JComboBox cboTipoEvaluacion;
 
     public InterfazPersonalCGA(){
         setContentPane(contenedor);

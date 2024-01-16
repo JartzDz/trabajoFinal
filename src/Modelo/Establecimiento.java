@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Establecimiento implements Serializable {
+    private String tipoEvaluacion;
     private String ruc,nombreEst,telefono,direccion,correo,CIRepresentante, tipoEstablecimiento;
 
 
@@ -15,6 +16,16 @@ public class Establecimiento implements Serializable {
         this.correo = correo;
         this.CIRepresentante = CIRepresentante;
         this.tipoEstablecimiento = tipoEstablecimiento;
+    }
+    public Establecimiento(String ruc, String nombreEst, String telefono, String direccion, String correo, String CIRepresentante, String tipoEstablecimiento, String tipoEvaluacion) {
+        this.ruc = ruc;
+        this.nombreEst = nombreEst;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.correo = correo;
+        this.CIRepresentante = CIRepresentante;
+        this.tipoEstablecimiento = tipoEstablecimiento;
+        this.tipoEvaluacion = tipoEvaluacion;
     }
 
     public String getRuc() {

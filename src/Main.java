@@ -9,6 +9,7 @@ public class Main {
         GestorMascotas gestorMascotas = new GestorMascotas();
         GestorUsuario gestorUsuario = new GestorUsuario();
         GestorEstablecimiento gestorEstablecimiento = new GestorEstablecimiento();
+        GestorAlertas gestorAlertas=new GestorAlertas();
 
         // Vistas
         InterfazMascotas interfazMascotas = new InterfazMascotas();
@@ -18,12 +19,15 @@ public class Main {
         InterfazEstablecimientos interfazEstablecimientos = new InterfazEstablecimientos();
         InterfazRegistro interfazRegistro = new InterfazRegistro();
         InterfazPersonalCGA interfazPersonalCGA = new InterfazPersonalCGA();
+        InterfazInformeAmbiental interfazInformeAmbiental=new InterfazInformeAmbiental();
+        InterfazAuditoriaAmbiental interfazAuditoriaAmbiental=new InterfazAuditoriaAmbiental();
+        InterfazMonitoreo interfazMonitoreo=new InterfazMonitoreo();
         // Controladores
         ControladorMascotas controladorMascotas = new ControladorMascotas(gestorMascotas, interfazMascotas,gestorUsuario);
-
+        ControladorAlertas controladorAlertas=new ControladorAlertas(interfazAuditoriaAmbiental,interfazInformeAmbiental,interfazMonitoreo,interfazPersonalCGA);
         ControladorUsuarios controladorUsuarios = new ControladorUsuarios(gestorUsuario, interfazUsuarios);
         ControladorEstablecimientos controladorEstablecimientos = new ControladorEstablecimientos(gestorEstablecimiento, interfazEstablecimientos, gestorUsuario);
-        ControladorCGA controladorCGA = new ControladorCGA(interfazPersonalCGA,gestorEstablecimiento,gestorUsuario);
+        ControladorCGA controladorCGA = new ControladorCGA(interfazPersonalCGA,gestorEstablecimiento,gestorUsuario,interfazAuditoriaAmbiental,interfazMonitoreo,interfazInformeAmbiental,gestorAlertas,controladorAlertas);
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
                 interfazAdmin, gestorUsuario, controladorMascotas, controladorUsuarios, controladorEstablecimientos, interfazLogin,gestorMascotas,gestorEstablecimiento);
 
